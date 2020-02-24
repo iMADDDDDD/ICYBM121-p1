@@ -309,13 +309,8 @@ def check_rule_19(rules_dict, followers_count, friends_count):
 
 #20. it publishes content which does not just contain URLs
 def check_rule_20(rules_dict, text):
-    #TODO
-    print('TEXT')
-    print(text)
     #source: https://www.geeksforgeeks.org/python-check-url-string/
     url = re.findall('http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\(\), ]|(?:%[0-9a-fA-F][0-9a-fA-F]))+', text) 
-    print('URL')
-    print(url)
     text_without_url = ''
     for u in url:
         text_without_url = text.replace(u,'')
@@ -347,7 +342,6 @@ def check_rule_22(rules_dict):
        rules_dict['rule_22'] = True
     return rules_dict
 
-#TODO
 def calculate_human_points(rules_dict):
     human_points = 0
     if rules_dict['rule_1']:
@@ -450,7 +444,7 @@ def calculate_bot_points(rules_dict):
 
 def main():
     #table 6: results of running the algorithm over the complete dataset
-    dataset = home_directory + '/git/ICYBM121-p1/database/E13/'
+    dataset = home_directory + '/git/ICYBM121-p1/database/TFP/'
     users_dataset = dataset + 'users.csv'
     tweets_dataset = dataset + 'tweets.csv'
     camisani_calzolari_algorithm(users_dataset, tweets_dataset)
