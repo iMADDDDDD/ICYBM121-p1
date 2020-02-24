@@ -31,17 +31,70 @@ def camisani_calzolari_algorithm(users_dataset, tweets_dataset):
             followers_count = int(row[4])
             rules_dict = check_rule_5(rules_dict, followers_count)
             
-            favorites_count = row[6]
-            listed_count = row[7]
+            #check rule 6: check if it has been inserted in a list by other Twitter users
+            listed_count = int(row[7])
+            rules_dict = check_rule_6(rules_dict, listed_count)
+
+            #check rule 7: check if it has written at least 50 tweets
+            statuses_count = int(row[3])
+            rules_dict = check_rule_7(rules_dict, statuses_count)
+            
+            #check rule 9: check if the profile contains a URL
             url = row[9]
+            rules_dict = check_rule_9(rules_dict, url)
+
+            #check rule 11: check if it writes tweets that have punctuation
+            rules_dict = check_rule_11(rules_dict, description)
             
-            
-            
+            #check rule 19: check if the equation for number of followers and friends is satisfies
+            friends_count = int(row[5])
+            rules_dict = check_rule_19(rules_dict, followers_count, friends_count)
+          
+            #check other rules related to tweets:
             user_id = row[0]
 
             human_points = calculate_human_points(rules_dict)
             bot_points = calculate_bot_points(rules_dict)
 
+
+def check_rules_related_to_tweets(tweets_dataset, user_id, rules_dict):
+    with open(tweets_dataset) as tweets_file:
+        tweets_reader = csv.reader(tweets_file, delimiter=',')
+        next(tweets_reader, None)
+        for tweet_row in tweets_reader:
+            # https://developer.twitter.com/en/docs/tweets/data-dictionary/overview/tweet-object
+            user_id_tweet = tweet_row[4]
+            if user_id == user_id_tweet:
+
+                #check rule 8: check if account has been geo-localized
+                geo = tweet_row[8]
+                rules_dict = check_rule_8(rules_dict, geo)
+
+                #check rule 10: check if it has been included in another user's favorites
+                favorite_count = int(tweet_row[14])
+                rules_dict = check_rule_10(rules_dict, favorite_count)
+
+                #check rule 11: check if it writes tweets that have punctuation
+                text = tweet_row[2]
+                rules_dict = check_rule_11(rules_dict, text)
+             
+                #check rule 12: check if it has used a hashtag in at least one tweet
+                num_hashtags = int(tweet_row[15])
+                rules_dict = check_rule_12(rules_dict, num_hashtags)
+
+                #check rule 13: check if it has logged into Twitter using an iPhone
+                source = tweet_row[3]
+                rules_dict = check_rule_13(rules_dict, source)
+
+                #check rule 14: check if it has logged into Twitter using an Android device
+                rules_dict = check_rule_14(rules_dict, source)
+
+                #check rule 15: check if it is connected with foursquare
+                rules_dict = check_rule_15(rules_dict, source)
+                
+                retweet_count = tweet_row[12]
+                
+ 
 
 def initialize_rules_dictionary():
     rules_dict = {}
@@ -107,63 +160,54 @@ def check_rule_5(rules_dict, followers_count):
     return rules_dict
 
 #6. it has been inserted in a list by other Twitter users
-def check_rule_6(listed_count):
-    if listed_count != '':
-        rule_6 = True
-    else: 
-        rule_6 = False
-    return rule_6
+# listed_count = number of public lists that this user is a member of
+def check_rule_6(rules_dict, listed_count):
+    if listed_count > 0:
+        rules_dict['rule_6'] = True
+    return rules_dict
 
 #7. it has written at least 50 tweets
 # https://developer.twitter.com/en/docs/tweets/data-dictionary/overview/user-object
 # subtract the number of retweets? 
 # there is no number of retweets per user account
-def check_rule_7(statuses_count):
-    if statuses_count != '':
-        rule_7 = True
-    else: 
-        rule_7 = False
-    return rule_7
+def check_rule_7(rules_dict, statuses_count):
+    if statuses_count > 0:
+        rules_dict['rule_7'] = True
+    return rules_dict
 
 #8. the account has been geo-localized
-def check_rule_8(geo):
+def check_rule_8(rules_dict, geo):
     if geo != '':
-        rule_8 = True
-    else: 
-        rule_8 = False
-    return rule_8
+        rules_dict['rule_8'] = True
+    return rules_dict
+
 
 #9. the profile contains a URL
-def check_rule_9(url):
+def check_rule_9(rules_dict, url):
     if url != '':
-        rule_9 = True
-    else: 
-        rule_9 = False
-    return rule_9
+        rules_dict['rule_9'] = True
+    return rules_dict
+
 
 #10. it has been includes in another user's favorites
-def check_rule_10(favorites_count):
-    if favorites_count != '':
-        rule_10 = True
-    else: 
-        rule_10 = False
-    return rule_10
+def check_rule_10(rules_dict, favorite_count):
+    if favorite_count >= 0:
+        rules_dict['rule_10'] = True
+    return rules_dict
+
 
 #11. it writes tweets that have punctuation
-def check_rule_11(favorites_count):
-    if favorites_count != '':
-        rule_11 = True
-    else: 
-        rule_11 = False
-    return rule_11
+# in one text or in all? #TODO
+def check_rule_11(rules_dict, text):
+    if '.' in text or '?' in text or '!' in text:
+        rules_dict['rule_11'] = True
+    return rules_dict
 
 #12. it has used a hashtag in at least one tweet
-def check_rule_12(favorites_count):
-    if favorites_count != '':
-        rule_12 = True
-    else: 
-        rule_12 = False
-    return rule_12
+def check_rule_12(rules_dict, num_hashtags):
+    if num_hashtags > 0:
+        rules_dict['rule_12'] = True
+    return rules_dict
 
 #13. it has logged into Twitter using an iPhone
 def check_rule_13(favorites_count):
@@ -213,13 +257,13 @@ def check_rule_18(favorites_count):
         rule_18 = False
     return rule_18
 
+
 #19. (2*number followers) >= (number of friends)
-def check_rule_19(favorites_count):
-    if favorites_count != '':
-        rule_19 = True
-    else: 
-        rule_19 = False
-    return rule_19
+def check_rule_19(rules_dict, followers_count, friends_count):
+    if (2*followers_count) >= (friends_count):
+         rules_dict['rule_19'] = True
+    return rules_dict
+
 
 #20. it publishes content which does not just contain URLs
 def check_rule_20(favorites_count):
@@ -256,30 +300,7 @@ def calculate_bot_points(rules_dict):
     return bot_points
 
 
-def points_found_in_tweets(tweets_dataset, user_id):
-    with open(tweets_dataset) as tweets_file:
-        tweets_reader = csv.reader(tweets_file, delimiter=',')
-        next(tweets_reader, None)
-        rule_8 = False
-        rule_11 = False
-        rule_12 = False
-        rule_13 = False
-        rule_14 = False
-        rule_15 = False 
-        rule_16 = False
-        rule_17 = False
-        rule_18 = False
-        rule_20 = False
-        rule_21 = False
-        rule_22 = False
-        for tweet_row in tweets_reader:
-            user_id_tweet = tweet_row[4]
-            if user_id == user_id_tweet:
-                source = tweet_row[3]
-                geo = tweet_row[8]
-                retweet_count = tweet_row[12]
-                num_hashtags = tweet_row[15]
- 
+
             
            
     
