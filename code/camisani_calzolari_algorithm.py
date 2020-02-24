@@ -91,8 +91,26 @@ def check_rules_related_to_tweets(tweets_dataset, user_id, rules_dict):
 
                 #check rule 15: check if it is connected with foursquare
                 rules_dict = check_rule_15(rules_dict, source)
-                
-                retweet_count = tweet_row[12]
+
+                #check rule 16: check if it is connected with instagram
+                rules_dict = check_rule_16(rules_dict, source)
+
+                #check rule 17: check if it has logged into twitter.com website
+                rules_dict = check_rule_17(rules_dict, source)
+
+                #check rule 18: check if it has written the userID of another user in at least one tweet, that is it posted an @reply or a mention         
+                in_reply_to_user_id = tweet_row[7]
+                rules_dict = check_rule_18(rules_dict, in_reply_to_user_id)
+                      
+                #check rule 20: check if it publishes content which does not just contain URLs
+                rules_dict = check_rule_20(rules_dict, text)
+
+                #check rule 21: check if at least one of its tweets has been retwitted by other accounts
+                retweet_count = int(tweet_row[12])
+                rules_dict = check_rule_21(rules_dict, retweet_count)
+
+        #check rule 22: check if it has logged into Twitter
+        rules_dict = check_rule_22(rules_dict)
                 
  
 
@@ -210,44 +228,35 @@ def check_rule_12(rules_dict, num_hashtags):
     return rules_dict
 
 #13. it has logged into Twitter using an iPhone
-def check_rule_13(favorites_count):
-    if favorites_count != '':
-        rule_13 = True
-    else: 
-        rule_13 = False
-    return rule_13
+def check_rule_13(rules_dict, source):
+    if source == 'iphone':
+        rules_dict['rule_13'] = True
+    return rules_dict
+
 
 #14. it has logged into Twitter using an Android device
-def check_rule_14(favorites_count):
-    if favorites_count != '':
-        rule_14 = True
-    else: 
-        rule_14 = False
-    return rule_14
+def check_rule_14(rules_dict, source):
+    if source == 'android':
+        rules_dict['rule_14'] = True
+    return rules_dict
 
 #15. it is connected with Foursquare
-def check_rule_15(favorites_count):
-    if favorites_count != '':
-        rule_15 = True
-    else: 
-        rule_15 = False
-    return rule_15
+def check_rule_15(rules_dict, source):
+    if source == 'foursquare':
+        rules_dict['rule_15'] = True
+    return rules_dict
 
 #16. it is connected with Instagram
-def check_rule_16(favorites_count):
-    if favorites_count != '':
-        rule_16 = True
-    else: 
-        rule_16 = False
-    return rule_16
+def check_rule_16(rules_dict, source):
+    if source == 'instagram':
+        rules_dict['rule_16'] = True
+    return rules_dict
 
 #17. it has logged into twitter.com website
-def check_rule_17(favorites_count):
-    if favorites_count != '':
-        rule_17 = True
-    else: 
-        rule_17 = False
-    return rule_17
+def check_rule_17(rules_dict, source):
+    if source == 'web':
+        rules_dict['rule_17'] = True
+    return rules_dict
 
 #18. it has written the userID of another user in at least one tweet, that is it posted a @reply or a mention
 def check_rule_18(favorites_count):
@@ -266,28 +275,34 @@ def check_rule_19(rules_dict, followers_count, friends_count):
 
 
 #20. it publishes content which does not just contain URLs
-def check_rule_20(favorites_count):
-    if favorites_count != '':
-        rule_20 = True
-    else: 
-        rule_20 = False
-    return rule_20
+def check_rule_20(rules_dict, text):
+    #TODO
+    if text != '':
+        rules_dict['rule_20'] = True
+    return rules_dict
 
 #21. at least one of its tweets has been retwitted by other accounts
-def check_rule_21(favorites_count):
-    if favorites_count != '':
-        rule_21 = True
-    else: 
-        rule_21 = False
-    return rule_21
+def check_rule_21(rules_dict, retweet_count):
+    if retweet_count > 0:
+        rules_dict['rule_21'] = True
+    return rules_dict
 
 #22. it has logged into Twitter through different clients
-def check_rule_22(favorites_count):
-    if favorites_count != '':
-        rule_22 = True
-    else: 
-        rule_22 = False
-    return rule_22
+def check_rule_22(rules_dict):
+    client_count = 0
+    if rules_dict['rule_13']:
+       client_count += 1
+    if rules_dict['rule_14']:
+       client_count += 1
+    if rules_dict['rule_15']:
+       client_count += 1
+    if rules_dict['rule_16']:
+       client_count += 1
+    if rules_dict['rule_17']:
+       client_count += 1
+    if client_count > 1:
+       rules_dict['rule_22'] = True
+    return rules_dict
 
 #TODO
 def calculate_human_points(rules_dict):
@@ -298,12 +313,6 @@ def calculate_human_points(rules_dict):
 def calculate_bot_points(rules_dict):
     bot_points = 0
     return bot_points
-
-
-
-            
-           
-    
 
 
 def main():
