@@ -1,6 +1,7 @@
 import csv
 import re
 
+home_directory = '/home/hanne'
 
 def camisani_calzolari_algorithm(users_dataset, tweets_dataset):
     human = 0
@@ -13,6 +14,7 @@ def camisani_calzolari_algorithm(users_dataset, tweets_dataset):
             #meaning of user fields
             #https://developer.twitter.com/en/docs/tweets/data-dictionary/overview/user-object
             rules_dict = initialize_rules_dictionary()
+            print(rules_dict)
             
             #check rule 1: check if profile contains a name
             name = row[1]
@@ -170,10 +172,12 @@ def initialize_rules_dictionary():
     rules_dict['rule_20'] = False
     rules_dict['rule_21'] = False
     rules_dict['rule_22'] = False
+    return rules_dict
 
     
 #1. the profile contains a name
 def check_rule_1(rules_dict, name):
+    print(rules_dict)
     if name != '':
         rules_dict['rule_1'] = True
     return rules_dict
@@ -291,13 +295,10 @@ def check_rule_17(rules_dict, source):
     return rules_dict
 
 #18. it has written the userID of another user in at least one tweet, that is it posted a @reply or a mention
-def check_rule_18(favorites_count):
-    if favorites_count != '':
-        rule_18 = True
-    else: 
-        rule_18 = False
-    return rule_18
-
+def check_rule_18(rules_dict, in_reply_to_user_id):
+    if in_reply_to_user_id != '':
+        rules_dict['rule_18'] = True
+    return rules_dict
 
 #19. (2*number followers) >= (number of friends)
 def check_rule_19(rules_dict, followers_count, friends_count):
@@ -312,10 +313,14 @@ def check_rule_20(rules_dict, text):
     print('TEXT')
     print(text)
     #source: https://www.geeksforgeeks.org/python-check-url-string/
-    url = re.findall('http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+] |[!*\(\), ]|(?:%[0-9a-fA-F][0-9a-fA-F]))+', string) 
+    url = re.findall('http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\(\), ]|(?:%[0-9a-fA-F][0-9a-fA-F]))+', text) 
     print('URL')
     print(url)
-    if text != '':
+    text_without_url = ''
+    for u in url:
+        text_without_url = text.replace(u,'')
+        text = text_without_url
+    if text_without_url != '':
         rules_dict['rule_20'] = True
     return rules_dict
 
@@ -445,7 +450,7 @@ def calculate_bot_points(rules_dict):
 
 def main():
     #table 6: results of running the algorithm over the complete dataset
-    dataset = '~/git/ICYBM121-p1/databases/E13/'
+    dataset = home_directory + '/git/ICYBM121-p1/database/E13/'
     users_dataset = dataset + 'users.csv'
     tweets_dataset = dataset + 'tweets.csv'
     camisani_calzolari_algorithm(users_dataset, tweets_dataset)
