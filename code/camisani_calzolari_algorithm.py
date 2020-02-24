@@ -1,8 +1,11 @@
 import csv
-
+import re
 
 
 def camisani_calzolari_algorithm(users_dataset, tweets_dataset):
+    human = 0
+    bot = 0
+    neutral = 0
     with open(users_dataset) as users_file:
         users_reader = csv.reader(users_file, delimiter=',')
         next(users_reader, None)
@@ -50,11 +53,25 @@ def camisani_calzolari_algorithm(users_dataset, tweets_dataset):
             friends_count = int(row[5])
             rules_dict = check_rule_19(rules_dict, followers_count, friends_count)
           
-            #check other rules related to tweets:
+            #check other rules related to tweets
             user_id = row[0]
+            rules_dict = check_rules_related_to_tweets(tweets_dataset, user_id, rules_dict)
 
-            human_points = calculate_human_points(rules_dict)
-            bot_points = calculate_bot_points(rules_dict)
+            #calculate the final classification of user
+            classification = end_result(rules_dict, human_points, bot_points)
+            if classification == 'human':
+               human += 1
+            elif classification == 'bot':
+               bot += 1
+            elif classification == 'neutral':
+               neutral += 1
+
+    print('HUMAN')
+    print(human)
+    print('BOT')
+    print(bot)
+    print('NEUTRAL')
+    print(neutral)         
 
 
 def check_rules_related_to_tweets(tweets_dataset, user_id, rules_dict):
@@ -111,7 +128,22 @@ def check_rules_related_to_tweets(tweets_dataset, user_id, rules_dict):
 
         #check rule 22: check if it has logged into Twitter
         rules_dict = check_rule_22(rules_dict)
-                
+    return rules_dict
+          
+
+def end_result(rules_dict, human_points, bot_points):
+    human_points = calculate_human_points(rules_dict)
+    bot_points = calculate_bot_points(rules_dict)
+    result = human_points - bot_points
+    if result > 0 :
+        classification = 'human'
+    elif result < -4:
+        classification = 'bot'
+    else:
+        classification = 'neutral'
+
+            
+      
  
 
 def initialize_rules_dictionary():
@@ -277,6 +309,12 @@ def check_rule_19(rules_dict, followers_count, friends_count):
 #20. it publishes content which does not just contain URLs
 def check_rule_20(rules_dict, text):
     #TODO
+    print('TEXT')
+    print(text)
+    #source: https://www.geeksforgeeks.org/python-check-url-string/
+    url = re.findall('http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+] |[!*\(\), ]|(?:%[0-9a-fA-F][0-9a-fA-F]))+', string) 
+    print('URL')
+    print(url)
     if text != '':
         rules_dict['rule_20'] = True
     return rules_dict
@@ -307,11 +345,101 @@ def check_rule_22(rules_dict):
 #TODO
 def calculate_human_points(rules_dict):
     human_points = 0
+    if rules_dict['rule_1']:
+        human_points += 1
+    if rules_dict['rule_2']:
+        human_points += 1
+    if rules_dict['rule_3']:
+        human_points += 1
+    if rules_dict['rule_4']:
+        human_points += 1
+    if rules_dict['rule_5']:
+        human_points += 1
+    if rules_dict['rule_6']:
+        human_points += 1
+    if rules_dict['rule_7']:
+        human_points += 1
+    if rules_dict['rule_8']:
+        human_points += 1
+    if rules_dict['rule_9']:
+        human_points += 1
+    if rules_dict['rule_10']:
+        human_points += 1
+    if rules_dict['rule_11']:
+        human_points += 1
+    if rules_dict['rule_12']:
+        human_points += 1
+    if rules_dict['rule_13']:
+        human_points += 1
+    if rules_dict['rule_14']:
+        human_points += 1
+    if rules_dict['rule_15']:
+        human_points += 1
+    if rules_dict['rule_16']:
+        human_points += 1
+    if rules_dict['rule_17']:
+        human_points += 1
+    if rules_dict['rule_18']:
+        human_points += 1
+    if rules_dict['rule_19']:
+        human_points += 1
+    if rules_dict['rule_20']:
+        human_points += 1
+    if rules_dict['rule_21']:
+        human_points += 2
+    if rules_dict['rule_22']:
+        human_points += 3
     return human_points
 
 #TODO
+# 2 bot points if it only uses APIs
+# at which rule do we have to look for this
 def calculate_bot_points(rules_dict):
     bot_points = 0
+    if not rules_dict['rule_1']:
+        bot_points += 1
+    if not rules_dict['rule_2']:
+        bot_points += 1
+    if not rules_dict['rule_3']:
+        bot_points += 1
+    if not rules_dict['rule_4']:
+        bot_points += 1
+    if not rules_dict['rule_5']:
+        bot_points += 1
+    if not rules_dict['rule_6']:
+        bot_points += 1
+    if not rules_dict['rule_7']:
+        bot_points += 1
+    if not rules_dict['rule_8']:
+        bot_points += 0
+    if not rules_dict['rule_9']:
+        bot_points += 1
+    if not rules_dict['rule_10']:
+        bot_points += 1
+    if not rules_dict['rule_11']:
+        bot_points += 1
+    if not rules_dict['rule_12']:
+        bot_points += 1
+    if not rules_dict['rule_13']:
+        bot_points += 0
+    if not rules_dict['rule_14']:
+        bot_points += 0
+    if not rules_dict['rule_15']:
+        bot_points += 0
+    if not rules_dict['rule_16']:
+        bot_points += 0
+    if not rules_dict['rule_17']:
+        bot_points += 0
+    if not rules_dict['rule_18']:
+        bot_points += 1
+    if not rules_dict['rule_19']:
+        bot_points += 1
+    if not rules_dict['rule_20']:
+        bot_points += 1
+    if not rules_dict['rule_21']:
+        bot_points += 2
+    if not rules_dict['rule_22']:
+        bot_points += 1
     return bot_points
 
 
