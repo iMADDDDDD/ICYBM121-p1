@@ -7,21 +7,36 @@ def camisani_calzolari_algorithm(users_dataset, tweets_dataset):
         users_reader = csv.reader(users_file, delimiter=',')
         next(users_reader, None)
         for row in users_reader:
+            #meaning of user fields
+            #https://developer.twitter.com/en/docs/tweets/data-dictionary/overview/user-object
             rules_dict = initialize_rules_dictionary()
             
+            #check rule 1: check if profile contains a name
             name = row[1]
             rules_dict = check_rule_1(rules_dict, name)
 
-            profile_image_url = row[16]
-            rules_dict = check_rule_2(rules_dict, name)
+            #check rule 2: check if profile contains an image
+            default_profile_image = row[14]
+            rules_dict = check_rule_2(rules_dict, default_profile_image)
 
-            followers_count = row[4]
+            #check rule 3: check if profile contains a physical address
+            location = row[12]
+            rules_dict = check_rule_3(rules_dict, location)
+
+            #check rule 4: check if profile contains a biography
+            description = row[31]
+            rules_dict = check_rule_4(rules_dict, description)
+
+            #check rule 5: check if the account has at least 30 followers
+            followers_count = int(row[4])
+            rules_dict = check_rule_5(rules_dict, followers_count)
+            
             favorites_count = row[6]
             listed_count = row[7]
             url = row[9]
-            location = row[12]
             
-            description = row[31]
+            
+            
             user_id = row[0]
 
             human_points = calculate_human_points(rules_dict)
@@ -59,36 +74,37 @@ def check_rule_1(rules_dict, name):
     if name != '':
         rules_dict['rule_1'] = True
     return rules_dict
+
    
 #2. the profile contains an image
-def check_rule_2(profile_image_url):
-    if profile_image_url != '':
+# default_profile_image is a Boolean
+# * true if default image is used
+# * false if user has uploaded its own image
+def check_rule_2(rules_dict, default_profile_image):
+    if default_profile_image != 'true':
         rules_dict['rule_2'] = True
     return rules_dict
 
+
 #3. the profile contains a physical address
-def check_rule_3(location):
+def check_rule_3(rules_dict, location):
     if location != '':
-        rule_3 = True
-    else: 
-        rule_3 = False
-    return rule_3
+        rules_dict['rule_3'] = True
+    return rules_dict
+
 
 #4. the profile contains a biography
-def check_rule_4(description):
+def check_rule_4(rules_dict, description):
     if description != '':
-        rule_4 = True
-    else: 
-        rule_4 = False
-    return rule_4
+        rules_dict['rule_4'] = True
+    return rules_dict
+
 
 #5. the account has at least 30 followers
-def check_rule_5(followers_count):
-    if followers_count != '':
-        rule_5 = True
-    else: 
-        rule_5 = False
-    return rule_5
+def check_rule_5(rules_dict, followers_count):
+    if followers_count >= 30:
+        rules_dict['rule_5'] = True
+    return rules_dict
 
 #6. it has been inserted in a list by other Twitter users
 def check_rule_6(listed_count):
