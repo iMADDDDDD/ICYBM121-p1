@@ -77,7 +77,7 @@ def camisani_calzolari_algorithm(users_dataset, tweets_dataset):
 
 
 def check_rules_related_to_tweets(tweets_dataset, user_id, rules_dict):
-    with open(tweets_dataset) as tweets_file:
+    with open(tweets_dataset, encoding= 'unicode_escape') as tweets_file:
         tweets_reader = csv.reader(tweets_file, delimiter=',')
         next(tweets_reader, None)
         for tweet_row in tweets_reader:
