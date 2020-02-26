@@ -14,7 +14,6 @@ def camisani_calzolari_algorithm(users_dataset, tweets_dataset):
             #meaning of user fields
             #https://developer.twitter.com/en/docs/tweets/data-dictionary/overview/user-object
             rules_dict = initialize_rules_dictionary()
-            print(rules_dict)
             
             #check rule 1: check if profile contains a name
             name = row[1]
@@ -60,7 +59,7 @@ def camisani_calzolari_algorithm(users_dataset, tweets_dataset):
             rules_dict = check_rules_related_to_tweets(tweets_dataset, user_id, rules_dict)
 
             #calculate the final classification of user
-            classification = end_result(rules_dict, human_points, bot_points)
+            classification = end_result(rules_dict)
             if classification == 'human':
                human += 1
             elif classification == 'bot':
@@ -77,7 +76,7 @@ def camisani_calzolari_algorithm(users_dataset, tweets_dataset):
 
 
 def check_rules_related_to_tweets(tweets_dataset, user_id, rules_dict):
-    with open(tweets_dataset, encoding= 'unicode_escape') as tweets_file:
+    with open(tweets_dataset, encoding= 'utf-8') as tweets_file:
         tweets_reader = csv.reader(tweets_file, delimiter=',')
         next(tweets_reader, None)
         for tweet_row in tweets_reader:
@@ -133,7 +132,7 @@ def check_rules_related_to_tweets(tweets_dataset, user_id, rules_dict):
     return rules_dict
           
 
-def end_result(rules_dict, human_points, bot_points):
+def end_result(rules_dict):
     human_points = calculate_human_points(rules_dict)
     bot_points = calculate_bot_points(rules_dict)
     result = human_points - bot_points
@@ -177,7 +176,6 @@ def initialize_rules_dictionary():
     
 #1. the profile contains a name
 def check_rule_1(rules_dict, name):
-    print(rules_dict)
     if name != '':
         rules_dict['rule_1'] = True
     return rules_dict
@@ -444,7 +442,7 @@ def calculate_bot_points(rules_dict):
 
 def main():
     #table 6: results of running the algorithm over the complete dataset
-    dataset = home_directory + '/git/ICYBM121-p1/database/TFP/'
+    dataset = home_directory + '/git/ICYBM121-p1/database/E13/'
     users_dataset = dataset + 'users.csv'
     tweets_dataset = dataset + 'tweets.csv'
     camisani_calzolari_algorithm(users_dataset, tweets_dataset)
