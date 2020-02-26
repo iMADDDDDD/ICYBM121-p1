@@ -3,6 +3,10 @@ Big data &amp; computer security - Project 1
 
 ## To implement
 ### TODO
+#### 3. Baseline datasets
+* FAK dataset
+* BAS dataset
+
 #### 4. Fake detection with algorithms based on classification rules
 * table 6: camisani_calzolari_algorithm.py
 * table 7
