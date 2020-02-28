@@ -1,4 +1,5 @@
 import random
+import csv
 
 home_directory = '/home/hanne'
 size_fsf = 1169
@@ -9,15 +10,16 @@ size_twt = 845
 def select_random_fake_accounts(number_to_select):
     total_size = size_fsf + size_int + size_twt
     selected_numbers = []
-    for i in range(0,number_to_select):
+    while len(selected_numbers) != number_to_select:
         number = random.randrange(1,total_size + 1)
-        selected_numbers.append(number)
+        if number not in selected_numbers:
+            selected_numbers.append(number)
     return selected_numbers
     
     
 def look_up_user_ids_of_selected_fake_accounts(selected_numbers, fsf_dataset, int_dataset, twt_dataset, user_id_file):
     user_ids = []
-    for number in selected numbers:
+    for number in selected_numbers:
         if number <= size_fsf:
             user_id = look_up_user_id(number,fsf_dataset)
         elif number > size_fsf and number <= (size_fsf + size_int):
