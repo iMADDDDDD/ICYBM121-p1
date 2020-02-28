@@ -1,6 +1,8 @@
 import math
 from camisani_calzolari_algorithm import camisani_calzolari_algorithm
 
+home_directory = '/home/hanne'
+
 def calculate_accuracy(true_positive, true_negative, false_positive, false_negative):
     accuracy = (true_positive + true_negative) / (true_positive + true_negative + false_positive + false_negative)
     return accuracy
@@ -23,7 +25,7 @@ def calculate_MCC(true_positive, true_negative, false_positive, false_negative):
 
 
 def main():
-    dataset = home_directory + '/git/ICYBM121-p1/database/E13/'
+    fak_dataset = home_directory + '/git/ICYBM121-p1/database/'
     users_dataset = dataset + 'users.csv'
     tweets_dataset = dataset + 'tweets.csv'
     camisani_calzolari_algorithm(users_dataset, tweets_dataset)
