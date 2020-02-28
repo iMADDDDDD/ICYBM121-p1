@@ -252,9 +252,11 @@ def check_rule_10(rules_dict, favorite_count):
 
 #11. it writes tweets that have punctuation
 # in one text or in all? #TODO
+# three punctuation marks that are appropriate for use as sentence endings
 def check_rule_11(rules_dict, text):
-    if '.' in text or '?' in text or '!' in text:
-        rules_dict['rule_11'] = True
+    if not isinstance(text, float):
+        if '.' in text or '?' in text or '!' in text:
+            rules_dict['rule_11'] = True
     return rules_dict
 
 #12. it has used a hashtag in at least one tweet
@@ -309,14 +311,15 @@ def check_rule_19(rules_dict, followers_count, friends_count):
 
 #20. it publishes content which does not just contain URLs
 def check_rule_20(rules_dict, text):
-    #source: https://www.geeksforgeeks.org/python-check-url-string/
-    url = re.findall('http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\(\), ]|(?:%[0-9a-fA-F][0-9a-fA-F]))+', text) 
-    text_without_url = ''
-    for u in url:
-        text_without_url = text.replace(u,'')
-        text = text_without_url
-    if text_without_url != '':
-        rules_dict['rule_20'] = True
+    if not isinstance(text, float):
+        #source: https://www.geeksforgeeks.org/python-check-url-string/
+        url = re.findall('http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\(\), ]|(?:%[0-9a-fA-F][0-9a-fA-F]))+', text) 
+        text_without_url = ''
+        for u in url:
+            text_without_url = text.replace(u,'')
+            text = text_without_url
+        if text_without_url != '':
+            rules_dict['rule_20'] = True
     return rules_dict
 
 #21. at least one of its tweets has been retwitted by other accounts
