@@ -18,22 +18,25 @@ def select_random_fake_accounts(number_to_select):
     
     
 def look_up_user_ids_of_selected_fake_accounts(selected_numbers, fsf_dataset, int_dataset, twt_dataset, user_id_file):
-    user_ids = []
+    user_ids = {}
     for number in selected_numbers:
         if number <= size_fsf:
             user_id = look_up_user_id(number,fsf_dataset)
+            dataset = 'fsf'
         elif number > size_fsf and number <= (size_fsf + size_int):
             select_number = number - size_fsf
             user_id = look_up_user_id(select_number,int_dataset)
+            dataset = 'int'
         else:
             select_number = number - size_fsf - size_int
             user_id = look_up_user_id(select_number,twt_dataset)
-        user_ids.append(user_id)
+            dataset = 'twt'
+        user_ids[user_id] = dataset
     with open(user_id_file, mode = 'w') as output:
             output_writer = csv.writer(output)
-            output_writer.writerow(['id'])
-            for user_id in user_ids:
-                output_writer.writerow([user_id])
+            output_writer.writerow(['id','dataset'])
+            for account in user_ids:
+                output_writer.writerow([account,user_ids[account]])
     
 
 def look_up_user_id(select_number,dataset):
