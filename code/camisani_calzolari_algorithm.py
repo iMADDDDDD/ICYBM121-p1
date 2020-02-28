@@ -1,6 +1,7 @@
 import csv
 import re
 import pandas
+import math
 
 home_directory = '/home/hanne'
 
@@ -229,7 +230,8 @@ def check_rule_7(rules_dict, statuses_count):
 
 #8. the account has been geo-localized
 def check_rule_8(rules_dict, geo):
-    if geo != '':
+    if not math.isnan(geo):
+        print('TRUE')
         rules_dict['rule_8'] = True
     return rules_dict
 
