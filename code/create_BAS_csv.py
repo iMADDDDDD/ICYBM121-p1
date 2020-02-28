@@ -6,7 +6,7 @@ home_directory = '/home/hanne'
 def create_csv(e13_dataset, ftp_dataset, fsf_dataset, int_dataset, twt_dataset, fak_users_file, bas_users_dataset, user_id_index):
     copy_whole_content_of_csv(e13_dataset, bas_users_dataset)
     copy_whole_content_of_csv(ftp_dataset, bas_users_dataset)
-    with open(fak_users_file, 'r') as users_file:
+    with open(fak_users_file, 'r', encoding = 'utf-8') as users_file:
         users_reader = csv.reader(users_file, delimiter=',')
         next(users_reader, None)
         for row in users_reader:
@@ -26,7 +26,7 @@ def copy_whole_content_of_csv(dataset1, dataset2):
        header_present = False
     output_file = open(dataset2, 'a', encoding = 'utf-8')
     csv_writer = csv.writer(output_file)
-    with open(dataset1, 'r') as users_file:
+    with open(dataset1, 'r', encoding = 'utf-8') as users_file:
         users_reader = csv.reader(users_file, delimiter=',')
         if not header_present:
             for row in users_reader:

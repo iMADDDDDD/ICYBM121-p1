@@ -39,5 +39,6 @@ def test():
         print(row)
         print('-------------------------')
 
+
 if __name__ == "__main__":
-    test()
+    eliminate_null_values()
