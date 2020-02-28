@@ -4,7 +4,7 @@ Big data &amp; computer security - Project 1
 ## To implement
 ### TODO
 #### 3. Baseline datasets
-* FAK dataset
+* FAK dataset: baseline_dataset.py
 * BAS dataset
 
 #### 4. Fake detection with algorithms based on classification rules
