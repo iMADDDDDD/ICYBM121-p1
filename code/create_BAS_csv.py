@@ -53,9 +53,22 @@ def copy_part_of_csv(dataset1, dataset2, user_id, user_id_index):
     
 def main():
     bas_users_dataset = home_directory + '/git/ICYBM121-p1/code/bas_users.csv'
+    e13_users_dataset =  home_directory + '/git/ICYBM121-p1/database/E13/users.csv'
+    ftp_users_dataset =  home_directory + '/git/ICYBM121-p1/database/FTP/users.csv'
+    fsf_users_dataset =  home_directory + '/git/ICYBM121-p1/database/FSF/users.csv'
+    int_users_dataset =  home_directory + '/git/ICYBM121-p1/database/INT/users.csv'
+    twt_users_dataset =  home_directory + '/git/ICYBM121-p1/database/TWT/users.csv'
+    fak_users_file = home_directory + '/git/ICYBM121-p1/code/FAK_user_ids.csv'
+    user_id_index_users = 0
+    create_csv(e13_users_dataset, ftp_users_dataset, fsf_users_dataset, int_users_dataset, twt_users_dataset, fak_users_file, bas_users_dataset, user_id_index_users)
     bas_tweets_dataset = home_directory + '/git/ICYBM121-p1/code/bas_tweets.csv'
-    e13_users_dataset = 
-    create_csv(e13_dataset, ftp_dataset, fsf_dataset, int_dataset, twt_dataset, fak_users_file, bas_users_dataset, user_id_index)
+    e13_tweets_dataset =  home_directory + '/git/ICYBM121-p1/database/E13/tweets.csv'
+    ftp_tweets_dataset =  home_directory + '/git/ICYBM121-p1/database/FTP/tweets.csv'
+    fsf_tweets_dataset =  home_directory + '/git/ICYBM121-p1/database/FSF/tweets.csv'
+    int_tweets_dataset =  home_directory + '/git/ICYBM121-p1/database/INT/tweets.csv'
+    twt_tweets_dataset =  home_directory + '/git/ICYBM121-p1/database/TWT/tweets.csv'
+    user_id_index_tweets = 4
+    create_csv(e13_tweets_dataset, ftp_tweets_dataset, fsf_tweets_dataset, int_tweets_dataset, twt_tweets_dataset, fak_users_file, bas_tweets_dataset, user_id_index_tweets)
 
 
 if __name__ == "__main__":
