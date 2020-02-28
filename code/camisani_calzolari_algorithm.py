@@ -1,5 +1,6 @@
 import csv
 import re
+import pandas
 
 home_directory = '/home/hanne'
 
@@ -60,6 +61,7 @@ def camisani_calzolari_algorithm(users_dataset, tweets_dataset):
 
             #calculate the final classification of user
             classification = end_result(rules_dict)
+            print(classification)
             if classification == 'human':
                human += 1
             elif classification == 'bot':
@@ -67,68 +69,65 @@ def camisani_calzolari_algorithm(users_dataset, tweets_dataset):
             elif classification == 'neutral':
                neutral += 1
 
-    print('HUMAN')
-    print(human)
-    print('BOT')
-    print(bot)
-    print('NEUTRAL')
-    print(neutral)         
+            print('HUMAN')
+            print(human)
+            print('BOT')
+            print(bot)
+            print('NEUTRAL')
+            print(neutral)  
+            print('----------------------------------------')       
 
 
 def check_rules_related_to_tweets(tweets_dataset, user_id, rules_dict):
-    with open(tweets_dataset, encoding= 'utf-8') as tweets_file:
-        tweets_reader = csv.reader(tweets_file, delimiter=',')
-        next(tweets_reader, None)
-        for tweet_row in tweets_reader:
-            # https://developer.twitter.com/en/docs/tweets/data-dictionary/overview/tweet-object
-            user_id_tweet = tweet_row[4]
-            if user_id == user_id_tweet:
+    df_csv = pandas.read_csv(tweets_dataset, index_col=4)
+    tweets_user = df_csv.loc[int(user_id)]
+    # https://developer.twitter.com/en/docs/tweets/data-dictionary/overview/tweet-object
+    for _, tweet_row in tweets_user.iterrows():
+        #check rule 8: check if account has been geo-localized
+        geo = tweet_row['geo']
+        rules_dict = check_rule_8(rules_dict, geo)
 
-                #check rule 8: check if account has been geo-localized
-                geo = tweet_row[8]
-                rules_dict = check_rule_8(rules_dict, geo)
+        #check rule 10: check if it has been included in another user's favorites
+        favorite_count = int(tweet_row['favorite_count'])
+        rules_dict = check_rule_10(rules_dict, favorite_count)
 
-                #check rule 10: check if it has been included in another user's favorites
-                favorite_count = int(tweet_row[14])
-                rules_dict = check_rule_10(rules_dict, favorite_count)
-
-                #check rule 11: check if it writes tweets that have punctuation
-                text = tweet_row[2]
-                rules_dict = check_rule_11(rules_dict, text)
+        #check rule 11: check if it writes tweets that have punctuation
+        text = tweet_row['text']
+        rules_dict = check_rule_11(rules_dict, text)
              
-                #check rule 12: check if it has used a hashtag in at least one tweet
-                num_hashtags = int(tweet_row[15])
-                rules_dict = check_rule_12(rules_dict, num_hashtags)
+        #check rule 12: check if it has used a hashtag in at least one tweet
+        num_hashtags = int(tweet_row['num_hashtags'])
+        rules_dict = check_rule_12(rules_dict, num_hashtags)
 
-                #check rule 13: check if it has logged into Twitter using an iPhone
-                source = tweet_row[3]
-                rules_dict = check_rule_13(rules_dict, source)
+        #check rule 13: check if it has logged into Twitter using an iPhone
+        source = tweet_row['source']
+        rules_dict = check_rule_13(rules_dict, source)
 
-                #check rule 14: check if it has logged into Twitter using an Android device
-                rules_dict = check_rule_14(rules_dict, source)
+        #check rule 14: check if it has logged into Twitter using an Android device
+        rules_dict = check_rule_14(rules_dict, source)
 
-                #check rule 15: check if it is connected with foursquare
-                rules_dict = check_rule_15(rules_dict, source)
+        #check rule 15: check if it is connected with foursquare
+        rules_dict = check_rule_15(rules_dict, source)
 
-                #check rule 16: check if it is connected with instagram
-                rules_dict = check_rule_16(rules_dict, source)
+        #check rule 16: check if it is connected with instagram
+        rules_dict = check_rule_16(rules_dict, source)
 
-                #check rule 17: check if it has logged into twitter.com website
-                rules_dict = check_rule_17(rules_dict, source)
+        #check rule 17: check if it has logged into twitter.com website
+        rules_dict = check_rule_17(rules_dict, source)
 
-                #check rule 18: check if it has written the userID of another user in at least one tweet, that is it posted an @reply or a mention         
-                in_reply_to_user_id = tweet_row[7]
-                rules_dict = check_rule_18(rules_dict, in_reply_to_user_id)
+        #check rule 18: check if it has written the userID of another user in at least one tweet, that is it posted an @reply or a mention         
+        in_reply_to_user_id = tweet_row['in_reply_to_user_id']
+        rules_dict = check_rule_18(rules_dict, in_reply_to_user_id)
                       
-                #check rule 20: check if it publishes content which does not just contain URLs
-                rules_dict = check_rule_20(rules_dict, text)
+        #check rule 20: check if it publishes content which does not just contain URLs
+        rules_dict = check_rule_20(rules_dict, text)
 
-                #check rule 21: check if at least one of its tweets has been retwitted by other accounts
-                retweet_count = int(tweet_row[12])
-                rules_dict = check_rule_21(rules_dict, retweet_count)
+        #check rule 21: check if at least one of its tweets has been retwitted by other accounts
+        retweet_count = int(tweet_row['retweet_count'])
+        rules_dict = check_rule_21(rules_dict, retweet_count)
 
-        #check rule 22: check if it has logged into Twitter
-        rules_dict = check_rule_22(rules_dict)
+    #check rule 22: check if it has logged into Twitter
+    rules_dict = check_rule_22(rules_dict)
     return rules_dict
           
 
@@ -142,6 +141,7 @@ def end_result(rules_dict):
         classification = 'bot'
     else:
         classification = 'neutral'
+    return classification
 
             
       
