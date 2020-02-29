@@ -4,9 +4,9 @@ import pandas
 
 home_directory = "/home/hanne"
 
-def create_csv(e13_dataset, tfp_dataset, fsf_dataset, int_dataset, twt_dataset, fak_users_file, bas_users_dataset, user_id_index):
-    copy_whole_content_of_csv(e13_dataset, bas_users_dataset)
-    copy_whole_content_of_csv(tfp_dataset, bas_users_dataset)
+def create_csv(e13_dataset, tfp_dataset, fsf_dataset, int_dataset, twt_dataset, fak_users_file, bas_users_dataset, user_id_index, header):
+    copy_whole_content_of_csv(e13_dataset, bas_users_dataset, header)
+    copy_whole_content_of_csv(tfp_dataset, bas_users_dataset, header)
     with open(fak_users_file, 'r', encoding = 'utf-8') as users_file:
         users_reader = csv.reader(users_file, delimiter=',')
         next(users_reader, None)
@@ -21,8 +21,7 @@ def create_csv(e13_dataset, tfp_dataset, fsf_dataset, int_dataset, twt_dataset, 
               copy_part_of_csv(twt_dataset, bas_users_dataset, user_id, user_id_index)
 
 
-def copy_whole_content_of_csv(dataset1, dataset2):
-    header_csv = ["id","name","screen_name","statuses_count","followers_count","friends_count","favourites_count","listed_count","created_at","url","lang","time_zone","location","default_profile","default_profile_image","geo_enabled","profile_image_url","profile_banner_url","profile_use_background_image","profile_background_image_url_https","profile_text_color","profile_image_url_https","profile_sidebar_border_color","profile_background_tile","profile_sidebar_fill_color","profile_background_image_url","profile_background_color","profile_link_color","utc_offset","protected","verified","description","updated","dataset"]
+def copy_whole_content_of_csv(dataset1, dataset2,header_csv):
     df_csv = pandas.read_csv(dataset1)
     if not os.path.isfile(dataset2):
         df_csv.to_csv(dataset2, header=header_csv)
@@ -47,7 +46,11 @@ def main():
     twt_users_dataset =  home_directory + '/git/ICYBM121-p1/database/TWT/users.csv'
     fak_users_file = home_directory + '/git/ICYBM121-p1/code/FAK_user_ids.csv'
     user_id_index_users = 0
-    create_csv(e13_users_dataset, tfp_users_dataset, fsf_users_dataset, int_users_dataset, twt_users_dataset, fak_users_file, bas_users_dataset, user_id_index_users)
+    header_users = ["id","name","screen_name","statuses_count","followers_count","friends_count","favourites_count","listed_count","created_at","url","lang",
+"time_zone","location","default_profile","default_profile_image","geo_enabled","profile_image_url","profile_banner_url","profile_use_background_image",
+"profile_background_image_url_https","profile_text_color","profile_image_url_https","profile_sidebar_border_color","profile_background_tile","profile_sidebar_fill_color",
+"profile_background_image_url","profile_background_color","profile_link_color","utc_offset","protected","verified","description","updated","dataset"]
+    create_csv(e13_users_dataset, tfp_users_dataset, fsf_users_dataset, int_users_dataset, twt_users_dataset, fak_users_file, bas_users_dataset, user_id_index_users,header_users)
     bas_tweets_dataset = home_directory + '/git/ICYBM121-p1/code/bas_tweets.csv'
     e13_tweets_dataset =  home_directory + '/git/ICYBM121-p1/database/E13/tweets.csv'
     tfp_tweets_dataset =  home_directory + '/git/ICYBM121-p1/database/TFP/tweets.csv'
@@ -55,7 +58,9 @@ def main():
     int_tweets_dataset =  home_directory + '/git/ICYBM121-p1/database/INT/tweets.csv'
     twt_tweets_dataset =  home_directory + '/git/ICYBM121-p1/database/TWT/tweets.csv'
     user_id_index_tweets = 4
-    create_csv(e13_tweets_dataset, tfp_tweets_dataset, fsf_tweets_dataset, int_tweets_dataset, twt_tweets_dataset, fak_users_file, bas_tweets_dataset, user_id_index_tweets)
+    header_tweets = ["created_at","id","text","source","user_id","truncated","in_reply_to_status_id","in_reply_to_user_id","in_reply_to_screen_name",
+"retweeted_status_id","geo","place","retweet_count","reply_count","favorite_count","num_hashtags","num_urls","num_mentions","timestamp"]
+    create_csv(e13_tweets_dataset, tfp_tweets_dataset, fsf_tweets_dataset, int_tweets_dataset, twt_tweets_dataset, fak_users_file, bas_tweets_dataset, user_id_index_tweets, header_tweets)
 
 
 if __name__ == "__main__":
