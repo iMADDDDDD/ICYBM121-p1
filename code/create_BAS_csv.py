@@ -25,12 +25,11 @@ def create_csv(e13_dataset, tfp_dataset, fsf_dataset, int_dataset, twt_dataset, 
 
 
 def copy_whole_content_of_csv(dataset1, dataset2,header_csv,user_id_index):
-    df_csv = pandas.read_csv(dataset1,index_col=int(user_id_index))
+    df_csv = pandas.read_csv(dataset1, index_col=int(user_id_index))
     if not os.path.isfile(dataset2):
         output_file = open(dataset2, 'w', encoding = 'utf-8')
         csv_writer = csv.writer(output_file)
         csv_writer.writerow(header_csv)
-    df_csv = pandas.read_csv(dataset1)
     df_csv.to_csv(dataset2, mode='a', header=False)
     
 
@@ -39,8 +38,8 @@ def copy_part_of_csv(dataset1, dataset2, user_id, user_id_index, kind,key_error)
     if kind == 'users':
         df_csv = pandas.read_csv(dataset1, index_col=int(user_id_index))
         rows_user = df_csv.loc[int(user_id)]
-        rows_user['user_id'] = int(user_id)
         df_user = pandas.DataFrame(rows_user).T
+        df_user.insert(loc=0, column = 'user_id', value = int(user_id))
         df_user.to_csv(dataset2, index = False, mode='a', header=False)
     elif kind == 'tweets':
         df_csv = pandas.read_csv(dataset1, index_col=int(user_id_index))
@@ -50,13 +49,14 @@ def copy_part_of_csv(dataset1, dataset2, user_id, user_id_index, kind,key_error)
             key_error += 1
         else:
             if isinstance(rows_user, pandas.Series):
-                rows_user['user_id'] = int(user_id)
                 df_user = pandas.DataFrame(rows_user).T
+                df_user.insert(loc=0, column = 'user_id', value = int(user_id))
                 df_user.to_csv(dataset2, index = False, mode='a', header=False)
             elif isinstance(rows_user, pandas.DataFrame):
                 for _, tweet_row in rows_user.iterrows():
-                    tweet_row['user_id'] = int(user_id)
-                    tweet_row.to_csv(dataset2, mode='a', header=False)
+                    df_tweet_row = pandas.DataFrame(tweet_row).T
+                    df_tweet_row.insert(loc=0, column = 'user_id', value = int(user_id))
+                    df_tweet_row.to_csv(dataset2, mode='a', header=False)
             else:
                 print("ERROR")
     return key_error      
