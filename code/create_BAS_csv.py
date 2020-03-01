@@ -88,7 +88,7 @@ def main():
     user_id_index_tweets = 4
     header_tweets = ["created_at","id","text","source","user_id","truncated","in_reply_to_status_id","in_reply_to_user_id","in_reply_to_screen_name",
 "retweeted_status_id","geo","place","retweet_count","reply_count","favorite_count","num_hashtags","num_urls","num_mentions","timestamp"]
-    create_csv(e13_tweets_dataset, tfp_tweets_dataset, fsf_tweets_dataset, int_tweets_dataset, twt_tweets_dataset, fak_users_file, bas_tweets_dataset, user_id_index_tweets, header_tweets, 'tweets')
+    #create_csv(e13_tweets_dataset, tfp_tweets_dataset, fsf_tweets_dataset, int_tweets_dataset, twt_tweets_dataset, fak_users_file, bas_tweets_dataset, user_id_index_tweets, header_tweets, 'tweets')
     
 
 

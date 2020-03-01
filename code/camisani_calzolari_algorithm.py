@@ -32,7 +32,10 @@ def camisani_calzolari_algorithm(users_dataset, tweets_dataset):
         rules_dict = check_rule_4(rules_dict, description)
 
         #check rule 5: check if the account has at least 30 followers
-        followers_count = int(row['followers_count'])
+        try:
+            followers_count = int(row['followers_count'])
+        except: 
+            followers_count = 0
         rules_dict = check_rule_5(rules_dict, followers_count)
             
         #check rule 6: check if it has been inserted in a list by other Twitter users
@@ -445,9 +448,9 @@ def calculate_bot_points(rules_dict):
 
 def main():
     #table 6: results of running the algorithm over the complete dataset
-    dataset = home_directory + '/git/ICYBM121-p1/database/E13/'
-    users_dataset = dataset + 'users.csv'
-    tweets_dataset = dataset + 'tweets.csv'
+    dataset = home_directory + '/git/ICYBM121-p1/code/'
+    users_dataset = dataset + 'bas_users.csv'
+    tweets_dataset = dataset + 'bas_tweets.csv'
     camisani_calzolari_algorithm(users_dataset, tweets_dataset)
 
 
