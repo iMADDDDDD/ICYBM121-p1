@@ -30,8 +30,10 @@ def copy_whole_content_of_csv(dataset1, dataset2,header_csv,user_id_index):
         output_file = open(dataset2, 'w', encoding = 'utf-8')
         csv_writer = csv.writer(output_file)
         csv_writer.writerow(header_csv)
-    df_csv.to_csv(dataset2, mode='a', header=False)
-    
+    for _, tweet_row in df_csv.iterrows():
+        df_tweet_row = pandas.DataFrame(tweet_row).T
+        df_tweet_row.to_csv(dataset2, mode='a', header=False)
+      
 
 
 def copy_part_of_csv(dataset1, dataset2, user_id, user_id_index, kind,key_error):
