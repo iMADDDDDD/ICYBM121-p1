@@ -9,74 +9,72 @@ def camisani_calzolari_algorithm(users_dataset, tweets_dataset):
     human = 0
     bot = 0
     neutral = 0
-    with open(users_dataset) as users_file:
-        users_reader = csv.reader(users_file, delimiter=',')
-        next(users_reader, None)
-        for row in users_reader:
-            #meaning of user fields
-            #https://developer.twitter.com/en/docs/tweets/data-dictionary/overview/user-object
-            rules_dict = initialize_rules_dictionary()
+    df_csv = pandas.read_csv(users_dataset)
+    for _, row in df_csv.iterrows():
+        #meaning of user fields
+        #https://developer.twitter.com/en/docs/tweets/data-dictionary/overview/user-object
+        rules_dict = initialize_rules_dictionary()
             
-            #check rule 1: check if profile contains a name
-            name = row[1]
-            rules_dict = check_rule_1(rules_dict, name)
+        #check rule 1: check if profile contains a name
+        name = row['name']
+        rules_dict = check_rule_1(rules_dict, name)
 
-            #check rule 2: check if profile contains an image
-            default_profile_image = row[14]
-            rules_dict = check_rule_2(rules_dict, default_profile_image)
+        #check rule 2: check if profile contains an image
+        default_profile_image = row['default_profile_image']
+        rules_dict = check_rule_2(rules_dict, default_profile_image)
 
-            #check rule 3: check if profile contains a physical address
-            location = row[12]
-            rules_dict = check_rule_3(rules_dict, location)
+        #check rule 3: check if profile contains a physical address
+        location = row['location']
+        rules_dict = check_rule_3(rules_dict, location)
 
-            #check rule 4: check if profile contains a biography
-            description = row[31]
-            rules_dict = check_rule_4(rules_dict, description)
+        #check rule 4: check if profile contains a biography
+        description = row['description']
+        rules_dict = check_rule_4(rules_dict, description)
 
-            #check rule 5: check if the account has at least 30 followers
-            followers_count = int(row[4])
-            rules_dict = check_rule_5(rules_dict, followers_count)
+        #check rule 5: check if the account has at least 30 followers
+        followers_count = int(row['followers_count'])
+        rules_dict = check_rule_5(rules_dict, followers_count)
             
-            #check rule 6: check if it has been inserted in a list by other Twitter users
-            listed_count = int(row[7])
-            rules_dict = check_rule_6(rules_dict, listed_count)
+        #check rule 6: check if it has been inserted in a list by other Twitter users
+        listed_count = int(row['listed_count'])
+        rules_dict = check_rule_6(rules_dict, listed_count)
 
-            #check rule 7: check if it has written at least 50 tweets
-            statuses_count = int(row[3])
-            rules_dict = check_rule_7(rules_dict, statuses_count)
+        #check rule 7: check if it has written at least 50 tweets
+        statuses_count = int(row['statuses_count'])
+        rules_dict = check_rule_7(rules_dict, statuses_count)
             
-            #check rule 9: check if the profile contains a URL
-            url = row[9]
-            rules_dict = check_rule_9(rules_dict, url)
+        #check rule 9: check if the profile contains a URL
+        url = row['url']
+        rules_dict = check_rule_9(rules_dict, url)
 
-            #check rule 11: check if it writes tweets that have punctuation
-            rules_dict = check_rule_11(rules_dict, description)
+        #check rule 11: check if it writes tweets that have punctuation
+        rules_dict = check_rule_11(rules_dict, description)
             
-            #check rule 19: check if the equation for number of followers and friends is satisfies
-            friends_count = int(row[5])
-            rules_dict = check_rule_19(rules_dict, followers_count, friends_count)
+        #check rule 19: check if the equation for number of followers and friends is satisfies
+        friends_count = int(row['friends_count'])
+        rules_dict = check_rule_19(rules_dict, followers_count, friends_count)
           
-            #check other rules related to tweets
-            user_id = row[0]
-            rules_dict = check_rules_related_to_tweets(tweets_dataset, user_id, rules_dict)
+        #check other rules related to tweets
+        user_id = row['id']
+        rules_dict = check_rules_related_to_tweets(tweets_dataset, user_id, rules_dict)
 
-            #calculate the final classification of user
-            classification = end_result(rules_dict)
-            print(classification)
-            if classification == 'human':
-               human += 1
-            elif classification == 'bot':
-               bot += 1
-            elif classification == 'neutral':
-               neutral += 1
+        #calculate the final classification of user
+        classification = end_result(rules_dict)
+        print(classification)
+        if classification == 'human':
+            human += 1
+        elif classification == 'bot':
+            bot += 1
+        elif classification == 'neutral':
+            neutral += 1
 
-            print('HUMAN')
-            print(human)
-            print('BOT')
-            print(bot)
-            print('NEUTRAL')
-            print(neutral)  
-            print('----------------------------------------')       
+        print('HUMAN')
+        print(human)
+        print('BOT')
+        print(bot)
+        print('NEUTRAL')
+        print(neutral)  
+        print('----------------------------------------')       
 
 
 def check_rules_related_to_tweets(tweets_dataset, user_id, rules_dict):
