@@ -9,7 +9,7 @@ def camisani_calzolari_algorithm(users_dataset, tweets_dataset):
     human = 0
     bot = 0
     neutral = 0
-    df_csv = pandas.read_csv(users_dataset)
+    df_csv = pandas.read_csv(users_dataset, sep=',')
     for _, row in df_csv.iterrows():
         #meaning of user fields
         #https://developer.twitter.com/en/docs/tweets/data-dictionary/overview/user-object

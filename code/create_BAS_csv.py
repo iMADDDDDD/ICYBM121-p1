@@ -4,10 +4,10 @@ import pandas
 
 home_directory = "/home/hanne"
 
-def create_csv(e13_dataset, tfp_dataset, fsf_dataset, int_dataset, twt_dataset, fak_users_file, bas_users_dataset, user_id_index, header,kind):
+def create_csv(e13_dataset, tfp_dataset, fsf_dataset, int_dataset, twt_dataset, fak_users_file, bas_users_dataset, user_id_index,kind):
     key_error = 0
-    copy_whole_content_of_csv(e13_dataset, bas_users_dataset, header, user_id_index)
-    copy_whole_content_of_csv(tfp_dataset, bas_users_dataset, header, user_id_index)
+    copy_whole_content_of_csv(e13_dataset, bas_users_dataset, user_id_index)
+    copy_whole_content_of_csv(tfp_dataset, bas_users_dataset, user_id_index)
     with open(fak_users_file, 'r', encoding = 'utf-8') as users_file:
         users_reader = csv.reader(users_file, delimiter=',')
         next(users_reader, None)
@@ -24,15 +24,12 @@ def create_csv(e13_dataset, tfp_dataset, fsf_dataset, int_dataset, twt_dataset, 
     print(key_error)
 
 
-def copy_whole_content_of_csv(dataset1, dataset2,header_csv,user_id_index):
+def copy_whole_content_of_csv(dataset1, dataset2,user_id_index):
     df_csv = pandas.read_csv(dataset1, index_col=int(user_id_index))
     if not os.path.isfile(dataset2):
-        output_file = open(dataset2, 'w', encoding = 'utf-8')
-        csv_writer = csv.writer(output_file)
-        csv_writer.writerow(header_csv)
-    for _, tweet_row in df_csv.iterrows():
-        df_tweet_row = pandas.DataFrame(tweet_row).T
-        df_tweet_row.to_csv(dataset2, mode='a', header=False)
+        df_csv.to_csv(dataset2, mode='a', header=True)
+    else:
+        df_csv.to_csv(dataset2, mode='a', header=False)
       
 
 
@@ -74,10 +71,6 @@ def main():
     twt_users_dataset =  home_directory + '/git/ICYBM121-p1/database/TWT/users.csv'
     fak_users_file = home_directory + '/git/ICYBM121-p1/code/FAK_user_ids.csv'
     user_id_index_users = 0
-    header_users = ["id","name","screen_name","statuses_count","followers_count","friends_count","favourites_count","listed_count","created_at","url","lang",
-"time_zone","location","default_profile","default_profile_image","geo_enabled","profile_image_url","profile_banner_url","profile_use_background_image",
-"profile_background_image_url_https","profile_text_color","profile_image_url_https","profile_sidebar_border_color","profile_background_tile","profile_sidebar_fill_color",
-"profile_background_image_url","profile_background_color","profile_link_color","utc_offset","protected","verified","description","updated","dataset"]
     create_csv(e13_users_dataset, tfp_users_dataset, fsf_users_dataset, int_users_dataset, twt_users_dataset, fak_users_file, bas_users_dataset, user_id_index_users, header_users, 'users')
     bas_tweets_dataset = home_directory + '/git/ICYBM121-p1/code/bas_tweets.csv'
     e13_tweets_dataset =  home_directory + '/git/ICYBM121-p1/database/E13/tweets.csv'
