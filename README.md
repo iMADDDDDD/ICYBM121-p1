@@ -7,7 +7,7 @@ Big data &amp; computer security - Project 1
 #### 4. Fake detection with algorithms based on classification rules
 * table 6: camisani_calzolari_algorithm.py
 * table 7: camisani_calzolari_algorithm_evaluation.py
-* table 8
+* table 8: single_rule_evaluation.py
 
 #### 5. Fake detection with algorithms based on feature sets
 * table 11
