@@ -115,7 +115,10 @@ def check_rules_related_to_tweets(tweets_dataset, user_id, rules_dict):
             rules_dict = check_rule_8(rules_dict, geo)
 
             #check rule 10: check if it has been included in another user's favorites
-            favorite_count = int(tweet_row['favorite_count'])
+            try:
+               favorite_count = int(tweet_row['favorite_count'])
+            except: 
+                favorite_count = 0
             rules_dict = check_rule_10(rules_dict, favorite_count)
 
             #check rule 11: check if it writes tweets that have punctuation
@@ -170,9 +173,6 @@ def end_result(rules_dict):
         classification = 'neutral'
     return classification
 
-            
-      
- 
 
 def initialize_rules_dictionary():
     rules_dict = {}
