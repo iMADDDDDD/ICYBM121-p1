@@ -1,6 +1,7 @@
 import csv
 import os
 import pandas
+import time 
 
 home_directory = "/home/hanne"
 
@@ -24,12 +25,12 @@ def create_csv(e13_dataset, tfp_dataset, fsf_dataset, int_dataset, twt_dataset, 
     print(key_error)
 
 
-def copy_whole_content_of_csv(dataset1, dataset2,user_id_index):
-    df_csv = pandas.read_csv(dataset1, index_col=int(user_id_index))
+def copy_whole_content_of_csv(dataset1, dataset2, user_id_index):
+    df_csv = pandas.read_csv(dataset1)
     if not os.path.isfile(dataset2):
-        df_csv.to_csv(dataset2, mode='a', header=True)
+        df_csv.to_csv(dataset2, index = False, mode='a', header=True)
     else:
-        df_csv.to_csv(dataset2, mode='a', header=False)
+        df_csv.to_csv(dataset2, index = False,  mode='a', header=False)
       
 
 
@@ -38,7 +39,7 @@ def copy_part_of_csv(dataset1, dataset2, user_id, user_id_index, kind,key_error)
         df_csv = pandas.read_csv(dataset1, index_col=int(user_id_index))
         rows_user = df_csv.loc[int(user_id)]
         df_user = pandas.DataFrame(rows_user).T
-        df_user.insert(loc=int(user_id_index), column = 'user_id', value = int(user_id))
+        df_user.insert(loc=int(user_id_index), column = 'id', value = int(user_id))
         df_user.to_csv(dataset2, index = False, mode='a', header=False)
     elif kind == 'tweets':
         df_csv = pandas.read_csv(dataset1, index_col=int(user_id_index))
@@ -49,13 +50,13 @@ def copy_part_of_csv(dataset1, dataset2, user_id, user_id_index, kind,key_error)
         else:
             if isinstance(rows_user, pandas.Series):
                 df_user = pandas.DataFrame(rows_user).T
-                df_user.insert(loc=int(user_id_index), column = 'id', value = int(user_id))
+                df_user.insert(loc=int(user_id_index), column = 'user_id', value = int(user_id))
                 df_user.to_csv(dataset2, index = False, mode='a', header=False)
             elif isinstance(rows_user, pandas.DataFrame):
                 for _, tweet_row in rows_user.iterrows():
                     df_tweet_row = pandas.DataFrame(tweet_row).T
-                    df_tweet_row.insert(loc=int(user_id_index), column = 'id', value = int(user_id))
-                    df_tweet_row.to_csv(dataset2, mode='a', header=False)
+                    df_tweet_row.insert(loc=int(user_id_index), column = 'user_id', value = int(user_id))
+                    df_tweet_row.to_csv(dataset2, mode='a', index = False, header=False)
             else:
                 print("ERROR")
     return key_error      
