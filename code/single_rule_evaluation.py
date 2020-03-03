@@ -1,10 +1,11 @@
 import os
 import csv
 import pandas
+import math
 
 home_directory = "/home/hanne"
 
-def camisani_calzolari_rule_1(classification_file, users_dataset):
+def camisani_calzolari_rules(classification_file, users_dataset, rule_number):
     human = 0
     bot = 0
     neutral = 0
@@ -28,11 +29,155 @@ def camisani_calzolari_rule_1(classification_file, users_dataset):
                     user_already_classified = True
 
         if not user_already_classified:
-            name = row['name']
-            if name != '':
-                classification = 'human'
-            else:
-                classification = 'bot'
+            if rule_number == 1:
+                name = row['name']
+                if name != '':
+                    classification = 'human'
+                else:
+                    classification = 'bot'
+
+            elif rule_number == 2:
+                default_profile_image = row['default_profile_image']
+                if default_profile_image != 'true':
+                    classification = 'human'
+                else:
+                    classification = 'bot'
+
+            elif rule_number == 3:
+                location = row['location']
+                if location != '':
+                    classification = 'human'
+                else:
+                    classification = 'bot'
+
+            elif rule_number == 4:
+                description = row['description']
+                if description != '':
+                    classification = 'human'
+                else:
+                    classification = 'bot'
+
+            elif rule_number == 5:
+                followers_count = row['followers_count']
+                if followers_count >= 30:
+                    classification = 'human'
+                else:
+                    classification = 'bot'
+
+            elif rule_number == 6:
+                listed_count = row['listed_count']
+                if listed_count > 0:
+                    classification = 'human'
+                else:
+                    classification = 'bot'
+
+            elif rule_number == 7:
+                statuses_count = row['statuses_count]
+                if statuses_count > 50:
+                    classification = 'human'
+                else:
+                    classification = 'bot'
+
+            elif rule_number == 8:
+                geo = row['geo']
+                if not math.isnan(geo):
+                    classification = 'human'
+                else:
+                    classification = 'bot'
+
+            elif rule_number == 9:
+                url = row['url']
+                if url != '':
+                    classification = 'human'
+                else:
+                    classification = 'bot'
+
+            elif rule_number == 10:
+                favorite_count = row['favorite_count']
+                if favorite_count >= 0:
+                    classification = 'human'
+                else:
+                    classification = 'bot'
+
+            elif rule_number == 11:
+                text = row['text']
+                if not isinstance(text, float):
+                    if '.' in text or '?' in text or '!' in text:
+                        classification = 'human'
+                else:
+                    classification = 'bot'
+            
+            elif rule_number == 12:
+                num_hashtags = row['num_hashtags']
+                if num_hashtags > 0:
+                    classification = 'human'
+                else:
+                    classification = 'bot'
+
+            elif rule_number == 13:
+                source = row['source']
+                if source == 'iphone':
+                    classification = 'human'
+                else:
+                    classification = 'bot'
+            
+            elif rule_number == 14:
+                source = row['source']
+                if source == 'android':
+                    classification = 'human'
+                else:
+                    classification = 'bot'  
+            
+            elif rule_number == 15:
+                source = row['source']
+                if source == 'foursquare':
+                    classification = 'human'
+                else:
+                    classification = 'bot'
+
+            elif rule_number == 16:
+                source = row['source']
+                if source == 'instagram':
+                    classification = 'human'
+                else:
+                    classification = 'bot' 
+
+            elif rule_number == 17:
+                source = row['source']
+                if source == 'web':
+                    classification = 'human'
+                else:
+                    classification = 'bot'
+
+            elif rule_number == 18:
+                in_reply_to_user_id = row['in_reply_to_user_id']
+                if in_reply_to_user_id != '':
+                    classification = 'human'
+                else:
+                    classification = 'bot'
+
+            elif rule_number == 19:
+                followers_count = row['followers_count']
+                friends_count = row['friends_count']
+                if (2*followers_count) >= (friends_count):
+                    classification = 'human'
+                else:
+                    classification = 'bot'
+            
+            elif rule_number == 20:
+                if not isinstance(text, float):
+                #source: https://www.geeksforgeeks.org/python-check-url-string/
+                    url = re.findall('http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\(\), ]|(?:%[0-9a-fA-F][0-9a-fA-F]))+', text) 
+                    text_without_url = ''
+                    for u in url:
+                        text_without_url = text.replace(u,'')
+                        text = text_without_url
+                    if text_without_url != '':
+                        classification = 'human'
+                    else:
+                        classification = 'bot'
+                 
+                
             dataset = row['dataset']
             if classification == 'human':
                 human += 1
@@ -52,11 +197,12 @@ def camisani_calzolari_rule_1(classification_file, users_dataset):
             print('----------------------------------------') 
 
 
+
 def main():
     dataset = home_directory + '/git/ICYBM121-p1/code/'
     classification_file = dataset + '/bas_classification_cc_r1.csv'
     users_dataset = dataset + '/bas_users.csv'
-    camisani_calzolari_rule_1(classification_file, users_dataset)
+    camisani_calzolari_rules(classification_file, users_dataset,2)
 
 
 if __name__ == "__main__":

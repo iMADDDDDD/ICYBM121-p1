@@ -250,7 +250,7 @@ def check_rule_6(rules_dict, listed_count):
 # subtract the number of retweets? 
 # there is no number of retweets per user account
 def check_rule_7(rules_dict, statuses_count):
-    if statuses_count > 0:
+    if statuses_count > 50:
         rules_dict['rule_7'] = True
     return rules_dict
 
