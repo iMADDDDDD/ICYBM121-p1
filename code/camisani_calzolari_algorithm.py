@@ -25,7 +25,7 @@ def camisani_calzolari_algorithm(users_dataset, tweets_dataset, classification_f
             class_reader = csv.reader(class_file, delimiter=',')
             next(class_reader, None)
             for class_row in class_reader:
-                class_user_id = row[0]
+                class_user_id = class_row[0]
                 if int(user_id) == int(class_user_id):
                     user_already_classified = True
 
@@ -88,6 +88,7 @@ def camisani_calzolari_algorithm(users_dataset, tweets_dataset, classification_f
             elif classification == 'neutral':
                 neutral += 1
             with open(classification_file, mode = 'a') as output:
+                output_writer = csv.writer(output)
                 output_writer.writerow([user_id,dataset,classification])
             print('HUMAN')
             print(human)
@@ -256,7 +257,6 @@ def check_rule_7(rules_dict, statuses_count):
 #8. the account has been geo-localized
 def check_rule_8(rules_dict, geo):
     if not math.isnan(geo):
-        print('TRUE')
         rules_dict['rule_8'] = True
     return rules_dict
 
@@ -276,7 +276,7 @@ def check_rule_10(rules_dict, favorite_count):
 
 
 #11. it writes tweets that have punctuation
-# in one text or in all? #TODO
+# in one text
 # three punctuation marks that are appropriate for use as sentence endings
 def check_rule_11(rules_dict, text):
     if not isinstance(text, float):
@@ -418,9 +418,6 @@ def calculate_human_points(rules_dict):
         human_points += 3
     return human_points
 
-#TODO
-# 2 bot points if it only uses APIs
-# at which rule do we have to look for this
 def calculate_bot_points(rules_dict):
     bot_points = 0
     if not rules_dict['rule_1']:
@@ -456,7 +453,7 @@ def calculate_bot_points(rules_dict):
     if not rules_dict['rule_16']:
         bot_points += 0
     if not rules_dict['rule_17']:
-        bot_points += 2
+        bot_points += 0
     if not rules_dict['rule_18']:
         bot_points += 1
     if not rules_dict['rule_19']:
@@ -467,6 +464,9 @@ def calculate_bot_points(rules_dict):
         bot_points += 2
     if not rules_dict['rule_22']:
         bot_points += 1
+    # 2 bot points if it only uses APIs
+    if not rules_dict['rule_13'] and not rules_dict['rule_14'] and not rules_dict['rule_15'] and not rules_dict['rule_16'] and not rules_dict['rule_17']:
+        bot_points += 2
     return bot_points
 
 
