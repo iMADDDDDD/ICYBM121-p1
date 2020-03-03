@@ -38,7 +38,7 @@ def copy_part_of_csv(dataset1, dataset2, user_id, user_id_index, kind,key_error)
         df_csv = pandas.read_csv(dataset1, index_col=int(user_id_index))
         rows_user = df_csv.loc[int(user_id)]
         df_user = pandas.DataFrame(rows_user).T
-        df_user.insert(loc=0, column = 'user_id', value = int(user_id))
+        df_user.insert(loc=int(user_id_index), column = 'user_id', value = int(user_id))
         df_user.to_csv(dataset2, index = False, mode='a', header=False)
     elif kind == 'tweets':
         df_csv = pandas.read_csv(dataset1, index_col=int(user_id_index))
@@ -49,12 +49,12 @@ def copy_part_of_csv(dataset1, dataset2, user_id, user_id_index, kind,key_error)
         else:
             if isinstance(rows_user, pandas.Series):
                 df_user = pandas.DataFrame(rows_user).T
-                df_user.insert(loc=0, column = 'user_id', value = int(user_id))
+                df_user.insert(loc=int(user_id_index), column = 'id', value = int(user_id))
                 df_user.to_csv(dataset2, index = False, mode='a', header=False)
             elif isinstance(rows_user, pandas.DataFrame):
                 for _, tweet_row in rows_user.iterrows():
                     df_tweet_row = pandas.DataFrame(tweet_row).T
-                    df_tweet_row.insert(loc=0, column = 'user_id', value = int(user_id))
+                    df_tweet_row.insert(loc=int(user_id_index), column = 'id', value = int(user_id))
                     df_tweet_row.to_csv(dataset2, mode='a', header=False)
             else:
                 print("ERROR")
@@ -71,7 +71,7 @@ def main():
     twt_users_dataset =  home_directory + '/git/ICYBM121-p1/database/TWT/users.csv'
     fak_users_file = home_directory + '/git/ICYBM121-p1/code/FAK_user_ids.csv'
     user_id_index_users = 0
-    create_csv(e13_users_dataset, tfp_users_dataset, fsf_users_dataset, int_users_dataset, twt_users_dataset, fak_users_file, bas_users_dataset, user_id_index_users, header_users, 'users')
+    #create_csv(e13_users_dataset, tfp_users_dataset, fsf_users_dataset, int_users_dataset, twt_users_dataset, fak_users_file, bas_users_dataset, user_id_index_users, 'users')
     bas_tweets_dataset = home_directory + '/git/ICYBM121-p1/code/bas_tweets.csv'
     e13_tweets_dataset =  home_directory + '/git/ICYBM121-p1/database/E13/tweets.csv'
     tfp_tweets_dataset =  home_directory + '/git/ICYBM121-p1/database/TFP/tweets.csv'
@@ -79,9 +79,7 @@ def main():
     int_tweets_dataset =  home_directory + '/git/ICYBM121-p1/database/INT/tweets.csv'
     twt_tweets_dataset =  home_directory + '/git/ICYBM121-p1/database/TWT/tweets.csv'
     user_id_index_tweets = 4
-    header_tweets = ["created_at","id","text","source","user_id","truncated","in_reply_to_status_id","in_reply_to_user_id","in_reply_to_screen_name",
-"retweeted_status_id","geo","place","retweet_count","reply_count","favorite_count","num_hashtags","num_urls","num_mentions","timestamp"]
-    #create_csv(e13_tweets_dataset, tfp_tweets_dataset, fsf_tweets_dataset, int_tweets_dataset, twt_tweets_dataset, fak_users_file, bas_tweets_dataset, user_id_index_tweets, header_tweets, 'tweets')
+    create_csv(e13_tweets_dataset, tfp_tweets_dataset, fsf_tweets_dataset, int_tweets_dataset, twt_tweets_dataset, fak_users_file, bas_tweets_dataset, user_id_index_tweets, 'tweets')
     
 
 
