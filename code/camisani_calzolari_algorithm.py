@@ -456,7 +456,7 @@ def calculate_bot_points(rules_dict):
     if not rules_dict['rule_16']:
         bot_points += 0
     if not rules_dict['rule_17']:
-        bot_points += 0
+        bot_points += 2
     if not rules_dict['rule_18']:
         bot_points += 1
     if not rules_dict['rule_19']:
@@ -475,7 +475,8 @@ def main():
     dataset = home_directory + '/git/ICYBM121-p1/code/'
     users_dataset = dataset + 'bas_users.csv'
     tweets_dataset = dataset + 'bas_tweets.csv'
-    camisani_calzolari_algorithm(users_dataset, tweets_dataset)
+    classification_file = dataset + 'bas_classification.csv'
+    camisani_calzolari_algorithm(users_dataset, tweets_dataset, classification_file)
 
 
 if __name__ == "__main__":
