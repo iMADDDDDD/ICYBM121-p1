@@ -109,7 +109,11 @@ def check_rules_related_to_tweets(tweets_dataset, user_id, rules_dict):
         print("no tweets for user")
         #everything is false by default
     else:
-        for _, tweet_row in tweets_user.iterrows():
+        if isinstance(tweets_user, pandas.Series):
+            df_user = pandas.DataFrame(tweets_user).T
+        else:
+            df_user = tweets_user
+        for _, tweet_row in df_user.iterrows():
             #check rule 8: check if account has been geo-localized
             geo = tweet_row['geo']
             rules_dict = check_rule_8(rules_dict, geo)
