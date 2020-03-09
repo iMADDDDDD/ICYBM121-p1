@@ -2,6 +2,7 @@ import os
 import csv
 import pandas
 import math
+import sys
 
 home_directory = "/home/hanne"
 
@@ -38,24 +39,26 @@ def camisani_calzolari_rules(classification_file, users_dataset, rule_number):
 
             elif rule_number == 2:
                 default_profile_image = row['default_profile_image']
-                if default_profile_image != 'true':
+                if isinstance(default_profile_image,float) and math.isnan(default_profile_image):
                     classification = 'human'
-                else:
+                elif default_profile_image == 1.0:
                     classification = 'bot'
 
             elif rule_number == 3:
                 location = row['location']
-                if location != '':
-                    classification = 'human'
-                else:
+                if isinstance(location,float) and math.isnan(location):
                     classification = 'bot'
+                else:
+                    classification = 'human'
 
             elif rule_number == 4:
+                print('RULE 4')
                 description = row['description']
-                if description != '':
-                    classification = 'human'
-                else:
+                print(description)
+                if isinstance(description,float) and math.isnan(description):
                     classification = 'bot'
+                else:
+                    classification = 'human'
 
             elif rule_number == 5:
                 followers_count = row['followers_count']
@@ -72,7 +75,7 @@ def camisani_calzolari_rules(classification_file, users_dataset, rule_number):
                     classification = 'bot'
 
             elif rule_number == 7:
-                statuses_count = row['statuses_count]
+                statuses_count = row['statuses_count']
                 if statuses_count > 50:
                     classification = 'human'
                 else:
@@ -176,7 +179,14 @@ def camisani_calzolari_rules(classification_file, users_dataset, rule_number):
                         classification = 'human'
                     else:
                         classification = 'bot'
-                 
+
+            elif rule_number == 21:
+                retweet_count = row['retweet_count']
+                if retweet_count > 0:
+                    classification = 'human'
+                else:
+                    classification = 'bot'
+            
                 
             dataset = row['dataset']
             if classification == 'human':
@@ -199,10 +209,11 @@ def camisani_calzolari_rules(classification_file, users_dataset, rule_number):
 
 
 def main():
+    rule_nr = sys.argv[1]
     dataset = home_directory + '/git/ICYBM121-p1/code/'
-    classification_file = dataset + '/bas_classification_cc_r1.csv'
+    classification_file = dataset + '/bas_classification_cc_r' + rule_nr + '.csv'
     users_dataset = dataset + '/bas_users.csv'
-    camisani_calzolari_rules(classification_file, users_dataset,2)
+    camisani_calzolari_rules(classification_file, users_dataset, int(rule_nr))
 
 
 if __name__ == "__main__":

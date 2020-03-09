@@ -1,5 +1,7 @@
 import math
 import csv
+import sys
+
 
 home_directory = '/home/hanne'
 
@@ -64,10 +66,22 @@ def calculate_MCC(true_positive, true_negative, false_positive, false_negative):
         MCC = ((true_positive * true_negative) - (false_positive * false_negative)) / math.sqrt((true_positive + false_negative) * (true_positive + false_positive) * (true_negative + false_positive) * (true_negative + false_negative))
         return MCC
 
+def calculate_information_gain(true_positive, true_negative, false_positive, false_negative):
+    print(true_negative)
+    print(false_negative)
+    print(true_positive)
+    print(false_positive)
+    total = true_negative + false_negative + true_positive + false_positive
+    humans = true_negative + false_negative
+    bots = true_positive + false_positive
+    information_gain = 1 - ((humans/total)*((-(true_negative/humans)*math.log2(true_negative/humans)) - ((false_negative/humans)*math.log2(false_negative/humans))) + (bots/total)*((-(true_positive/bots)*math.log2(true_positive/bots)) - ((false_positive/bots)*math.log2(false_positive/bots))))
+    return information_gain
+
 
 def main():
+    file_name = sys.argv[1]
     dataset = home_directory + '/git/ICYBM121-p1/code/'
-    classification_file = dataset + '/bas_classification.csv'
+    classification_file = dataset + '/' + file_name
     tp, tn, fp, fn = determine_positive_and_negative(classification_file)
     accuracy = calculate_accuracy(tp, tn, fp, fn)
     print("ACCURACY")
@@ -84,6 +98,9 @@ def main():
     mcc = calculate_MCC(tp, tn, fp, fn)
     print("MCC")
     print(mcc)
+    information_gain = calculate_information_gain(tp, tn, fp, fn)
+    print("INFORMATION GAIN")
+    print(information_gain)
     
 
 

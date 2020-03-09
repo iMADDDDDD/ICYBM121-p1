@@ -160,7 +160,7 @@ def check_rules_related_to_tweets(tweets_dataset, user_id, rules_dict):
             retweet_count = int(tweet_row['retweet_count'])
             rules_dict = check_rule_21(rules_dict, retweet_count)
 
-        #check rule 22: check if it has logged into Twitter
+        #check rule 22: check if it has logged into Twitter using different clients
         rules_dict = check_rule_22(rules_dict)
     return rules_dict
           
@@ -217,14 +217,14 @@ def check_rule_1(rules_dict, name):
 # * true if default image is used
 # * false if user has uploaded its own image
 def check_rule_2(rules_dict, default_profile_image):
-    if default_profile_image != 'true':
+    if isinstance(default_profile_image,float) and math.isnan(default_profile_image):
         rules_dict['rule_2'] = True
     return rules_dict
 
 
 #3. the profile contains a physical address
 def check_rule_3(rules_dict, location):
-    if location != '':
+    if not (isinstance(location,float) and math.isnan(location)):
         rules_dict['rule_3'] = True
     return rules_dict
 
