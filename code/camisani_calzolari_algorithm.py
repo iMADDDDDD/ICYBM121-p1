@@ -267,14 +267,14 @@ def check_rule_8(rules_dict, geo):
 
 #9. the profile contains a URL
 def check_rule_9(rules_dict, url):
-    if url != '':
+    if not (isinstance(url,float) and math.isnan(url)):
         rules_dict['rule_9'] = True
     return rules_dict
 
 
 #10. it has been includes in another user's favorites
 def check_rule_10(rules_dict, favorite_count):
-    if favorite_count >= 0:
+    if favorite_count > 0:
         rules_dict['rule_10'] = True
     return rules_dict
 
