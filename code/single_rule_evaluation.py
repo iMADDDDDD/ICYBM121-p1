@@ -87,8 +87,8 @@ def camisani_calzolari_rules(classification_file, users_dataset, tweets_dataset,
                     classification = 'human'
 
             elif rule_number == 19:
-                followers_count = tweet_row['followers_count']
-                friends_count = tweet_row['friends_count']
+                followers_count = row['followers_count']
+                friends_count = row['friends_count']
                 if (2*followers_count) >= (friends_count):
                     classification = 'human'
                 else:
@@ -250,12 +250,15 @@ def van_den_beld_rules(classification_file, users_dataset, tweets_dataset, rule_
                 else: 
                     classification = 'human'
 
-            # tweets
-            elif rule_number == 3:
-                classification = 'human'
-
             elif rule_number == 4:
-                profile_image_url = row['profile_image_url']
+                user_profile_image_url = row['profile_image_url']
+                number_same_images = df.loc[df.profile_image_url == user_profile_image_url, 'profile_image_url'].count()
+                if number_same_images > 1:
+                    classification = 'bot'
+                else:
+                    classification = 'human'
+
+            elif rule_number == 3 or rule_number == 5:
 
             dataset = row['dataset']
             if classification == 'human':
@@ -275,16 +278,39 @@ def van_den_beld_rules(classification_file, users_dataset, tweets_dataset, rule_
             print(neutral)  
             print('----------------------------------------') 
 
+def check_vdb_tweet_rule(tweets_dataset, rule_number, user_id):
+    classification = 'human'
+    df_csv = pandas.read_csv(tweets_dataset, index_col=4)
+    #print(df_csv)
+    try:
+        tweets_user = df_csv.loc[int(user_id)]
+    # https://developer.twitter.com/en/docs/tweets/data-dictionary/overview/tweet-object
+    except:
+        print("no tweets for user")
+        #everything is false by default
+    else:
+        if isinstance(tweets_user, pandas.Series):
+            df_user = pandas.DataFrame(tweets_user).T
+        else:
+            df_user = tweets_user
+        client_count = 0
+
+        for _, tweet_row in df_user.iterrows():
+            if rule_number == 3:
+                text = tweet_row['text']
+                in_reply_to_user_id = tweet_row['in_reply_to_user_id']
                 
+
+            elif rule_number == 5:
 
 def main():
     rule_nr = sys.argv[1]
     dataset = home_directory + '/git/ICYBM121-p1/code/'
-    classification_file = dataset + '/bas_classification_vdb_r' + rule_nr + '.csv'
+    classification_file = dataset + '/bas_classification_cc_r' + rule_nr + '.csv'
     users_dataset = dataset + '/bas_users.csv'
     tweets_dataset = dataset + '/bas_tweets.csv'
-    #camisani_calzolari_rules(classification_file, users_dataset, tweets_dataset, int(rule_nr))
-    van_den_beld_rules(classification_file, users_dataset, tweets_dataset, int(rule_nr))
+    camisani_calzolari_rules(classification_file, users_dataset, tweets_dataset, int(rule_nr))
+    #van_den_beld_rules(classification_file, users_dataset, tweets_dataset, int(rule_nr))
 
 
 if __name__ == "__main__":
