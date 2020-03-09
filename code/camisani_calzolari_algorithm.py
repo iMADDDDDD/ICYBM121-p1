@@ -231,7 +231,7 @@ def check_rule_3(rules_dict, location):
 
 #4. the profile contains a biography
 def check_rule_4(rules_dict, description):
-    if description != '':
+    if not (isinstance(description,float) and math.isnan(description)):
         rules_dict['rule_4'] = True
     return rules_dict
 

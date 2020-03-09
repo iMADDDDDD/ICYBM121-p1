@@ -52,9 +52,7 @@ def camisani_calzolari_rules(classification_file, users_dataset, rule_number):
                     classification = 'human'
 
             elif rule_number == 4:
-                print('RULE 4')
                 description = row['description']
-                print(description)
                 if isinstance(description,float) and math.isnan(description):
                     classification = 'bot'
                 else:
@@ -75,7 +73,9 @@ def camisani_calzolari_rules(classification_file, users_dataset, rule_number):
                     classification = 'bot'
 
             elif rule_number == 7:
+                print('RULE 7')
                 statuses_count = row['statuses_count']
+                print(statuses_count)
                 if statuses_count > 50:
                     classification = 'human'
                 else:
