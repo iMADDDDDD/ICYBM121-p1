@@ -258,7 +258,7 @@ def van_den_beld_rules(classification_file, users_dataset, tweets_dataset, rule_
                 else:
                     classification = 'human'
 
-            elif rule_number == 3 or rule_number == 5:
+            #elif rule_number == 3 or rule_number == 5:
 
             dataset = row['dataset']
             if classification == 'human':
@@ -301,7 +301,7 @@ def check_vdb_tweet_rule(tweets_dataset, rule_number, user_id):
                 in_reply_to_user_id = tweet_row['in_reply_to_user_id']
                 
 
-            elif rule_number == 5:
+            #elif rule_number == 5:
 
 def main():
     rule_nr = sys.argv[1]
