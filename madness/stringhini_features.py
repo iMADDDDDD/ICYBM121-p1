@@ -3,7 +3,6 @@ from info_gain import info_gain
 from numpy import *
 import re
 
-
 BAS = '../datasets/BAS/users.csv'
 BAS_TWEETS = '../datasets/BAS/baseline_tweets.csv'
 
@@ -21,13 +20,10 @@ def feature1():
             temp_list.append(0)
 
     ig = info_gain.info_gain(temp_list, friends_list)
-
     print("INFORMATION GAIN: " + str(ig))
-
     class_list = read_dataset()
-
     print(corrcoef(friends_list, class_list))
-    pass
+    return temp_list
 
 
 # Spambots have sent less than 20 tweets
@@ -57,24 +53,39 @@ def feature2():
 
     class_list = read_dataset()
     print(corrcoef(tweets_count, class_list))
-    pass
+    return tmp
 
 
 # The content of spambots’ tweets exhibits the so-called message similarity
 def feature3():
+    print("Reading datasets...")
     dataset = pd.read_csv(BAS)
     dataset_tweets = pd.read_csv(BAS_TWEETS)
     dataset_tweets.rename(columns={'Unnamed: 0': 'user_id'}, inplace=True)
+    print("Done")
 
     users_id = dataset['id'].values
-    users_id_tweets = dataset_tweets['user_id'].values
 
-    all_user_tweets = dataset_tweets['text'].loc[dataset_tweets['user_id'] == 3610511]
-    message_similarity(all_user_tweets)
+    temp = []
+    similarities = []
 
-    # TODO
-    # Find a way for message similarity
-    pass
+    for i in range(len(users_id)):
+        print(i)
+        all_user_tweets = dataset_tweets['text'].loc[dataset_tweets['user_id'] == users_id[i]]
+        similarities.append(message_similarity(all_user_tweets))
+
+    for similarity in similarities:
+        if similarity > 100:
+            temp.append(0)
+        else:
+            temp.append(1)
+
+    ig = info_gain.info_gain(temp, similarities)
+    print("Information Gain: " + str(ig))
+
+    class_list = read_dataset()
+    print(corrcoef(similarities, class_list))
+    return temp
 
 
 # Spambots have a high URL ratio
@@ -112,7 +123,7 @@ def feature4():
 
     class_list = read_dataset()
     print(corrcoef(url_ratios, class_list))
-    pass
+    return temp
 
 
 # Spambots have a high friends/followers ratio
@@ -147,7 +158,7 @@ def feature5():
 
     class_list = read_dataset()
     print(corrcoef(class_list, ratios))
-    pass
+    return temp
 
 
 def read_dataset():
@@ -165,10 +176,35 @@ def read_dataset():
 
 
 def message_similarity(tweets):
-    tweets_list = tweets.tolist()
-    last15 = tweets_list[-15:]
-    pass
+    tweets = tweets.tolist()
+    similarities = 0
+    i = 1
+    while i < len(tweets):
+        j = -1
+        while j > -16:
+
+            if j + i < 0:
+                j = -17
+            else:
+                firstTweet = str(tweets[i]).split()
+                secondTweet = str(tweets[i + j]).split()
+
+                for m in range(len(firstTweet)):
+                    for n in range(len(secondTweet)):
+
+                        if firstTweet[m] == secondTweet[n]:
+
+                            try:
+                                if (firstTweet[m + 1] == secondTweet[n + 1] and firstTweet[m + 2] == secondTweet[
+                                    n + 2] and firstTweet[m + 3] == secondTweet[n + 3]):
+                                    similarities += 1
+                            except:
+                                pass
+
+                j -= 1
+        i += 1
+    return similarities / 2
 
 
 if __name__ == '__main__':
-    feature5()
+    feature3()
