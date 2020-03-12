@@ -159,27 +159,23 @@ def check_tweet_rule(df_csv, rule_number, user_id):
                     classification = 'human'
             
             elif rule_number == 13:
-                #print('RULE 13')
                 source = tweet_row['source']
-                #print(source)
                 if 'Twitter for iPhone' in source:
                     classification = 'human'
 
             elif rule_number == 14:
-                print('RULE 14')
                 source = tweet_row['source']
-                print(source)
-                if source == 'android':
+                if 'Twitter for Android' in source:
                     classification = 'human'
 
             elif rule_number == 15:
                 source = tweet_row['source']
-                if source == 'foursquare':
+                if 'foursquare' in source:
                     classification = 'human'
 
             elif rule_number == 16:
                 source = tweet_row['source']
-                if source == 'instagram':
+                if 'Instagram' in source:
                     classification = 'human'
 
             elif rule_number == 17:
