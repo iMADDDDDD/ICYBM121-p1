@@ -32,7 +32,7 @@ def feature1():
 
     class_list = read_dataset()
     print(corrcoef(age, class_list))
-    pass
+    return temp
 
 
 # Bidirectional links
@@ -796,7 +796,7 @@ def feature9():
 
     class_list = read_dataset()
     print("PEARSON CORRELATION COEFFICIENT: " + str(corrcoef(ratios, class_list)[0][1]))
-    pass
+    return temp
 
 
 def read_dataset():
