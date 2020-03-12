@@ -1,0 +1,65 @@
+=== Run information ===
+
+Scheme:       weka.classifiers.lazy.IBk -K 1 -W 0 -A "weka.core.neighboursearch.LinearNNSearch -A \"weka.core.EuclideanDistance -R first-last\""
+Relation:     camisani_calzolari_classificationFinal-weka.filters.unsupervised.attribute.Remove-R1
+Instances:    3900
+Attributes:   24
+              name
+              image
+              address
+              biography
+              followers_30
+              list
+              tweets_50
+              URL
+              followers_friends_ratio
+              number_of_friends
+              number_of_tweets
+              friends_to_follower_ratio
+              bot_in_biography
+              followers_friends_ratio_100
+              duplicate_images
+              followers_friends_ratio_50
+              default_image
+              no biography
+              no location
+              friends_100
+              no tweets
+              account_age
+              following_rate
+              H_or_Bot
+Test mode:    10-fold cross-validation
+
+=== Classifier model (full training set) ===
+
+IB1 instance-based classifier
+using 1 nearest neighbour(s) for classification
+
+
+Time taken to build model: 0 seconds
+
+=== Stratified cross-validation ===
+=== Summary ===
+
+Correctly Classified Instances        3794               97.2821 %
+Incorrectly Classified Instances       106                2.7179 %
+Kappa statistic                          0.9456
+Mean absolute error                      0.0382
+Root mean squared error                  0.1515
+Relative absolute error                  7.6421 %
+Root relative squared error             30.2965 %
+Total Number of Instances             3900     
+
+=== Detailed Accuracy By Class ===
+
+                 TP Rate  FP Rate  Precision  Recall   F-Measure  MCC      ROC Area  PRC Area  Class
+                 0.963    0.017    0.983      0.963    0.973      0.946    0.990     0.991     0
+                 0.983    0.037    0.963      0.983    0.973      0.946    0.990     0.986     1
+Weighted Avg.    0.973    0.027    0.973      0.973    0.973      0.946    0.990     0.989     
+
+=== Confusion Matrix ===
+
+    a    b   <-- classified as
+ 1877   73 |    a = 0
+   33 1917 |    b = 1
+

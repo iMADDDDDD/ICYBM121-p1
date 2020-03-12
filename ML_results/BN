@@ -1,0 +1,96 @@
+=== Run information ===
+
+Scheme:       weka.classifiers.bayes.BayesNet -D -Q weka.classifiers.bayes.net.search.local.K2 -- -P 1 -S BAYES -E weka.classifiers.bayes.net.estimate.SimpleEstimator -- -A 0.5
+Relation:     camisani_calzolari_classificationFinal-weka.filters.unsupervised.attribute.Remove-R1
+Instances:    3900
+Attributes:   24
+              name
+              image
+              address
+              biography
+              followers_30
+              list
+              tweets_50
+              URL
+              followers_friends_ratio
+              number_of_friends
+              number_of_tweets
+              friends_to_follower_ratio
+              bot_in_biography
+              followers_friends_ratio_100
+              duplicate_images
+              followers_friends_ratio_50
+              default_image
+              no biography
+              no location
+              friends_100
+              no tweets
+              account_age
+              following_rate
+              H_or_Bot
+Test mode:    10-fold cross-validation
+
+=== Classifier model (full training set) ===
+
+Bayes Network Classifier
+not using ADTree
+#attributes=24 #classindex=23
+Network structure (nodes followed by parents)
+name(2): H_or_Bot 
+image(2): H_or_Bot 
+address(2): H_or_Bot 
+biography(2): H_or_Bot 
+followers_30(2): H_or_Bot 
+list(2): H_or_Bot 
+tweets_50(2): H_or_Bot 
+URL(2): H_or_Bot 
+followers_friends_ratio(2): H_or_Bot 
+number_of_friends(2): H_or_Bot 
+number_of_tweets(2): H_or_Bot 
+friends_to_follower_ratio(2): H_or_Bot 
+bot_in_biography(2): H_or_Bot 
+followers_friends_ratio_100(2): H_or_Bot 
+duplicate_images(2): H_or_Bot 
+followers_friends_ratio_50(2): H_or_Bot 
+default_image(2): H_or_Bot 
+no biography(2): H_or_Bot 
+no location(2): H_or_Bot 
+friends_100(2): H_or_Bot 
+no tweets(2): H_or_Bot 
+account_age(2): H_or_Bot 
+following_rate(2): H_or_Bot 
+H_or_Bot(2): 
+LogScore Bayes: -28743.486277868607
+LogScore BDeu: -28782.99798801721
+LogScore MDL: -28831.807308846688
+LogScore ENTROPY: -28637.49211079191
+LogScore AIC: -28684.492110791907
+
+
+Time taken to build model: 0.05 seconds
+
+=== Stratified cross-validation ===
+=== Summary ===
+
+Correctly Classified Instances        3705               95      %
+Incorrectly Classified Instances       195                5      %
+Kappa statistic                          0.9   
+Mean absolute error                      0.0569
+Root mean squared error                  0.204 
+Relative absolute error                 11.3747 %
+Root relative squared error             40.7982 %
+Total Number of Instances             3900     
+
+=== Detailed Accuracy By Class ===
+
+                 TP Rate  FP Rate  Precision  Recall   F-Measure  MCC      ROC Area  PRC Area  Class
+                 0.956    0.056    0.944      0.956    0.950      0.900    0.984     0.982     0
+                 0.944    0.044    0.956      0.944    0.950      0.900    0.984     0.983     1
+Weighted Avg.    0.950    0.050    0.950      0.950    0.950      0.900    0.984     0.983     
+
+=== Confusion Matrix ===
+
+    a    b   <-- classified as
+ 1865   85 |    a = 0
+  110 1840 |    b = 1
+
