@@ -135,12 +135,86 @@ def check_tweet_rule(df_csv, rule_number, user_id):
         else:
             df_user = tweets_user
         client_count = 0
-        if rule_number == 8:
-           
-           print("RULE 8")
-           if False in df_user['geo'].isnull():
-               classification = 'human'
-           
+
+        for _, tweet_row in df_user.iterrows():
+            if rule_number == 8:   
+                geo = tweet_row['geo']
+                if not math.isnan(geo):
+                    classification = 'human'
+
+            elif rule_number == 10:
+                favorite_count = int(tweet_row['favorite_count'])
+                if favorite_count > 0:
+                    classification = 'human'
+
+            elif rule_number == 11:
+                text = tweet_row['text']
+                if not isinstance(text, float):
+                    if '.' in text or '?' in text or '!' in text:
+                        classification = 'human'
+            
+            elif rule_number == 12:
+                num_hashtags = int(tweet_row['num_hashtags'])
+                if num_hashtags > 0:
+                    classification = 'human'
+            
+            elif rule_number == 13:
+                #print('RULE 13')
+                source = tweet_row['source']
+                #print(source)
+                if 'Twitter for iPhone' in source:
+                    classification = 'human'
+
+            elif rule_number == 14:
+                print('RULE 14')
+                source = tweet_row['source']
+                print(source)
+                if source == 'android':
+                    classification = 'human'
+
+            elif rule_number == 15:
+                source = tweet_row['source']
+                if source == 'foursquare':
+                    classification = 'human'
+
+            elif rule_number == 16:
+                source = tweet_row['source']
+                if source == 'instagram':
+                    classification = 'human'
+
+            elif rule_number == 17:
+                source = tweet_row['source']
+                if source == 'web':
+                    classification = 'human'
+
+            elif rule_number == 18:
+                in_reply_to_user_id = tweet_row['in_reply_to_user_id']
+                if in_reply_to_user_id != '':
+                    classification = 'human'
+            
+            elif rule_number == 20:
+                text = tweet_row['text']
+                if not isinstance(text, float):
+                #source: https://www.geeksforgeeks.org/python-check-url-string/
+                    url = re.findall('http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\(\), ]|(?:%[0-9a-fA-F][0-9a-fA-F]))+', text) 
+                    text_without_url = ''
+                    for u in url:
+                        text_without_url = text.replace(u,'')
+                        text = text_without_url
+                    if text_without_url != '':
+                        classification = 'human'
+
+            elif rule_number == 21:
+                retweet_count = tweet_row['retweet_count']
+                if retweet_count > 0:
+                    classification = 'human'
+
+            elif rule_number == 22:
+                source = tweet_row['source']
+                if source == 'iphone' or source == 'android' or source == 'foursquare' or source == 'instagram' or source == 'web':
+                    client_count += 1
+                if client_count > 1:
+                    classification = 'human'
           
 
 
