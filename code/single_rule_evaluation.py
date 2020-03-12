@@ -6,6 +6,7 @@ import sys
 from datetime import datetime
 import pytz
 import time
+import re
 
 
 home_directory = "/home/hanne"
@@ -184,8 +185,8 @@ def check_tweet_rule(df_csv, rule_number, user_id):
                     classification = 'human'
 
             elif rule_number == 18:
-                in_reply_to_user_id = tweet_row['in_reply_to_user_id']
-                if in_reply_to_user_id != '':
+                in_reply_to_user_id = int(tweet_row['in_reply_to_user_id'])
+                if in_reply_to_user_id != 0:
                     classification = 'human'
             
             elif rule_number == 20:
@@ -201,16 +202,14 @@ def check_tweet_rule(df_csv, rule_number, user_id):
                         classification = 'human'
 
             elif rule_number == 21:
-                retweet_count = tweet_row['retweet_count']
+                retweet_count = int(tweet_row['retweet_count'])
                 if retweet_count > 0:
                     classification = 'human'
 
-            elif rule_number == 22:
-                source = tweet_row['source']
-                if source == 'iphone' or source == 'android' or source == 'foursquare' or source == 'instagram' or source == 'web':
-                    client_count += 1
-                if client_count > 1:
-                    classification = 'human'
+        if rule_number == 22:
+            sources = df_user['source'].unique()
+            if len(sources) > 1:
+                classification = 'human'
           
 
 
