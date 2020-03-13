@@ -223,6 +223,7 @@ def van_den_beld_rules(classification_file, users_dataset, tweets_dataset, rule_
             output_writer = csv.writer(output)
             output_writer.writerow(['id','dataset', 'classification'])
     df_csv = pandas.read_csv(users_dataset, sep=',')
+    df_tweets = pandas.read_csv(tweets_dataset, index_col=4)
     for _, row in df_csv.iterrows():
         #meaning of user fields
         #https://developer.twitter.com/en/docs/tweets/data-dictionary/overview/user-object
@@ -262,7 +263,8 @@ def van_den_beld_rules(classification_file, users_dataset, tweets_dataset, rule_
                 else:
                     classification = 'human'
 
-            #elif rule_number == 3 or rule_number == 5:
+            elif rule_number == 3 or rule_number == 5:
+                classification = check_vdb_tweet_rule(df_tweets, rule_number, user_id)
 
             dataset = row['dataset']
             if classification == 'human':
@@ -282,10 +284,8 @@ def van_den_beld_rules(classification_file, users_dataset, tweets_dataset, rule_
             print(neutral)  
             print('----------------------------------------') 
 
-def check_vdb_tweet_rule(tweets_dataset, rule_number, user_id):
+def check_vdb_tweet_rule(df_csv, rule_number, user_id):
     classification = 'human'
-    df_csv = pandas.read_csv(tweets_dataset, index_col=4)
-    #print(df_csv)
     try:
         tweets_user = df_csv.loc[int(user_id)]
     # https://developer.twitter.com/en/docs/tweets/data-dictionary/overview/tweet-object
@@ -299,12 +299,26 @@ def check_vdb_tweet_rule(tweets_dataset, rule_number, user_id):
             df_user = tweets_user
         client_count = 0
 
-        for _, tweet_row in df_user.iterrows():
-            if rule_number == 3:
-                text = tweet_row['text']
-                in_reply_to_user_id = tweet_row['in_reply_to_user_id']
+    if rule_number == 3:
+        print('RULE 3')
+        df_user['created_at'] = pandas.to_datetime(df_user['created_at'])
+        created_date = df_user.sort_values(by=['created_at'], ascending=False)
+        df_last_tweets = created_date.head(20)
+        print(df_last_tweets)
+        df_same_tweets = df_last_tweets.duplicated('text')
+        #print(df_same_tweets)    
+            
+    #reply_texts = df_user['text', 'in_reply_to_user_id']
+     #       if rule_number == 3:
+      #          text = tweet_row['text']
+       #         in_reply_to_user_id = tweet_row['in_reply_to_user_id']
               
-                
+          #  if rule_number == 5:    
+           #     source = tweet_row['source']
+            #    if source != 'web':
+             #       classification = 'bot'
+
+    return classification
 
 def socialbakers_rules(classification_file, users_dataset, tweets_dataset, rule_number):
     human = 0
@@ -383,11 +397,23 @@ def socialbakers_rules(classification_file, users_dataset, tweets_dataset, rule_
                     classification = 'human'
             
             elif rule_number == 2 or rule_number == 3 or rule_number == 4 or rule_number == 5:
-                check_sb_tweet_rule(df_tweets, rule_number, user_id)              
-
+                classification = check_sb_tweet_rule(df_tweets, rule_number, user_id)              
+            if classification == 'human':
+                human += 1
+            elif classification == 'bot':
+                bot += 1
+            elif classification == 'neutral':
+                neutral += 1
             with open(classification_file, mode = 'a') as output:
                 output_writer = csv.writer(output)
                 output_writer.writerow([user_id, dataset, classification])
+            print('HUMAN')
+            print(human)
+            print('BOT')
+            print(bot)
+            print('NEUTRAL')
+            print(neutral)  
+            print('----------------------------------------') 
 
 
 def check_sb_tweet_rule(df_csv, rule_number, user_id):
@@ -413,8 +439,9 @@ def check_sb_tweet_rule(df_csv, rule_number, user_id):
 
             if rule_number == 2:   
                 text = tweet_row['text']
-                if 'diet' in text or 'make money' in text or 'work from home' in text or 'dieta' in text or 'fare soldi' in text or 'lavoro da casa' in text:
-                    count_spam_tweets += 1
+                if not isinstance(text, float):
+                    if 'diet' in text or 'make money' in text or 'work from home' in text or 'dieta' in text or 'fare soldi' in text or 'lavoro da casa' in text:
+                        count_spam_tweets += 1
              
             elif rule_number == 4:
                 retweeted_status_id = tweet_row['retweeted_status_id']
@@ -438,10 +465,11 @@ def check_sb_tweet_rule(df_csv, rule_number, user_id):
             percentage = count_spam_tweets / number_tweets
             if percentage > 30.00:
                 classification = 'bot'  
- 
+             
         elif rule_number == 3:
-            print('RULE 3')
-            print(df_user['text'].value_counts())
+            max_frequency = df_user['text'].value_counts().max()
+            if max_frequency > 3:
+                classification = 'bot'
 
         elif rule_number == 4:
             percentage = count_retweets / number_tweets
@@ -453,9 +481,9 @@ def check_sb_tweet_rule(df_csv, rule_number, user_id):
             if percentage > 90.00:
                 classification = 'bot'  
             
-                 
-
     return classification
+
+
 
 def main():
     rule_nr = sys.argv[1]
