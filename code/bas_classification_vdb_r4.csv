@@ -1087,7 +1087,7 @@ id,dataset,classification
 500246041,E13,human
 794406714,E13,human
 574488060,E13,human
-794598979,E13,human
+794598979,E13,bot
 795590899,E13,human
 796144921,E13,human
 501094162,E13,human
@@ -1113,7 +1113,7 @@ id,dataset,classification
 1032386005,E13,human
 503425054,E13,human
 577422947,E13,human
-1033055161,E13,human
+1033055161,E13,bot
 471422290,E13,human
 471533963,E13,human
 471826933,E13,human
@@ -1318,7 +1318,7 @@ id,dataset,classification
 627845498,E13,human
 918993840,E13,human
 628453024,E13,human
-920600658,E13,human
+920600658,E13,bot
 1137300811,E13,human
 629661106,E13,human
 631128691,E13,human
@@ -1477,7 +1477,7 @@ id,dataset,classification
 1125217129,E13,human
 1127280169,E13,human
 1156344000,E13,human
-1169114810,E13,human
+1169114810,E13,bot
 1212975186,E13,human
 1213937306,E13,human
 24503,TFP,human
@@ -1539,7 +1539,7 @@ id,dataset,classification
 22598920,TFP,human
 22596491,TFP,human
 22624920,TFP,human
-22710614,TFP,human
+22710614,TFP,bot
 22752192,TFP,human
 22970058,TFP,human
 23770754,TFP,human
@@ -1633,7 +1633,7 @@ id,dataset,classification
 112232553,TFP,human
 112419862,TFP,human
 112986371,TFP,human
-113134931,TFP,human
+113134931,TFP,bot
 113971060,TFP,human
 114726248,TFP,human
 118241739,TFP,human
@@ -1651,7 +1651,7 @@ id,dataset,classification
 131202911,TFP,human
 131559802,TFP,human
 131636321,TFP,human
-132569641,TFP,human
+132569641,TFP,bot
 136368506,TFP,human
 139321563,TFP,human
 140527863,TFP,human
@@ -1750,7 +1750,7 @@ id,dataset,classification
 317336535,TFP,human
 321282277,TFP,human
 326716112,TFP,human
-328117388,TFP,human
+328117388,TFP,bot
 331349150,TFP,human
 338966793,TFP,human
 342957744,TFP,human
@@ -1766,7 +1766,7 @@ id,dataset,classification
 370595287,TFP,human
 372786191,TFP,human
 374138547,TFP,human
-378814988,TFP,human
+378814988,TFP,bot
 379176983,TFP,human
 379296310,TFP,human
 379728710,TFP,human
@@ -1821,7 +1821,7 @@ id,dataset,classification
 449195625,TFP,human
 995328134,TFP,human
 486991172,TFP,human
-487275447,TFP,human
+487275447,TFP,bot
 452726181,TFP,human
 453034522,TFP,human
 487880355,TFP,human
@@ -1836,11 +1836,11 @@ id,dataset,classification
 565292271,TFP,human
 493462829,TFP,human
 493919122,TFP,human
-462251578,TFP,human
+462251578,TFP,bot
 495378971,TFP,human
 464014539,TFP,human
 1017001452,TFP,human
-1018511592,TFP,human
+1018511592,TFP,bot
 499717759,TFP,human
 573824373,TFP,human
 499933271,TFP,human
@@ -1852,7 +1852,7 @@ id,dataset,classification
 504803459,TFP,human
 504944262,TFP,human
 475246008,TFP,human
-475693524,TFP,human
+475693524,TFP,bot
 819790166,TFP,human
 477087533,TFP,human
 515405009,TFP,human
@@ -1880,7 +1880,7 @@ id,dataset,classification
 916815853,TFP,human
 919599445,TFP,human
 629208634,TFP,human
-1147652996,TFP,human
+1147652996,TFP,bot
 938775151,TFP,human
 947759960,TFP,human
 948165787,TFP,human
@@ -1901,7 +1901,7 @@ id,dataset,classification
 17498356,TFP,human
 19861856,TFP,human
 22407164,TFP,human
-22600059,TFP,human
+22600059,TFP,bot
 22840934,TFP,human
 22994885,TFP,human
 30638954,TFP,human
@@ -1916,7 +1916,7 @@ id,dataset,classification
 96109716,TFP,human
 118197667,TFP,human
 133387350,TFP,human
-206326866,TFP,human
+206326866,TFP,bot
 240173232,TFP,human
 240821668,TFP,human
 254497239,TFP,human
@@ -1928,7 +1928,7 @@ id,dataset,classification
 363161920,TFP,human
 394789922,TFP,human
 397034400,TFP,human
-425767265,TFP,human
+425767265,TFP,bot
 425878819,TFP,human
 443896569,TFP,human
 488525613,TFP,human
@@ -1937,7 +1937,7 @@ id,dataset,classification
 614133542,TFP,human
 780431689,TFP,human
 791830218,TFP,human
-821873300,TFP,human
+821873300,TFP,bot
 832044601,TFP,human
 851100607,TFP,human
 890871740,TFP,human
@@ -2559,7 +2559,7 @@ id,dataset,classification
 1174684957,FSF,human
 1174851499,FSF,human
 616833719,INT,human
-195913271,INT,human
+195913271,INT,bot
 28265406,TWT,human
 1174383524,FSF,human
 1176324859,FSF,human
@@ -2978,7 +2978,7 @@ id,dataset,classification
 184849544,TWT,human
 616297320,INT,human
 616306866,INT,human
-475732319,INT,human
+475732319,INT,bot
 191725589,TWT,human
 1129940900,FSF,human
 1175011819,FSF,human
