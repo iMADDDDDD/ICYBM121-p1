@@ -1,5 +1,7 @@
 import math
 
+#Classification equals 0 (human) or 1 (bot)
+
 def rules(ruleset, number, attribute):
     if ruleset == 'camisani_calzolari':
         if number == 1:
@@ -25,77 +27,77 @@ def rules(ruleset, number, attribute):
 
 def camisani_calzolari_rule_1(name):
     if name != '':
-        classification = 'human'
+        classification = 0
     else:
-        classification = 'bot'
+        classification = 1
     return classification
 
 
 def camisani_calzolari_rule_2(default_profile_image):
     if isinstance(default_profile_image, float) and math.isnan(default_profile_image):
-        classification = 'human'
+        classification = 0
     else:
-        classification = 'bot'
+        classification = 1
     return classification
 
 def camisani_calzolari_rule_3(location):
     if isinstance(location,float) and math.isnan(location):
-        classification = 'bot'
+        classification = 1
     else:
-        classification = 'human'
+        classification = 0
     return classification
 
 
 def camisani_calzolari_rule_4(description):
     if isinstance(description,float) and math.isnan(description):
-        classification = 'bot'
+        classification = 1
     else:
-        classification = 'human'
+        classification = 0
     return classification
 
 
 def camisani_calzolari_rule_5(followers_count):
     if int(followers_count) >= 30:
-        classification = 'human'
+        classification = 0
     else:
-        classification = 'bot'
+        classification = 1
     return classification
 
 def camisani_calzolari_rule_6(listed_count):
     if int(listed_count) > 0:
-        classification = 'human'
+        classification = 0
     else:
-        classification = 'bot'
+        classification = 1
     return classification
 
 
 def camisani_calzolari_rule_7(statuses_count):
     if int(statuses_count) > 50:
-        classification = 'human'
+        classification = 0
     else:
-        classification = 'bot'
+        classification = 1
     return classification
 
 def camisani_calzolari_rule_8(geo):
     if isinstance(geo,float) and math.isnan(geo):
-        classification = 'bot'
+        classification = 1
     else:
-        classification = 'human'
+        classification = 0
     return classification
 
 def camisani_calzolari_rule_9(url):
     if isinstance(url,float) and math.isnan(url):
-        classification = 'bot'
+        classification = 1
     else:
-        classification = 'human'
+        classification = 0
     return classification
 
 
 def camisani_calzolari_rule_19(followers_count, friends_count):
     if (2*followers_count) >= (friends_count):
-        classification = 'human'
+        classification = 0
     else:
-        classification = 'bot'
+        classification = 1
     return classification
             
 

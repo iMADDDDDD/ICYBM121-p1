@@ -17,13 +17,13 @@ def determine_positive_and_negative(classification_file):
         next(class_reader, None)
         for class_row in class_reader:
             dataset = class_row[1]
-            classification = class_row[2]
-            if classification == 'human':
+            classification = int(class_row[2])
+            if classification == 0:
                 if dataset == 'E13' or dataset == 'TFP':
                     true_negative += 1
                 elif dataset == 'FSF' or dataset == 'TWT' or dataset == 'INT':
                     false_negative += 1
-            elif classification == 'bot':
+            elif classification == 1:
                 if dataset == 'E13' or dataset == 'TFP':
                     false_positive += 1
                 elif dataset == 'FSF' or dataset == 'TWT' or dataset == 'INT':
@@ -145,7 +145,11 @@ def calculate_information_gain_star(dataset, classification_file, attribute, rul
     return information_gain_star
 
 def calculate_pearson_correlation_coefficient(classification_file):
-    return 0
+    df_csv = pandas.read_csv(classification_file)
+    df_rule_class = df_csv.filter(['output','class'], axis=1)
+    print(df_rule_class)
+    pearson_correlation_coefficient = df_rule_class.corr(method='pearson')
+    return pearson_correlation_coefficient
 
 def calculate_pearson_correlation_coefficient_star():
     return 0
@@ -184,9 +188,12 @@ def main():
     information_gain = calculate_information_gain(tp, tn, fp, fn)
     print("INFORMATION GAIN")
     print(information_gain)
-    information_gain_star = calculate_information_gain_star(bas_dataset, classification_file, attribute, rule_set, rule_number)
-    print("INFORMATION GAIN STAR")
-    print(information_gain_star)
+    #information_gain_star = calculate_information_gain_star(bas_dataset, classification_file, attribute, rule_set, rule_number)
+    #print("INFORMATION GAIN STAR")
+    #print(information_gain_star)
+    pearson_correlation_coefficient = calculate_pearson_correlation_coefficient(classification_file)
+    print("PEARSON CORRELATION COEFFICIENT")
+    print(pearson_correlation_coefficient)
     
     
 

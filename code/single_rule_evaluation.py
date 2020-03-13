@@ -19,7 +19,7 @@ def camisani_calzolari_rules(classification_file, users_dataset, tweets_dataset,
     if not os.path.isfile(classification_file):
         with open(classification_file, mode = 'w') as output:
             output_writer = csv.writer(output)
-            output_writer.writerow(['id','dataset', 'classification'])
+            output_writer.writerow(['id','dataset', 'output', 'class'])
     df_csv = pandas.read_csv(users_dataset, sep=',')
     df_tweets = pandas.read_csv(tweets_dataset, index_col=4)
     for _, row in df_csv.iterrows():
@@ -79,25 +79,31 @@ def camisani_calzolari_rules(classification_file, users_dataset, tweets_dataset,
                 classification = check_tweet_rule(df_tweets, rule_number, user_id)        
                 
             dataset = row['dataset']
-            if classification == 'human':
-                human += 1
-            elif classification == 'bot':
+            if dataset == 'E13' or dataset == 'TFP':
+                class_user = 0
+            elif dataset == 'FSF' or dataset == 'TWT' or dataset == 'INT':
+                class_user = 1
+            # RULE IS NOT SATISFIED
+            if classification == 0:
+                # USER IS BOT
                 bot += 1
-            elif classification == 'neutral':
-                neutral += 1
+
+            # RULE IS SATISFIED
+            elif classification == 1:
+                # USER IS HUMAN
+                human += 1
+
             with open(classification_file, mode = 'a') as output:
                 output_writer = csv.writer(output)
-                output_writer.writerow([user_id,dataset,classification])
+                output_writer.writerow([user_id,dataset,classification,class_user])
             print('HUMAN')
             print(human)
             print('BOT')
             print(bot)
-            print('NEUTRAL')
-            print(neutral)  
             print('----------------------------------------') 
 
 def check_tweet_rule(df_csv, rule_number, user_id):
-    classification = 'bot'
+    classification = 1
     try:
         tweets_user = df_csv.loc[int(user_id)]
     # https://developer.twitter.com/en/docs/tweets/data-dictionary/overview/tweet-object
@@ -115,53 +121,53 @@ def check_tweet_rule(df_csv, rule_number, user_id):
             if rule_number == 8:   
                 geo = tweet_row['geo']
                 if not math.isnan(geo):
-                    classification = 'human'
+                    classification = 0
 
             elif rule_number == 10:
                 favorite_count = int(tweet_row['favorite_count'])
                 if favorite_count > 0:
-                    classification = 'human'
+                    classification = 0
 
             elif rule_number == 11:
                 text = tweet_row['text']
                 if not isinstance(text, float):
                     if '.' in text or '?' in text or '!' in text:
-                        classification = 'human'
+                        classification = 0
             
             elif rule_number == 12:
                 num_hashtags = int(tweet_row['num_hashtags'])
                 if num_hashtags > 0:
-                    classification = 'human'
+                    classification = 0
             
             elif rule_number == 13:
                 source = tweet_row['source']
                 if 'Twitter for iPhone' in source:
-                    classification = 'human'
+                    classification = 0
 
             elif rule_number == 14:
                 source = tweet_row['source']
                 if 'Twitter for Android' in source:
-                    classification = 'human'
+                    classification = 0
 
             elif rule_number == 15:
                 source = tweet_row['source']
                 if 'foursquare' in source:
-                    classification = 'human'
+                    classification = 0
 
             elif rule_number == 16:
                 source = tweet_row['source']
                 if 'Instagram' in source:
-                    classification = 'human'
+                    classification = 0
 
             elif rule_number == 17:
                 source = tweet_row['source']
                 if source == 'web':
-                    classification = 'human'
+                    classification = 0
 
             elif rule_number == 18:
                 in_reply_to_user_id = int(tweet_row['in_reply_to_user_id'])
                 if in_reply_to_user_id != 0:
-                    classification = 'human'
+                    classification = 0
             
             elif rule_number == 20:
                 text = tweet_row['text']
@@ -173,17 +179,17 @@ def check_tweet_rule(df_csv, rule_number, user_id):
                         text_without_url = text.replace(u,'')
                         text = text_without_url
                     if text_without_url != '':
-                        classification = 'human'
+                        classification = 0
 
             elif rule_number == 21:
                 retweet_count = int(tweet_row['retweet_count'])
                 if retweet_count > 0:
-                    classification = 'human'
+                    classification = 0
 
         if rule_number == 22:
             sources = df_user['source'].unique()
             if len(sources) > 1:
-                classification = 'human'
+                classification = 0
 
     return classification
 
@@ -217,33 +223,33 @@ def van_den_beld_rules(classification_file, users_dataset, tweets_dataset, rule_
                 description = row['description']
                 if not isinstance(description,float):
                     if 'bot' in description:
-                        classification = 'bot'
+                        classification = 1
                     else: 
-                        classification = 'human'
+                        classification = 0
 
             elif rule_number == 2:
                 followers_count = row['followers_count']
                 friends_count = row['friends_count']
                 if friends_count >= followers_count * 100:
-                    classification = 'bot'
+                    classification = 1
                 else: 
-                    classification = 'human'
+                    classification = 0
 
             elif rule_number == 4:
                 user_profile_image_url = row['profile_image_url']
                 number_same_images = df_csv.loc[df_csv.profile_image_url == user_profile_image_url, 'profile_image_url'].count()
                 if number_same_images > 1:
-                    classification = 'bot'
+                    classification = 1
                 else:
-                    classification = 'human'
+                    classification = 0
 
             elif rule_number == 3 or rule_number == 5:
                 classification = check_vdb_tweet_rule(df_tweets, rule_number, user_id)
 
             dataset = row['dataset']
-            if classification == 'human':
+            if classification == 0:
                 human += 1
-            elif classification == 'bot':
+            elif classification == 1:
                 bot += 1
             elif classification == 'neutral':
                 neutral += 1
@@ -259,7 +265,7 @@ def van_den_beld_rules(classification_file, users_dataset, tweets_dataset, rule_
             print('----------------------------------------') 
 
 def check_vdb_tweet_rule(df_csv, rule_number, user_id):
-    classification = 'human'
+    classification = 0
     try:
         tweets_user = df_csv.loc[int(user_id)]
     # https://developer.twitter.com/en/docs/tweets/data-dictionary/overview/tweet-object
@@ -276,7 +282,7 @@ def check_vdb_tweet_rule(df_csv, rule_number, user_id):
             if rule_number == 5:
                 source = tweet_row['source']
                 if source != 'web':
-                    classification = 'bot'
+                    classification = 1
 
         if rule_number == 3:
             df_user['created_at'] = pandas.to_datetime(df_user['created_at'])
@@ -292,7 +298,7 @@ def check_vdb_tweet_rule(df_csv, rule_number, user_id):
                     dict_same_tweets[text].append(in_reply_to_user_id)
             for tweet in dict_same_tweets:
                 if len(dict_same_tweets[tweet]) > 1:
-                    classification = 'bot' 
+                    classification = 1 
              
                 
 
@@ -332,16 +338,16 @@ def socialbakers_rules(classification_file, users_dataset, tweets_dataset, rule_
                 followers_count = row['followers_count']
                 friends_count = row['friends_count']
                 if friends_count >= followers_count * 50:
-                    classification = 'bot'
+                    classification = 1
                 else: 
-                    classification = 'human'
+                    classification = 0
 
             elif rule_number == 6:
                 statuses_count = int(row['statuses_count'])
                 if statuses_count == 0:
-                    classification = 'bot'
+                    classification = 1
                 else:
-                    classification = 'human'
+                    classification = 0
  
             elif rule_number == 7:
                 created_at = row['created_at']
@@ -356,11 +362,11 @@ def socialbakers_rules(classification_file, users_dataset, tweets_dataset, rule_
                 if difference > 62:
                     default_profile_image = row['default_profile_image']
                     if default_profile_image == 1.0:
-                        classification = 'bot'
+                        classification = 1
                     else:
-                        classification = 'human'
+                        classification = 0
                 else:
-                    classification = 'human'
+                    classification = 0
             
             elif rule_number == 8:
                 description = row['description']
@@ -369,19 +375,19 @@ def socialbakers_rules(classification_file, users_dataset, tweets_dataset, rule_
                     if isinstance(location,float) and math.isnan(location): 
                         friends_count = int(row['friends_count'])
                         if friends_count > 100:
-                            classification = 'bot'
+                            classification = 1
                         else:
-                            classification = 'human'
+                            classification = 0
                     else:
-                        classification = 'human'
+                        classification = 0
                 else:
-                    classification = 'human'
+                    classification = 0
             
             elif rule_number == 2 or rule_number == 3 or rule_number == 4 or rule_number == 5:
                 classification = check_sb_tweet_rule(df_tweets, rule_number, user_id)              
-            if classification == 'human':
+            if classification == 0:
                 human += 1
-            elif classification == 'bot':
+            elif classification == 1:
                 bot += 1
             elif classification == 'neutral':
                 neutral += 1
@@ -398,7 +404,7 @@ def socialbakers_rules(classification_file, users_dataset, tweets_dataset, rule_
 
 
 def check_sb_tweet_rule(df_csv, rule_number, user_id):
-    classification = 'human'
+    classification = 0
     try:
         tweets_user = df_csv.loc[int(user_id)]
     # https://developer.twitter.com/en/docs/tweets/data-dictionary/overview/tweet-object
@@ -445,22 +451,22 @@ def check_sb_tweet_rule(df_csv, rule_number, user_id):
         if rule_number == 2: 
             percentage = count_spam_tweets / number_tweets
             if percentage > 30.00:
-                classification = 'bot'  
+                classification = 1  
              
         elif rule_number == 3:
             max_frequency = df_user['text'].value_counts().max()
             if max_frequency > 3:
-                classification = 'bot'
+                classification = 1
 
         elif rule_number == 4:
             percentage = count_retweets / number_tweets
             if percentage > 90.00:
-                classification = 'bot'  
+                classification = 1  
                 
         elif rule_number == 5:
             percentage = count_links / number_tweets
             if percentage > 90.00:
-                classification = 'bot'  
+                classification = 1  
             
     return classification
 
