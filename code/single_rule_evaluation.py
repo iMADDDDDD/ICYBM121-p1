@@ -7,6 +7,7 @@ from datetime import datetime
 import pytz
 import time
 import re
+import rules
 
 
 home_directory = "/home/hanne"
@@ -38,31 +39,19 @@ def camisani_calzolari_rules(classification_file, users_dataset, tweets_dataset,
         if not user_already_classified:
             if rule_number == 1:
                 name = row['name']
-                if name != '':
-                    classification = 'human'
-                else:
-                    classification = 'bot'
+                rules.rules('camisani_calzolari', 1, name)
 
             elif rule_number == 2:
                 default_profile_image = row['default_profile_image']
-                if isinstance(default_profile_image,float) and math.isnan(default_profile_image):
-                    classification = 'human'
-                elif default_profile_image == 1.0:
-                    classification = 'bot'
+                rules.rules('camisani_calzolari', 2, default_profile_image)
 
             elif rule_number == 3:
                 location = row['location']
-                if isinstance(location,float) and math.isnan(location):
-                    classification = 'bot'
-                else:
-                    classification = 'human'
-
+                rules.rules('camisani_calzolari', 3, location)
+                 
             elif rule_number == 4:
                 description = row['description']
-                if isinstance(description,float) and math.isnan(description):
-                    classification = 'bot'
-                else:
-                    classification = 'human'
+                rules.rules('camisani_calzolari', 4, description)
 
             elif rule_number == 5:
                 followers_count = row['followers_count']

@@ -16,6 +16,10 @@ def rules(ruleset, number, attribute):
             classification = camisani_calzolari_rule_6(attribute)
         elif number == 7:
             classification = camisani_calzolari_rule_7(attribute)
+        elif number == 8:
+            classification = camisani_calzolari_rule_8(attribute)
+        elif number == 9:
+            classification = camisani_calzolari_rule_9(attribute)
     return classification
 
 
@@ -72,8 +76,19 @@ def camisani_calzolari_rule_7(statuses_count):
         classification = 'bot'
     return classification
 
+def camisani_calzolari_rule_8(geo):
+    if isinstance(geo,float) and math.isnan(geo):
+        classification = 'bot'
+    else:
+        classification = 'human'
+    return classification
 
-def camisani_calzolari_rule_8(description):
+def camisani_calzolari_rule_9(url):
+    if isinstance(url,float) and math.isnan(url):
+        classification = 'bot'
+    else:
+        classification = 'human'
+    return classification
 
 
 
