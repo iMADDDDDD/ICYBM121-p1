@@ -1,0 +1,58 @@
+=== Run information ===
+
+Scheme:       weka.classifiers.bayes.BayesNet -D -Q weka.classifiers.bayes.net.search.local.K2 -- -P 1 -S BAYES -E weka.classifiers.bayes.net.estimate.SimpleEstimator -- -A 0.5
+Relation:     class_c-weka.filters.unsupervised.attribute.Remove-R1
+Instances:    3900
+Attributes:   5
+              bilink_ratio
+              avg_neighbors_followers
+              avg_neighbors_twts
+              followings_median_neighbors_followers
+              H_or_Bot
+Test mode:    10-fold cross-validation
+
+=== Classifier model (full training set) ===
+
+Bayes Network Classifier
+not using ADTree
+#attributes=5 #classindex=4
+Network structure (nodes followed by parents)
+bilink_ratio(2): H_or_Bot 
+avg_neighbors_followers(2): H_or_Bot 
+avg_neighbors_twts(2): H_or_Bot 
+followings_median_neighbors_followers(2): H_or_Bot 
+H_or_Bot(2): 
+LogScore Bayes: -5899.25212324912
+LogScore BDeu: -5906.1237250140975
+LogScore MDL: -5920.7272213307115
+LogScore ENTROPY: -5883.517928086181
+LogScore AIC: -5892.517928086181
+
+
+Time taken to build model: 0.03 seconds
+
+=== Stratified cross-validation ===
+=== Summary ===
+
+Correctly Classified Instances        2990               76.6667 %
+Incorrectly Classified Instances       910               23.3333 %
+Kappa statistic                          0.5333
+Mean absolute error                      0.3216
+Root mean squared error                  0.4023
+Relative absolute error                 64.3218 %
+Root relative squared error             80.4571 %
+Total Number of Instances             3900     
+
+=== Detailed Accuracy By Class ===
+
+                 TP Rate  FP Rate  Precision  Recall   F-Measure  MCC      ROC Area  PRC Area  Class
+                 0.547    0.013    0.976      0.547    0.701      0.594    0.762     0.819     1
+                 0.987    0.453    0.685      0.987    0.809      0.594    0.762     0.676     0
+Weighted Avg.    0.767    0.233    0.831      0.767    0.755      0.594    0.762     0.747     
+
+=== Confusion Matrix ===
+
+    a    b   <-- classified as
+ 1066  884 |    a = 1
+   26 1924 |    b = 0
+

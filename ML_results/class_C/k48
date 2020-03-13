@@ -1,0 +1,57 @@
+=== Run information ===
+
+Scheme:       weka.classifiers.trees.J48 -C 0.25 -M 2
+Relation:     class_c-weka.filters.unsupervised.attribute.Remove-R1
+Instances:    3900
+Attributes:   5
+              bilink_ratio
+              avg_neighbors_followers
+              avg_neighbors_twts
+              followings_median_neighbors_followers
+              H_or_Bot
+Test mode:    10-fold cross-validation
+
+=== Classifier model (full training set) ===
+
+J48 pruned tree
+------------------
+
+bilink_ratio = 1: 1 (759.0/8.0)
+bilink_ratio = 0
+|   followings_median_neighbors_followers = 1
+|   |   avg_neighbors_twts = 1: 1 (33.0)
+|   |   avg_neighbors_twts = 0: 0 (2808.0/884.0)
+|   followings_median_neighbors_followers = 0: 1 (300.0/18.0)
+
+Number of Leaves  : 	4
+
+Size of the tree : 	7
+
+
+Time taken to build model: 0.01 seconds
+
+=== Stratified cross-validation ===
+=== Summary ===
+
+Correctly Classified Instances        2990               76.6667 %
+Incorrectly Classified Instances       910               23.3333 %
+Kappa statistic                          0.5333
+Mean absolute error                      0.3234
+Root mean squared error                  0.4022
+Relative absolute error                 64.6758 %
+Root relative squared error             80.4323 %
+Total Number of Instances             3900     
+
+=== Detailed Accuracy By Class ===
+
+                 TP Rate  FP Rate  Precision  Recall   F-Measure  MCC      ROC Area  PRC Area  Class
+                 0.547    0.013    0.976      0.547    0.701      0.594    0.761     0.815     1
+                 0.987    0.453    0.685      0.987    0.809      0.594    0.761     0.676     0
+Weighted Avg.    0.767    0.233    0.831      0.767    0.755      0.594    0.761     0.745     
+
+=== Confusion Matrix ===
+
+    a    b   <-- classified as
+ 1066  884 |    a = 1
+   26 1924 |    b = 0
+
