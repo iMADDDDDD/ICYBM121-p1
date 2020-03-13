@@ -16,10 +16,10 @@ def rules(ruleset, number, attribute):
             classification = camisani_calzolari_rule_6(attribute)
         elif number == 7:
             classification = camisani_calzolari_rule_7(attribute)
-        elif number == 8:
-            classification = camisani_calzolari_rule_8(attribute)
         elif number == 9:
             classification = camisani_calzolari_rule_9(attribute)
+        elif number == 19:
+            classification = camisani_calzolari_rule_19(attribute[0], attribute[1])
     return classification
 
 
@@ -56,7 +56,7 @@ def camisani_calzolari_rule_4(description):
 
 def camisani_calzolari_rule_5(followers_count):
     if int(followers_count) >= 30:
-        classification = 'human
+        classification = 'human'
     else:
         classification = 'bot'
     return classification
@@ -90,5 +90,13 @@ def camisani_calzolari_rule_9(url):
         classification = 'human'
     return classification
 
+
+def camisani_calzolari_rule_19(followers_count, friends_count):
+    if (2*followers_count) >= (friends_count):
+        classification = 'human'
+    else:
+        classification = 'bot'
+    return classification
+            
 
 

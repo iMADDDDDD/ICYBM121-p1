@@ -81,8 +81,7 @@ def calculate_information_gain_star(dataset, classification_file, attribute, rul
     dict_entropy_classes = {}
     for _, row in df_csv.iterrows():
         attribute_value = row[attribute]
-        #print(attribute_value)
-        if math.isnan(attribute_value):
+        if isinstance(attribute_value,float) and math.isnan(attribute_value):
             attribute_value = 'not available'
         elif not isinstance(attribute_value, str):
             attribute_value = str(attribute_value)   
@@ -94,8 +93,6 @@ def calculate_information_gain_star(dataset, classification_file, attribute, rul
             class_reader = csv.reader(class_file, delimiter=',')
             next(class_reader, None)
             for class_row in class_reader:
-                #print(user_id)
-                #print(class_row[0])
                 if int(user_id) == int(class_row[0]):
                     dataset = class_row[1]
                     classification = class_row[2]
@@ -123,13 +120,24 @@ def calculate_information_gain_star(dataset, classification_file, attribute, rul
         humans = tn + fn
         bots = tp + fp
         total = humans + bots
+        print(value)
+        print(tp)
+        print(tn)
+        print(fn)
+        print(fp)
+        print(humans)
+        print(bots)
+        print(total)
         if value == 'not available':
             attribute_value = math.nan
         else:
             attribute_value = value
         classification = rules.rules(rule_set, rule_number, attribute_value)
         if classification == 'human':
-            attribute_value_entropy = ((humans/whole_total)*((-(tn/humans)*math.log2(tn/humans)) - ((fn/humans)*math.log2(fn/humans))))
+            attribute_value_entropy = 0
+            if fn != 0 and tn != 0:
+                attribute_value_entropy = ((humans/whole_total)*((-(tn/humans)*math.log2(tn/humans)) - ((fn/humans)*math.log2(fn/humans))))
+             
         else:
             attribute_value_entropy = (bots/whole_total)*((-(tp/bots)*math.log2(tp/bots)) - ((fp/bots)*math.log2(fp/bots)))
         information_gain_star -= attribute_value_entropy

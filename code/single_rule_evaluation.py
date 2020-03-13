@@ -39,56 +39,41 @@ def camisani_calzolari_rules(classification_file, users_dataset, tweets_dataset,
         if not user_already_classified:
             if rule_number == 1:
                 name = row['name']
-                rules.rules('camisani_calzolari', 1, name)
+                classification = rules.rules('camisani_calzolari', rule_number, name)
 
             elif rule_number == 2:
                 default_profile_image = row['default_profile_image']
-                rules.rules('camisani_calzolari', 2, default_profile_image)
+                classification = rules.rules('camisani_calzolari', rule_number, default_profile_image)
 
             elif rule_number == 3:
                 location = row['location']
-                rules.rules('camisani_calzolari', 3, location)
+                classification = rules.rules('camisani_calzolari', rule_number, location)
                  
             elif rule_number == 4:
                 description = row['description']
-                rules.rules('camisani_calzolari', 4, description)
+                classification = rules.rules('camisani_calzolari', rule_number, description)
 
             elif rule_number == 5:
                 followers_count = row['followers_count']
-                if followers_count >= 30:
-                    classification = 'human'
-                else:
-                    classification = 'bot'
+                classification = rules.rules('camisani_calzolari', rule_number, followers_count)
 
             elif rule_number == 6:
                 listed_count = row['listed_count']
-                if listed_count > 0:
-                    classification = 'human'
-                else:
-                    classification = 'bot'
+                classification = rules.rules('camisani_calzolari', rule_number, description)
 
             elif rule_number == 7:
                 statuses_count = row['statuses_count']
-                if statuses_count > 50:
-                    classification = 'human'
-                else:
-                    classification = 'bot'
+                classification = rules.rules('camisani_calzolari', rule_number, statuses_count)
             
             elif rule_number == 9:
                 url = row['url']
-                if isinstance(url,float) and math.isnan(url):
-                    classification = 'bot'
-                else:
-                    classification = 'human'
+                classification = rules.rules('camisani_calzolari', rule_number, url)
 
             elif rule_number == 19:
                 followers_count = row['followers_count']
                 friends_count = row['friends_count']
-                if (2*followers_count) >= (friends_count):
-                    classification = 'human'
-                else:
-                    classification = 'bot'
-            
+                classification = rules.rules('camisani_calzolari', rule_number, [followers_count, friends_count])
+
             # needs to be checked in tweets
             elif rule_number == 8 or rule_number == 10 or rule_number == 11 or rule_number == 12 or rule_number == 13 or rule_number == 14 or rule_number == 15 or rule_number == 16 or rule_number == 17 or rule_number == 18 or rule_number == 20 or rule_number == 21 or rule_number == 22:
                 classification = check_tweet_rule(df_tweets, rule_number, user_id)        
