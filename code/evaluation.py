@@ -2,6 +2,7 @@ import math
 import csv
 import sys
 import pandas
+import rules
 
 
 home_directory = '/home/hanne'
@@ -74,20 +75,28 @@ def calculate_information_gain(true_positive, true_negative, false_positive, fal
     information_gain = 1 - ((humans/total)*((-(true_negative/humans)*math.log2(true_negative/humans)) - ((false_negative/humans)*math.log2(false_negative/humans))) + (bots/total)*((-(true_positive/bots)*math.log2(true_positive/bots)) - ((false_positive/bots)*math.log2(false_positive/bots))))
     return information_gain
 
-def calculate_information_gain_star(dataset, classification_file, attribute):
+def calculate_information_gain_star(dataset, classification_file, attribute, rule_set, rule_number):
     whole_total = 3900
     df_csv = pandas.read_csv(dataset)
     dict_entropy_classes = {}
     for _, row in df_csv.iterrows():
         attribute_value = row[attribute]
+        #print(attribute_value)
+        if math.isnan(attribute_value):
+            attribute_value = 'not available'
+        elif not isinstance(attribute_value, str):
+            attribute_value = str(attribute_value)   
         if attribute_value not in dict_entropy_classes:
+            # {attribute_value : [TP, TN, FP, TP]}
             dict_entropy_classes[attribute_value] = [0,0,0,0]
         user_id = row['id']
         with open(classification_file) as class_file:
             class_reader = csv.reader(class_file, delimiter=',')
             next(class_reader, None)
             for class_row in class_reader:
-                if user_id == class_row[0]:
+                #print(user_id)
+                #print(class_row[0])
+                if int(user_id) == int(class_row[0]):
                     dataset = class_row[1]
                     classification = class_row[2]
                     if classification == 'human':
@@ -114,8 +123,16 @@ def calculate_information_gain_star(dataset, classification_file, attribute):
         humans = tn + fn
         bots = tp + fp
         total = humans + bots
-        attribute_value_entropy = - (((humans + bots)/whole_total) * ((-(humans/total) * math.log2(humans/total)) - ((bots/total)*math.log2(bots/total))))
-        information_gain_star += attribute_value_entropy
+        if value == 'not available':
+            attribute_value = math.nan
+        else:
+            attribute_value = value
+        classification = rules.rules(rule_set, rule_number, attribute_value)
+        if classification == 'human':
+            attribute_value_entropy = ((humans/whole_total)*((-(tn/humans)*math.log2(tn/humans)) - ((fn/humans)*math.log2(fn/humans))))
+        else:
+            attribute_value_entropy = (bots/whole_total)*((-(tp/bots)*math.log2(tp/bots)) - ((fp/bots)*math.log2(fp/bots)))
+        information_gain_star -= attribute_value_entropy
         
     return information_gain_star
 
@@ -131,6 +148,10 @@ def main():
     file_name = sys.argv[1]
     kind_dataset = sys.argv[2]
     attribute = sys.argv[3]
+    if 'cc' in file_name:
+        rule_set = 'camisani_calzolari'
+    rule_number = int(file_name[-5])
+    print(rule_number)
     if kind_dataset == 'u':
         bas_dataset = dataset + '/' + 'bas_users.csv'
     elif kind_dataset == 't':
@@ -155,7 +176,7 @@ def main():
     information_gain = calculate_information_gain(tp, tn, fp, fn)
     print("INFORMATION GAIN")
     print(information_gain)
-    information_gain_star = calculate_information_gain_star(bas_dataset, classification_file, attribute)
+    information_gain_star = calculate_information_gain_star(bas_dataset, classification_file, attribute, rule_set, rule_number)
     print("INFORMATION GAIN STAR")
     print(information_gain_star)
     
