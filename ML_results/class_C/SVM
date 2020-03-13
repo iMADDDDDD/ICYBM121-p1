@@ -1,0 +1,44 @@
+=== Run information ===
+
+Scheme:       weka.classifiers.functions.LibSVM -S 0 -K 2 -D 3 -G 0.0 -R 0.0 -N 0.5 -M 40.0 -C 1.0 -E 0.001 -P 0.1 -model "C:\\Program Files\\Weka-3-9-4" -seed 1
+Relation:     class_c-weka.filters.unsupervised.attribute.Remove-R1
+Instances:    3900
+Attributes:   5
+              bilink_ratio
+              avg_neighbors_followers
+              avg_neighbors_twts
+              followings_median_neighbors_followers
+              H_or_Bot
+Test mode:    10-fold cross-validation
+
+=== Classifier model (full training set) ===
+
+LibSVM wrapper, original code by Yasser EL-Manzalawy (= WLSVM)
+
+Time taken to build model: 0.22 seconds
+
+=== Stratified cross-validation ===
+=== Summary ===
+
+Correctly Classified Instances        2990               76.6667 %
+Incorrectly Classified Instances       910               23.3333 %
+Kappa statistic                          0.5333
+Mean absolute error                      0.2333
+Root mean squared error                  0.483 
+Relative absolute error                 46.6667 %
+Root relative squared error             96.6092 %
+Total Number of Instances             3900     
+
+=== Detailed Accuracy By Class ===
+
+                 TP Rate  FP Rate  Precision  Recall   F-Measure  MCC      ROC Area  PRC Area  Class
+                 0.547    0.013    0.976      0.547    0.701      0.594    0.767     0.760     1
+                 0.987    0.453    0.685      0.987    0.809      0.594    0.767     0.683     0
+Weighted Avg.    0.767    0.233    0.831      0.767    0.755      0.594    0.767     0.722     
+
+=== Confusion Matrix ===
+
+    a    b   <-- classified as
+ 1066  884 |    a = 1
+   26 1924 |    b = 0
+

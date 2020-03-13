@@ -1,0 +1,277 @@
+=== Run information ===
+
+Scheme:       weka.classifiers.meta.AdaBoostM1 -P 100 -S 1 -I 10 -W weka.classifiers.trees.DecisionStump
+Relation:     class_c-weka.filters.unsupervised.attribute.Remove-R1
+Instances:    3900
+Attributes:   5
+              bilink_ratio
+              avg_neighbors_followers
+              avg_neighbors_twts
+              followings_median_neighbors_followers
+              H_or_Bot
+Test mode:    10-fold cross-validation
+
+=== Classifier model (full training set) ===
+
+AdaBoostM1: Base classifiers and their weights: 
+
+Decision Stump
+
+Classifications
+
+bilink_ratio = 0 : 0
+bilink_ratio != 0 : 1
+bilink_ratio is missing : 1
+
+Class distributions
+
+bilink_ratio = 0
+1	0	
+0.38172556510665395	0.6182744348933461	
+bilink_ratio != 0
+1	0	
+0.9894598155467721	0.010540184453227932	
+bilink_ratio is missing
+1	0	
+0.5	0.5	
+
+
+Weight: 0.8
+
+Decision Stump
+
+Classifications
+
+bilink_ratio = 1 : 1
+bilink_ratio != 1 : 1
+bilink_ratio is missing : 1
+
+Class distributions
+
+bilink_ratio = 1
+1	0	
+0.9767845077753151	0.02321549222468481	
+bilink_ratio != 1
+1	0	
+0.5793942867458198	0.4206057132541802	
+bilink_ratio is missing
+1	0	
+0.6361215720526272	0.3638784279473728	
+
+
+Weight: 0.56
+
+Decision Stump
+
+Classifications
+
+bilink_ratio = 0 : 0
+bilink_ratio != 0 : 1
+bilink_ratio is missing : 1
+
+Class distributions
+
+bilink_ratio = 0
+1	0	
+0.44070964602270635	0.5592903539772937	
+bilink_ratio != 0
+1	0	
+0.9601082447161954	0.039891755283804654	
+bilink_ratio is missing
+1	0	
+0.5000000000000024	0.49999999999999756	
+
+
+Weight: 0.43
+
+Decision Stump
+
+Classifications
+
+followings_median_neighbors_followers = 1 : 1
+followings_median_neighbors_followers != 1 : 1
+followings_median_neighbors_followers is missing : 1
+
+Class distributions
+
+followings_median_neighbors_followers = 1
+1	0	
+0.5249281727688366	0.4750718272311634	
+followings_median_neighbors_followers != 1
+1	0	
+0.971685330068203	0.028314669931796932	
+followings_median_neighbors_followers is missing
+1	0	
+0.5848055211180267	0.4151944788819732	
+
+
+Weight: 0.34
+
+Decision Stump
+
+Classifications
+
+followings_median_neighbors_followers = 1 : 0
+followings_median_neighbors_followers != 1 : 1
+followings_median_neighbors_followers is missing : 1
+
+Class distributions
+
+followings_median_neighbors_followers = 1
+1	0	
+0.43961199944192525	0.5603880005580748	
+followings_median_neighbors_followers != 1
+1	0	
+0.960574535296376	0.03942546470362393	
+followings_median_neighbors_followers is missing
+1	0	
+0.5000000000000079	0.4999999999999921	
+
+
+Weight: 0.43
+
+Decision Stump
+
+Classifications
+
+bilink_ratio = 0 : 1
+bilink_ratio != 0 : 1
+bilink_ratio is missing : 1
+
+Class distributions
+
+bilink_ratio = 0
+1	0	
+0.5468793806093853	0.45312061939061465	
+bilink_ratio != 0
+1	0	
+0.9421167240642476	0.057883275935752404	
+bilink_ratio is missing
+1	0	
+0.5859412552827075	0.4140587447172925	
+
+
+Weight: 0.35
+
+Decision Stump
+
+Classifications
+
+bilink_ratio = 0 : 0
+bilink_ratio != 0 : 1
+bilink_ratio is missing : 1
+
+Class distributions
+
+bilink_ratio = 0
+1	0	
+0.4602983131388391	0.5397016868611608	
+bilink_ratio != 0
+1	0	
+0.920010448010663	0.07998955198933698	
+bilink_ratio is missing
+1	0	
+0.5000000000000098	0.49999999999999023	
+
+
+Weight: 0.29
+
+Decision Stump
+
+Classifications
+
+followings_median_neighbors_followers = 1 : 1
+followings_median_neighbors_followers != 1 : 1
+followings_median_neighbors_followers is missing : 1
+
+Class distributions
+
+followings_median_neighbors_followers = 1
+1	0	
+0.5219116776481333	0.4780883223518667	
+followings_median_neighbors_followers != 1
+1	0	
+0.9356421401464354	0.06435785985356453	
+followings_median_neighbors_followers is missing
+1	0	
+0.5613060966292843	0.43869390337071573	
+
+
+Weight: 0.25
+
+Decision Stump
+
+Classifications
+
+followings_median_neighbors_followers = 1 : 0
+followings_median_neighbors_followers != 1 : 1
+followings_median_neighbors_followers is missing : 1
+
+Class distributions
+
+followings_median_neighbors_followers = 1
+1	0	
+0.4603927603208122	0.5396072396791878	
+followings_median_neighbors_followers != 1
+1	0	
+0.9191095486900916	0.08089045130990834	
+followings_median_neighbors_followers is missing
+1	0	
+0.5000000000000403	0.4999999999999597	
+
+
+Weight: 0.29
+
+Decision Stump
+
+Classifications
+
+bilink_ratio = 1 : 1
+bilink_ratio != 1 : 1
+bilink_ratio is missing : 1
+
+Class distributions
+
+bilink_ratio = 1
+1	0	
+0.8973564613310606	0.10264353866893931	
+bilink_ratio != 1
+1	0	
+0.5325658898715404	0.46743411012845965	
+bilink_ratio is missing
+1	0	
+0.5611580315947651	0.438841968405235	
+
+
+Weight: 0.25
+
+Number of performed Iterations: 10
+
+
+Time taken to build model: 0.05 seconds
+
+=== Stratified cross-validation ===
+=== Summary ===
+
+Correctly Classified Instances        2957               75.8205 %
+Incorrectly Classified Instances       943               24.1795 %
+Kappa statistic                          0.5164
+Mean absolute error                      0.3703
+Root mean squared error                  0.4149
+Relative absolute error                 74.0545 %
+Root relative squared error             82.9732 %
+Total Number of Instances             3900     
+
+=== Detailed Accuracy By Class ===
+
+                 TP Rate  FP Rate  Precision  Recall   F-Measure  MCC      ROC Area  PRC Area  Class
+                 0.530    0.013    0.975      0.530    0.687      0.581    0.754     0.811     1
+                 0.987    0.470    0.677      0.987    0.803      0.581    0.754     0.669     0
+Weighted Avg.    0.758    0.242    0.826      0.758    0.745      0.581    0.754     0.740     
+
+=== Confusion Matrix ===
+
+    a    b   <-- classified as
+ 1033  917 |    a = 1
+   26 1924 |    b = 0
+

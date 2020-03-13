@@ -1,0 +1,268 @@
+=== Run information ===
+
+Scheme:       weka.classifiers.meta.Decorate -E 15 -R 1.0 -S 1 -I 50 -W weka.classifiers.trees.J48 -- -C 0.25 -M 2
+Relation:     class_c-weka.filters.unsupervised.attribute.Remove-R1
+Instances:    3900
+Attributes:   5
+              bilink_ratio
+              avg_neighbors_followers
+              avg_neighbors_twts
+              followings_median_neighbors_followers
+              H_or_Bot
+Test mode:    10-fold cross-validation
+
+=== Classifier model (full training set) ===
+
+Decorate base classifiers: 
+
+J48 pruned tree
+------------------
+
+bilink_ratio = 1: 1 (759.0/8.0)
+bilink_ratio = 0
+|   followings_median_neighbors_followers = 1
+|   |   avg_neighbors_twts = 1: 1 (33.0)
+|   |   avg_neighbors_twts = 0: 0 (2808.0/884.0)
+|   followings_median_neighbors_followers = 0: 1 (300.0/18.0)
+
+Number of Leaves  : 	4
+
+Size of the tree : 	7
+
+
+J48 pruned tree
+------------------
+
+bilink_ratio = 1
+|   avg_neighbors_twts = 1: 1 (230.0/45.0)
+|   avg_neighbors_twts = 0: 0 (1280.0/570.0)
+bilink_ratio = 0: 0 (6290.0/3007.0)
+
+Number of Leaves  : 	3
+
+Size of the tree : 	5
+
+
+J48 pruned tree
+------------------
+
+bilink_ratio = 1: 1 (1541.0/581.0)
+bilink_ratio = 0
+|   followings_median_neighbors_followers = 1
+|   |   avg_neighbors_followers = 1: 1 (4.0/1.0)
+|   |   avg_neighbors_followers = 0: 0 (5600.0/2529.0)
+|   followings_median_neighbors_followers = 0: 1 (655.0/268.0)
+
+Number of Leaves  : 	4
+
+Size of the tree : 	7
+
+
+J48 pruned tree
+------------------
+
+bilink_ratio = 1: 1 (1485.0/514.0)
+bilink_ratio = 0
+|   followings_median_neighbors_followers = 1: 0 (5682.0/2536.0)
+|   followings_median_neighbors_followers = 0: 1 (633.0/236.0)
+
+Number of Leaves  : 	3
+
+Size of the tree : 	5
+
+
+J48 pruned tree
+------------------
+
+bilink_ratio = 1: 1 (1548.0/561.0)
+bilink_ratio = 0
+|   followings_median_neighbors_followers = 1: 0 (5595.0/2498.0)
+|   followings_median_neighbors_followers = 0: 1 (657.0/261.0)
+
+Number of Leaves  : 	3
+
+Size of the tree : 	5
+
+
+J48 pruned tree
+------------------
+
+bilink_ratio = 1: 1 (1495.0/509.0)
+bilink_ratio = 0
+|   followings_median_neighbors_followers = 1
+|   |   avg_neighbors_followers = 1: 1 (2.0)
+|   |   avg_neighbors_followers = 0
+|   |   |   avg_neighbors_twts = 1: 1 (198.0/87.0)
+|   |   |   avg_neighbors_twts = 0: 0 (5476.0/2358.0)
+|   followings_median_neighbors_followers = 0: 1 (629.0/218.0)
+
+Number of Leaves  : 	5
+
+Size of the tree : 	9
+
+
+J48 pruned tree
+------------------
+
+avg_neighbors_twts = 1: 1 (464.0/134.0)
+avg_neighbors_twts = 0
+|   bilink_ratio = 1: 1 (1296.0/507.0)
+|   bilink_ratio = 0
+|   |   followings_median_neighbors_followers = 1: 0 (5429.0/2365.0)
+|   |   followings_median_neighbors_followers = 0: 1 (611.0/236.0)
+
+Number of Leaves  : 	4
+
+Size of the tree : 	7
+
+
+J48 pruned tree
+------------------
+
+followings_median_neighbors_followers = 1
+|   bilink_ratio = 1: 1 (1357.0/493.0)
+|   bilink_ratio = 0: 0 (5636.0/2485.0)
+followings_median_neighbors_followers = 0: 1 (807.0/260.0)
+
+Number of Leaves  : 	3
+
+Size of the tree : 	5
+
+
+J48 pruned tree
+------------------
+
+avg_neighbors_twts = 1: 1 (450.0/122.0)
+avg_neighbors_twts = 0
+|   followings_median_neighbors_followers = 1
+|   |   bilink_ratio = 1: 1 (1139.0/435.0)
+|   |   bilink_ratio = 0: 0 (5468.0/2427.0)
+|   followings_median_neighbors_followers = 0: 1 (743.0/265.0)
+
+Number of Leaves  : 	4
+
+Size of the tree : 	7
+
+
+J48 pruned tree
+------------------
+
+bilink_ratio = 1: 1 (1511.0/497.0)
+bilink_ratio = 0
+|   followings_median_neighbors_followers = 1
+|   |   avg_neighbors_twts = 1: 1 (195.0/88.0)
+|   |   avg_neighbors_twts = 0: 0 (5456.0/2414.0)
+|   followings_median_neighbors_followers = 0
+|   |   avg_neighbors_followers = 1: 0 (2.0)
+|   |   avg_neighbors_followers = 0: 1 (636.0/235.0)
+
+Number of Leaves  : 	5
+
+Size of the tree : 	9
+
+
+J48 pruned tree
+------------------
+
+bilink_ratio = 1: 1 (1493.0/488.0)
+bilink_ratio = 0
+|   followings_median_neighbors_followers = 1
+|   |   avg_neighbors_twts = 1: 1 (198.0/87.0)
+|   |   avg_neighbors_twts = 0: 0 (5462.0/2419.0)
+|   followings_median_neighbors_followers = 0: 1 (647.0/238.0)
+
+Number of Leaves  : 	4
+
+Size of the tree : 	7
+
+
+J48 pruned tree
+------------------
+
+bilink_ratio = 1: 1 (1499.0/466.0)
+bilink_ratio = 0
+|   followings_median_neighbors_followers = 1: 0 (5665.0/2476.0)
+|   followings_median_neighbors_followers = 0: 1 (636.0/217.0)
+
+Number of Leaves  : 	3
+
+Size of the tree : 	5
+
+
+J48 pruned tree
+------------------
+
+avg_neighbors_twts = 1: 1 (471.0/140.0)
+avg_neighbors_twts = 0
+|   bilink_ratio = 1: 1 (1302.0/505.0)
+|   bilink_ratio = 0
+|   |   followings_median_neighbors_followers = 1: 0 (5432.0/2376.0)
+|   |   followings_median_neighbors_followers = 0: 1 (595.0/237.0)
+
+Number of Leaves  : 	4
+
+Size of the tree : 	7
+
+
+J48 pruned tree
+------------------
+
+bilink_ratio = 1: 1 (1525.0/521.0)
+bilink_ratio = 0
+|   followings_median_neighbors_followers = 1
+|   |   avg_neighbors_followers = 1: 1 (2.0)
+|   |   avg_neighbors_followers = 0
+|   |   |   avg_neighbors_twts = 1: 1 (186.0/84.0)
+|   |   |   avg_neighbors_twts = 0: 0 (5461.0/2403.0)
+|   followings_median_neighbors_followers = 0: 1 (626.0/225.0)
+
+Number of Leaves  : 	5
+
+Size of the tree : 	9
+
+
+J48 pruned tree
+------------------
+
+bilink_ratio = 1: 1 (1558.0/505.0)
+bilink_ratio = 0
+|   followings_median_neighbors_followers = 1
+|   |   avg_neighbors_twts = 1: 1 (190.0/92.0)
+|   |   avg_neighbors_twts = 0: 0 (5416.0/2400.0)
+|   followings_median_neighbors_followers = 0: 1 (636.0/230.0)
+
+Number of Leaves  : 	4
+
+Size of the tree : 	7
+
+
+Number of classifier in the ensemble: 15
+
+
+Time taken to build model: 0.23 seconds
+
+=== Stratified cross-validation ===
+=== Summary ===
+
+Correctly Classified Instances        2990               76.6667 %
+Incorrectly Classified Instances       910               23.3333 %
+Kappa statistic                          0.5333
+Mean absolute error                      0.4405
+Root mean squared error                  0.448 
+Relative absolute error                 88.103  %
+Root relative squared error             89.6024 %
+Total Number of Instances             3900     
+
+=== Detailed Accuracy By Class ===
+
+                 TP Rate  FP Rate  Precision  Recall   F-Measure  MCC      ROC Area  PRC Area  Class
+                 0.547    0.013    0.976      0.547    0.701      0.594    0.762     0.818     1
+                 0.987    0.453    0.685      0.987    0.809      0.594    0.762     0.677     0
+Weighted Avg.    0.767    0.233    0.831      0.767    0.755      0.594    0.762     0.748     
+
+=== Confusion Matrix ===
+
+    a    b   <-- classified as
+ 1066  884 |    a = 1
+   26 1924 |    b = 0
+
