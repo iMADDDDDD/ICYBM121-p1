@@ -59,7 +59,7 @@ def camisani_calzolari_rules(classification_file, users_dataset, tweets_dataset,
 
             elif rule_number == 6:
                 listed_count = row['listed_count']
-                classification = rules.rules('camisani_calzolari', rule_number, description)
+                classification = rules.rules('camisani_calzolari', rule_number, listed_count)
 
             elif rule_number == 7:
                 statuses_count = row['statuses_count']
@@ -124,9 +124,10 @@ def check_tweet_rule(df_csv, rule_number, user_id):
                     classification = 0
 
             elif rule_number == 10:
-                favorite_count = int(tweet_row['favorite_count'])
-                if favorite_count > 0:
-                    classification = 0
+                favorite_count = tweet_row['favorite_count']
+                if not isinstance(favorite_count, float) and not math.isnan(favorite_count):
+                    if int(favorite_count) > 0:
+                       classification = 0
 
             elif rule_number == 11:
                 text = tweet_row['text']
@@ -201,7 +202,7 @@ def van_den_beld_rules(classification_file, users_dataset, tweets_dataset, rule_
     if not os.path.isfile(classification_file):
         with open(classification_file, mode = 'w') as output:
             output_writer = csv.writer(output)
-            output_writer.writerow(['id','dataset', 'classification'])
+            output_writer.writerow(['id','dataset', 'output', 'class'])
     df_csv = pandas.read_csv(users_dataset, sep=',')
     df_tweets = pandas.read_csv(tweets_dataset, index_col=4)
     for _, row in df_csv.iterrows():
@@ -247,6 +248,10 @@ def van_den_beld_rules(classification_file, users_dataset, tweets_dataset, rule_
                 classification = check_vdb_tweet_rule(df_tweets, rule_number, user_id)
 
             dataset = row['dataset']
+            if dataset == 'E13' or dataset == 'TFP':
+                class_user = 0
+            elif dataset == 'FSF' or dataset == 'TWT' or dataset == 'INT':
+                class_user = 1
             if classification == 0:
                 human += 1
             elif classification == 1:
@@ -255,7 +260,7 @@ def van_den_beld_rules(classification_file, users_dataset, tweets_dataset, rule_
                 neutral += 1
             with open(classification_file, mode = 'a') as output:
                 output_writer = csv.writer(output)
-                output_writer.writerow([user_id,dataset,classification])
+                output_writer.writerow([user_id,dataset,classification,class_user])
             print('HUMAN')
             print(human)
             print('BOT')
@@ -314,7 +319,7 @@ def socialbakers_rules(classification_file, users_dataset, tweets_dataset, rule_
     if not os.path.isfile(classification_file):
         with open(classification_file, mode = 'w') as output:
             output_writer = csv.writer(output)
-            output_writer.writerow(['id','dataset', 'classification'])
+            output_writer.writerow(['id','dataset', 'output', 'class'])
     df_csv = pandas.read_csv(users_dataset, sep=',')
     df_tweets = pandas.read_csv(tweets_dataset, index_col=4)
     for _, row in df_csv.iterrows():
@@ -384,7 +389,11 @@ def socialbakers_rules(classification_file, users_dataset, tweets_dataset, rule_
                     classification = 0
             
             elif rule_number == 2 or rule_number == 3 or rule_number == 4 or rule_number == 5:
-                classification = check_sb_tweet_rule(df_tweets, rule_number, user_id)              
+                classification = check_sb_tweet_rule(df_tweets, rule_number, user_id)    
+            if dataset == 'E13' or dataset == 'TFP':
+                class_user = 0
+            elif dataset == 'FSF' or dataset == 'TWT' or dataset == 'INT':
+                class_user = 1          
             if classification == 0:
                 human += 1
             elif classification == 1:
@@ -393,7 +402,7 @@ def socialbakers_rules(classification_file, users_dataset, tweets_dataset, rule_
                 neutral += 1
             with open(classification_file, mode = 'a') as output:
                 output_writer = csv.writer(output)
-                output_writer.writerow([user_id, dataset, classification])
+                output_writer.writerow([user_id, dataset, classification, class_user])
             print('HUMAN')
             print(human)
             print('BOT')
