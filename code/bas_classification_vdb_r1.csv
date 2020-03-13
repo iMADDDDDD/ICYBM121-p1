@@ -706,7 +706,7 @@ id,dataset,classification
 388842116,E13,human
 389400082,E13,human
 389652102,E13,human
-389715862,E13,human
+389715862,E13,bot
 390428793,E13,human
 390730174,E13,human
 390759955,E13,human
@@ -885,7 +885,7 @@ id,dataset,classification
 718684188,E13,human
 478994018,E13,human
 984297403,E13,human
-551056105,E13,human
+551056105,E13,bot
 439855752,E13,human
 439875805,E13,human
 479451474,E13,human
@@ -1063,7 +1063,7 @@ id,dataset,classification
 465431316,E13,human
 465433625,E13,human
 571938412,E13,human
-498042431,E13,human
+498042431,E13,bot
 498054058,E13,human
 787115406,E13,human
 498358491,E13,human
@@ -1601,8 +1601,8 @@ id,dataset,classification
 78845364,TFP,human
 82062642,TFP,human
 82118682,TFP,human
-84361482,TFP,human
-84543942,TFP,human
+84361482,TFP,bot
+84543942,TFP,bot
 84838434,TFP,human
 85850428,TFP,human
 86538176,TFP,human
@@ -1925,7 +1925,7 @@ id,dataset,classification
 305476548,TFP,human
 333412049,TFP,human
 339887833,TFP,human
-363161920,TFP,human
+363161920,TFP,bot
 394789922,TFP,human
 397034400,TFP,human
 425767265,TFP,human
@@ -3103,7 +3103,7 @@ id,dataset,classification
 617254082,INT,human
 1130284382,FSF,human
 1175732936,FSF,human
-616231144,INT,human
+616231144,INT,bot
 1128728185,FSF,human
 616237669,INT,human
 1381459980,INT,human
@@ -3814,7 +3814,7 @@ id,dataset,classification
 1174725366,FSF,human
 622375535,INT,human
 616220383,INT,human
-616309005,INT,human
+616309005,INT,bot
 616807239,INT,human
 616550352,INT,human
 616304133,INT,human

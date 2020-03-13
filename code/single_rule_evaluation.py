@@ -297,28 +297,35 @@ def check_vdb_tweet_rule(df_csv, rule_number, user_id):
             df_user = pandas.DataFrame(tweets_user).T
         else:
             df_user = tweets_user
-        client_count = 0
+        for _, tweet_row in df_user.iterrows():
 
-    if rule_number == 3:
-        print('RULE 3')
-        df_user['created_at'] = pandas.to_datetime(df_user['created_at'])
-        created_date = df_user.sort_values(by=['created_at'], ascending=False)
-        df_last_tweets = created_date.head(20)
-        print(df_last_tweets)
-        df_same_tweets = df_last_tweets.duplicated('text')
-        #print(df_same_tweets)    
-            
-    #reply_texts = df_user['text', 'in_reply_to_user_id']
-     #       if rule_number == 3:
-      #          text = tweet_row['text']
-       #         in_reply_to_user_id = tweet_row['in_reply_to_user_id']
-              
-          #  if rule_number == 5:    
-           #     source = tweet_row['source']
-            #    if source != 'web':
-             #       classification = 'bot'
+            if rule_number == 5:
+                source = tweet_row['source']
+                if source != 'web':
+                    classification = 'bot'
+
+        if rule_number == 3:
+            df_user['created_at'] = pandas.to_datetime(df_user['created_at'])
+            created_date = df_user.sort_values(by=['created_at'], ascending=False)
+            df_last_tweets = created_date.head(20)
+            dict_same_tweets = {}
+            for _, row in df_last_tweets.iterrows():
+                text = row['text']
+                in_reply_to_user_id = int(row['in_reply_to_user_id'])
+                if text not in dict_same_tweets:
+                    dict_same_tweets[text] = []
+                if in_reply_to_user_id not in dict_same_tweets[text]:
+                    dict_same_tweets[text].append(in_reply_to_user_id)
+            for tweet in dict_same_tweets:
+                if len(dict_same_tweets[tweet]) > 1:
+                    classification = 'bot' 
+             
+                
+
+           
 
     return classification
+
 
 def socialbakers_rules(classification_file, users_dataset, tweets_dataset, rule_number):
     human = 0
