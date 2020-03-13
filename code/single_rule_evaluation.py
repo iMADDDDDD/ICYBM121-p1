@@ -210,8 +210,6 @@ def check_tweet_rule(df_csv, rule_number, user_id):
             sources = df_user['source'].unique()
             if len(sources) > 1:
                 classification = 'human'
-          
-
 
     return classification
 
@@ -317,6 +315,7 @@ def socialbakers_rules(classification_file, users_dataset, tweets_dataset, rule_
             output_writer = csv.writer(output)
             output_writer.writerow(['id','dataset', 'classification'])
     df_csv = pandas.read_csv(users_dataset, sep=',')
+    df_tweets = pandas.read_csv(tweets_dataset, index_col=4)
     for _, row in df_csv.iterrows():
         #meaning of user fields
         #https://developer.twitter.com/en/docs/tweets/data-dictionary/overview/user-object
@@ -342,6 +341,13 @@ def socialbakers_rules(classification_file, users_dataset, tweets_dataset, rule_
                 else: 
                     classification = 'human'
 
+            elif rule_number == 6:
+                statuses_count = int(row['statuses_count'])
+                if statuses_count == 0:
+                    classification = 'bot'
+                else:
+                    classification = 'human'
+ 
             elif rule_number == 7:
                 created_at = row['created_at']
                 created_date = datetime.strptime(created_at,'%a %b %d %H:%M:%S %z %Y')
@@ -375,12 +381,81 @@ def socialbakers_rules(classification_file, users_dataset, tweets_dataset, rule_
                         classification = 'human'
                 else:
                     classification = 'human'
-                      
+            
+            elif rule_number == 2 or rule_number == 3 or rule_number == 4 or rule_number == 5:
+                check_sb_tweet_rule(df_tweets, rule_number, user_id)              
 
             with open(classification_file, mode = 'a') as output:
                 output_writer = csv.writer(output)
                 output_writer.writerow([user_id, dataset, classification])
 
+
+def check_sb_tweet_rule(df_csv, rule_number, user_id):
+    classification = 'human'
+    try:
+        tweets_user = df_csv.loc[int(user_id)]
+    # https://developer.twitter.com/en/docs/tweets/data-dictionary/overview/tweet-object
+    except:
+        print("no tweets for user")
+        #everything is false by default
+    else:
+        if isinstance(tweets_user, pandas.Series):
+            df_user = pandas.DataFrame(tweets_user).T
+        else:
+            df_user = tweets_user
+        count_spam_tweets = 0
+        count_retweets = 0
+        count_links = 0
+        number_tweets = 0
+        
+        for _, tweet_row in df_user.iterrows():
+            number_tweets += 1
+
+            if rule_number == 2:   
+                text = tweet_row['text']
+                if 'diet' in text or 'make money' in text or 'work from home' in text or 'dieta' in text or 'fare soldi' in text or 'lavoro da casa' in text:
+                    count_spam_tweets += 1
+             
+            elif rule_number == 4:
+                retweeted_status_id = tweet_row['retweeted_status_id']
+                if not math.isnan(retweeted_status_id): 
+                    count_retweets += 1
+
+            elif rule_number == 5:
+                text = tweet_row['text']
+                if not isinstance(text, float):
+                #source: https://www.geeksforgeeks.org/python-check-url-string/
+                    url = re.findall('http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\(\), ]|(?:%[0-9a-fA-F][0-9a-fA-F]))+', text) 
+                    text_without_url = ''
+                    for u in url:
+                        text_without_url = text.replace(u,'')
+                        text = text_without_url
+                    if text_without_url == '':
+                        count_links += 1
+                 
+                 
+        if rule_number == 2: 
+            percentage = count_spam_tweets / number_tweets
+            if percentage > 30.00:
+                classification = 'bot'  
+ 
+        elif rule_number == 3:
+            print('RULE 3')
+            print(df_user['text'].value_counts())
+
+        elif rule_number == 4:
+            percentage = count_retweets / number_tweets
+            if percentage > 90.00:
+                classification = 'bot'  
+                
+        elif rule_number == 5:
+            percentage = count_links / number_tweets
+            if percentage > 90.00:
+                classification = 'bot'  
+            
+                 
+
+    return classification
 
 def main():
     rule_nr = sys.argv[1]
