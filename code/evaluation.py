@@ -151,15 +151,23 @@ def calculate_pearson_correlation_coefficient(classification_file):
     pearson_correlation_coefficient = df_rule_class.corr(method='pearson')
     return pearson_correlation_coefficient
 
-def calculate_pearson_correlation_coefficient_star():
-    return 0
-
+def calculate_pearson_correlation_coefficient_star(bas_dataset, classification_file, rule_set, rule_number):
+    attribute = rules.attributes(rule_set, rule_number)
+    df_dataset = pandas.read_csv(bas_dataset)
+    df_attribute = df_dataset[attribute]
+    df_numerical_attribute = df_attribute.fillna(0)
+    #df_numerical_attribute = df_numerical_attribute.astype(int)
+    df_classification = pandas.read_csv(classification_file)
+    df_class = df_classification['class']
+    df_pcc_star = pandas.concat([df_numerical_attribute, df_class], axis=1)
+    pearson_correlation_coefficient_star = df_pcc_star.corr(method='pearson')
+    return pearson_correlation_coefficient_star
 
 def main():
     dataset = home_directory + '/git/ICYBM121-p1/code'
     file_name = sys.argv[1]
     kind_dataset = sys.argv[2]
-    attribute = sys.argv[3]
+    #attribute = sys.argv[3]
     if 'cc' in file_name:
         rule_set = 'camisani_calzolari'
     rule_number = int(file_name[-5])
@@ -194,6 +202,9 @@ def main():
     pearson_correlation_coefficient = calculate_pearson_correlation_coefficient(classification_file)
     print("PEARSON CORRELATION COEFFICIENT")
     print(pearson_correlation_coefficient)
+    pearson_correlation_coefficient_star = calculate_pearson_correlation_coefficient_star(bas_dataset, classification_file, rule_set, rule_number)
+    print("PEARSON CORRELATION COEFFICIENT STAR")
+    print(pearson_correlation_coefficient_star)
     
     
 

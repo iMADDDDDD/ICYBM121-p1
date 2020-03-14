@@ -2,8 +2,8 @@ import math
 
 #Classification equals 0 (human) or 1 (bot)
 
-def rules(ruleset, number, attribute):
-    if ruleset == 'camisani_calzolari':
+def rules(rule_set, number, attribute):
+    if rule_set == 'camisani_calzolari':
         if number == 1:
             classification = camisani_calzolari_rule_1(attribute)
         elif number == 2:
@@ -24,6 +24,15 @@ def rules(ruleset, number, attribute):
             classification = camisani_calzolari_rule_19(attribute[0], attribute[1])
     return classification
 
+def attributes(rule_set, rule_number):
+    if rule_set == 'camisani_calzolari':
+        if rule_number == 1:
+            attribute = 'name'
+        elif rule_number == 2:
+            attribute = 'default_profile_image'
+        elif rule_number == 3:
+            attribute = 'location'
+    return attribute
 
 def camisani_calzolari_rule_1(name):
     if name != '':
