@@ -1,9 +1,10 @@
 import math
 import re
 
-#Output equals 0 (false) or 1 (true)
+#Output of rule equals 0 (false) or 1 (true)
 
 def rules(rule_set, number, attribute):
+    #Camisani-Calzolari rules
     if rule_set == 'camisani_calzolari':
         if number == 1:
             output = camisani_calzolari_rule_1(attribute)
@@ -49,6 +50,8 @@ def rules(rule_set, number, attribute):
             output = camisani_calzolari_rule_21(attribute)
         elif number == 22:
             output = camisani_calzolari_rule_22(attribute)
+
+    #Van Den Beld rules
     elif rule_set == 'van_den_beld':
         if number == 1:
             output = van_den_beld_rule_1(attribute)
@@ -60,6 +63,8 @@ def rules(rule_set, number, attribute):
             output = van_den_beld_rule_4(attribute[0], attribute[1])
         elif number == 5:
             output = van_den_beld_rule_5(attribute)
+
+    #Socialbakers rules
     elif rule_set == 'social_bakers':
         if number == 1:
             output = social_bakers_rule_1(attribute[0], attribute[1])
@@ -80,8 +85,9 @@ def rules(rule_set, number, attribute):
     
     return output
 
-
+# Returns the corresponding attribute name(s) of the users or tweets dataset required to evaluate the rule.
 def attributes(rule_set, rule_number):
+    #Camisani-Calzolari rules
     if rule_set == 'camisani_calzolari':
         if rule_number == 1:
             attribute = 'name'
@@ -115,6 +121,8 @@ def attributes(rule_set, rule_number):
             attribute = ['followers_count', 'friends_count']
         elif rule_number == 21:
             attribute = 'retweet_count'
+
+    #Van Den Beld rules
     elif rule_set == 'van_den_beld':
         if rule_number == 1:
             attribute = 'description'
@@ -126,6 +134,8 @@ def attributes(rule_set, rule_number):
             attribute = 'profile_image_url'
         elif rule_number == 5:
             attribute = 'source'
+
+    #Socialbakers rules
     elif rule_set == 'social_bakers':
         if rule_number == 1:
             attribute = ['followers_count', 'friends_count']
@@ -141,6 +151,8 @@ def attributes(rule_set, rule_number):
             attribute = ['description', 'location', 'friends_count']
     return attribute
 
+
+#--------- CAMISANI CALZOLARI RULES ---------------------------------
 
 #rule 1. the profile contains a name
 def camisani_calzolari_rule_1(name):
@@ -362,6 +374,9 @@ def camisani_calzolari_rule_22(df_sources):
         output = 0
     return output
 
+
+#--------- VAN DEN BELD RULES ----------------------------------------
+
 #rule 1. bot in biography
 def van_den_beld_rule_1(description):
     if not isinstance(description,float):
@@ -417,6 +432,8 @@ def van_den_beld_rule_5(source):
         output = 0
     return output
 
+
+#--------- SOCIAL BAKERS RULES ----------------------------------------
 
 #rule 1. friends:followers >= 50:1
 def social_bakers_rule_1(followers_count, friends_count):
