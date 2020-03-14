@@ -160,7 +160,7 @@ def van_den_beld_rules(classification_file, users_dataset, tweets_dataset, rule_
             print('----------------------------------------') 
 
 def check_vdb_tweet_rule(df_csv, rule_number, user_id):
-    classification = 0
+    rule_output = 0
     try:
         tweets_user = df_csv.loc[int(user_id)]
     # https://developer.twitter.com/en/docs/tweets/data-dictionary/overview/tweet-object
@@ -175,39 +175,22 @@ def check_vdb_tweet_rule(df_csv, rule_number, user_id):
         for _, tweet_row in df_user.iterrows():
 
             if rule_number == 5:
-                source = tweet_row['source']
-                if source != 'web':
-                    classification = 1
+               rule_output = check_vdb_rule(rule_set, number, tweet_row, df_user)
 
         if rule_number == 3:
-            df_user['created_at'] = pandas.to_datetime(df_user['created_at'])
-            created_date = df_user.sort_values(by=['created_at'], ascending=False)
-            df_last_tweets = created_date.head(20)
-            dict_same_tweets = {}
-            for _, row in df_last_tweets.iterrows():
-                text = row['text']
-                in_reply_to_user_id = int(row['in_reply_to_user_id'])
-                if text not in dict_same_tweets:
-                    dict_same_tweets[text] = []
-                if in_reply_to_user_id not in dict_same_tweets[text]:
-                    dict_same_tweets[text].append(in_reply_to_user_id)
-            for tweet in dict_same_tweets:
-                if len(dict_same_tweets[tweet]) > 1:
-                    classification = 1 
-             
-                
+            rule_output = check_vdb_rule(rule_set, number, [], df_user)
 
-           
-
-    return classification
+    return rule_output
 
 def check_vdb_rule(rule_set, number, row, df_row): 
     rule_satisfied = 0
     attribute = rules.attributes(rule_set, number)
     if number == 4:
         attribute_value = []
-        attribute_value.append(row[attr])
-        attribute_value.append(df_row[attr])
+        attribute_value.append(row[attribute])
+        attribute_value.append(df_row[attribute])
+    elif number == 3:
+        attribute_value = df_row
     else: 
         if isinstance(attribute, list):
            attribute_value = []

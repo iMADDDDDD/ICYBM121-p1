@@ -49,6 +49,18 @@ def rules(rule_set, number, attribute):
             output = camisani_calzolari_rule_21(attribute)
         elif number == 22:
             output = camisani_calzolari_rule_22(attribute)
+    elif rule_set == 'van_den_beld':
+        if number == 1:
+            output = van_den_beld_rule_1(attribute)
+        elif number == 2:
+            output = van_den_beld_rule_2(attribute[0], attribute[1])
+        elif number == 3:
+            output = van_den_beld_rule_3(attribute)
+        elif number == 4:
+            output = van_den_beld_rule_4(attribute[0], attribute[1])
+        elif number == 5:
+            output = van_den_beld_rule_5(attribute)
+    
     return output
 
 
@@ -86,7 +98,17 @@ def attributes(rule_set, rule_number):
             attribute = ['followers_count', 'friends_count']
         elif rule_number == 21:
             attribute = 'retweet_count'
- 
+    elif rule_set == 'van_den_beld':
+        if rule_number == 1:
+            attribute = 'description'
+        elif rule_number == 2:
+            attribute = ['followers_count', 'friends_count']
+        elif rule_number == 3:
+            attribute = ''
+        elif rule_number == 4:
+            attribute = 'profile_image_url'
+        elif rule_number == 5:
+            attribute = 'source'
     return attribute
 
 
@@ -329,12 +351,46 @@ def van_den_beld_rule_2(followers_count, friends_count):
         output = 0
     return output
 
+#rule 3.
+def van_den_beld_rule_3(df_tweets):
+   output = 0
+   df_tweets['created_at'] = pandas.to_datetime(df_tweets['created_at'])
+   created_date = df_user.sort_values(by=['created_at'], ascending=False)
+   df_last_tweets = created_date.head(20)
+   dict_same_tweets = {}
+   for _, row in df_last_tweets.iterrows():
+       text = row['text']
+       in_reply_to_user_id = int(row['in_reply_to_user_id'])
+       if text not in dict_same_tweets:
+           dict_same_tweets[text] = []
+       if in_reply_to_user_id not in dict_same_tweets[text]:
+           dict_same_tweets[text].append(in_reply_to_user_id)
+   for tweet in dict_same_tweets:
+       if len(dict_same_tweets[tweet]) > 1:
+           output = 1
+   return output   
+
 #rule 4. duplicate_profile_pictures
 def van_den_beld_rule_4(profile_image_url, df_profile_image_url):
     number_same_images = (df_profile_image_url == profile_image_url).sum()
     if number_same_images > 1:
         output = 1
     else:
+        output = 0
+    return output
+
+#rule 5. 
+def van_den_beld_rule_5(source):
+    if source != 'web':
+        output = 1
+    else: 
+        output = 0
+    return output
+
+def social_bakers_rule_1(friends_count, followers_count):
+    if friends_count >= followers_count * 50:
+        output = 1
+    else: 
         output = 0
     return output
 
