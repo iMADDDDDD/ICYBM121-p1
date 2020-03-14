@@ -3,7 +3,7 @@ import csv
 import sys
 import pandas
 import rules
-from info_gain import info_gain
+#from info_gain import info_gain
 
 
 home_directory = '/home/hanne'
@@ -18,13 +18,13 @@ def determine_positive_and_negative(classification_file):
         next(class_reader, None)
         for class_row in class_reader:
             dataset = class_row[1]
-            classification = int(class_row[2])
-            if classification == 0:
+            classification = class_row[2]
+            if classification == 'human':
                 if dataset == 'E13' or dataset == 'TFP':
                     true_negative += 1
                 elif dataset == 'FSF' or dataset == 'TWT' or dataset == 'INT':
                     false_negative += 1
-            elif classification == 1:
+            elif classification == 'bot':
                 if dataset == 'E13' or dataset == 'TFP':
                     false_positive += 1
                 elif dataset == 'FSF' or dataset == 'TWT' or dataset == 'INT':
@@ -167,11 +167,10 @@ def main():
     dataset = home_directory + '/git/ICYBM121-p1/code'
     file_name = sys.argv[1]
     kind_dataset = sys.argv[2]
-    #attribute = sys.argv[3]
     if 'cc' in file_name:
         rule_set = 'camisani_calzolari'
-    rule_number = int(file_name[-5])
-    print(rule_number)
+    #rule_number = int(file_name[-5])
+    #print(rule_number)
     if kind_dataset == 'u':
         bas_dataset = dataset + '/' + 'bas_users.csv'
     elif kind_dataset == 't':
@@ -193,18 +192,18 @@ def main():
     mcc = calculate_MCC(tp, tn, fp, fn)
     print("MCC")
     print(mcc)
-    information_gain = calculate_information_gain(tp, tn, fp, fn)
-    print("INFORMATION GAIN")
-    print(information_gain)
+    #information_gain = calculate_information_gain(tp, tn, fp, fn)
+    #print("INFORMATION GAIN")
+    #print(information_gain)
     #information_gain_star = calculate_information_gain_star(bas_dataset, classification_file, attribute, rule_set, rule_number)
     #print("INFORMATION GAIN STAR")
     #print(information_gain_star)
-    pearson_correlation_coefficient = calculate_pearson_correlation_coefficient(classification_file)
-    print("PEARSON CORRELATION COEFFICIENT")
-    print(pearson_correlation_coefficient)
-    pearson_correlation_coefficient_star = calculate_pearson_correlation_coefficient_star(bas_dataset, classification_file, rule_set, rule_number)
-    print("PEARSON CORRELATION COEFFICIENT STAR")
-    print(pearson_correlation_coefficient_star)
+    #pearson_correlation_coefficient = calculate_pearson_correlation_coefficient(classification_file)
+    #print("PEARSON CORRELATION COEFFICIENT")
+    #print(pearson_correlation_coefficient)
+    #pearson_correlation_coefficient_star = calculate_pearson_correlation_coefficient_star(bas_dataset, classification_file, rule_set, rule_number)
+    #print("PEARSON CORRELATION COEFFICIENT STAR")
+    #print(pearson_correlation_coefficient_star)
     
     
 

@@ -95,8 +95,8 @@ def check_rule(rule_set, number, rules_dict, row):
            attribute_value.append(row[attr])
     else:
        attribute_value = row[attribute]    
-    classification = rules.rules(rule_set, number, attribute_value)
-    if classification == 0:
+    rule_output = rules.rules(rule_set, number, attribute_value)
+    if rule_output == 1:
         rule_index = 'rule_' + str(number)
         rules_dict[rule_index] = True
     return rules_dict
@@ -241,10 +241,11 @@ def calculate_bot_points(rules_dict):
 
 
 def main():
-    dataset = home_directory + '/git/ICYBM121-p1/database/INT/'
+    database = 'TWT'
+    dataset = home_directory + '/git/ICYBM121-p1/database/' + database + '/'
     users_dataset = dataset + 'users.csv'
     tweets_dataset = dataset + 'tweets.csv'
-    classification_file = dataset + 'E13_classification.csv'
+    classification_file = dataset + database +'_classification.csv'
     camisani_calzolari_algorithm(users_dataset, tweets_dataset, classification_file)
 
 

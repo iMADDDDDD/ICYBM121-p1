@@ -13,6 +13,7 @@ import rules
 home_directory = "/home/hanne"
 
 def camisani_calzolari_rules(classification_file, users_dataset, tweets_dataset, rule_number):
+    rule_set = 'camisani_calzolari'
     human = 0
     bot = 0
     neutral = 0
@@ -37,46 +38,14 @@ def camisani_calzolari_rules(classification_file, users_dataset, tweets_dataset,
                     user_already_classified = True
 
         if not user_already_classified:
-            if rule_number == 1:
-                name = row['name']
-                classification = rules.rules('camisani_calzolari', rule_number, name)
+            rule_satisfied = 0
 
-            elif rule_number == 2:
-                default_profile_image = row['default_profile_image']
-                classification = rules.rules('camisani_calzolari', rule_number, default_profile_image)
-
-            elif rule_number == 3:
-                location = row['location']
-                classification = rules.rules('camisani_calzolari', rule_number, location)
-                 
-            elif rule_number == 4:
-                description = row['description']
-                classification = rules.rules('camisani_calzolari', rule_number, description)
-
-            elif rule_number == 5:
-                followers_count = row['followers_count']
-                classification = rules.rules('camisani_calzolari', rule_number, followers_count)
-
-            elif rule_number == 6:
-                listed_count = row['listed_count']
-                classification = rules.rules('camisani_calzolari', rule_number, listed_count)
-
-            elif rule_number == 7:
-                statuses_count = row['statuses_count']
-                classification = rules.rules('camisani_calzolari', rule_number, statuses_count)
-            
-            elif rule_number == 9:
-                url = row['url']
-                classification = rules.rules('camisani_calzolari', rule_number, url)
-
-            elif rule_number == 19:
-                followers_count = row['followers_count']
-                friends_count = row['friends_count']
-                classification = rules.rules('camisani_calzolari', rule_number, [followers_count, friends_count])
+            if rule_number in [1,2,3,4,5,6,7,9,19]:
+                rule_satisfied = check_rule(rule_set, rule_number, row)
 
             # needs to be checked in tweets
-            elif rule_number == 8 or rule_number == 10 or rule_number == 11 or rule_number == 12 or rule_number == 13 or rule_number == 14 or rule_number == 15 or rule_number == 16 or rule_number == 17 or rule_number == 18 or rule_number == 20 or rule_number == 21 or rule_number == 22:
-                classification = check_tweet_rule(df_tweets, rule_number, user_id)        
+            elif rule_number in [8,10,11,12,13,14,15,16,17,18,20,21,22]:
+                rule_satisfied = check_rules_related_to_tweets(df_tweets, user_id, rule_number, rule_set)
                 
             dataset = row['dataset']
             if dataset == 'E13' or dataset == 'TFP':
@@ -84,28 +53,29 @@ def camisani_calzolari_rules(classification_file, users_dataset, tweets_dataset,
             elif dataset == 'FSF' or dataset == 'TWT' or dataset == 'INT':
                 class_user = 1
             # RULE IS NOT SATISFIED
-            if classification == 0:
+            if rule_satisfied == 0:
                 # USER IS BOT
                 bot += 1
 
             # RULE IS SATISFIED
-            elif classification == 1:
+            elif rule_satisfied == 1:
                 # USER IS HUMAN
                 human += 1
 
             with open(classification_file, mode = 'a') as output:
                 output_writer = csv.writer(output)
-                output_writer.writerow([user_id,dataset,classification,class_user])
+                output_writer.writerow([user_id,dataset,rule_satisfied,class_user])
             print('HUMAN')
             print(human)
             print('BOT')
             print(bot)
             print('----------------------------------------') 
 
-def check_tweet_rule(df_csv, rule_number, user_id):
-    classification = 1
+
+def check_rules_related_to_tweets(df_tweets, user_id, number, rule_set):
+    rule_satisfied = 0
     try:
-        tweets_user = df_csv.loc[int(user_id)]
+        tweets_user = df_tweets.loc[int(user_id)]
     # https://developer.twitter.com/en/docs/tweets/data-dictionary/overview/tweet-object
     except:
         print("no tweets for user")
@@ -115,87 +85,32 @@ def check_tweet_rule(df_csv, rule_number, user_id):
             df_user = pandas.DataFrame(tweets_user).T
         else:
             df_user = tweets_user
-        client_count = 0
+        if number == 22:
+            rule_satisfied = check_rule(rule_set, number, df_user)
+        else:
+            for _, tweet_row in df_user.iterrows():
+                rule_satisfied = check_rule(rule_set, number, tweet_row)
+    return rule_satisfied
 
-        for _, tweet_row in df_user.iterrows():
-            if rule_number == 8:   
-                geo = tweet_row['geo']
-                if not math.isnan(geo):
-                    classification = 0
 
-            elif rule_number == 10:
-                favorite_count = tweet_row['favorite_count']
-                if not isinstance(favorite_count, float) and not math.isnan(favorite_count):
-                    if int(favorite_count) > 0:
-                       classification = 0
+def check_rule(rule_set, number, row): 
+    rule_satisfied = 0
+    attribute = rules.attributes(rule_set, number)
+    if isinstance(attribute, list):
+       attribute_value = []
+       for attr in attribute:
+           attribute_value.append(row[attr])
+    else:
+       attribute_value = row[attribute]    
+    rule_output = rules.rules(rule_set, number, attribute_value)
+    if rule_output == 1:
+        rule_satisfied = 1
+    return rule_satisfied
 
-            elif rule_number == 11:
-                text = tweet_row['text']
-                if not isinstance(text, float):
-                    if '.' in text or '?' in text or '!' in text:
-                        classification = 0
-            
-            elif rule_number == 12:
-                num_hashtags = int(tweet_row['num_hashtags'])
-                if num_hashtags > 0:
-                    classification = 0
-            
-            elif rule_number == 13:
-                source = tweet_row['source']
-                if 'Twitter for iPhone' in source:
-                    classification = 0
-
-            elif rule_number == 14:
-                source = tweet_row['source']
-                if 'Twitter for Android' in source:
-                    classification = 0
-
-            elif rule_number == 15:
-                source = tweet_row['source']
-                if 'foursquare' in source:
-                    classification = 0
-
-            elif rule_number == 16:
-                source = tweet_row['source']
-                if 'Instagram' in source:
-                    classification = 0
-
-            elif rule_number == 17:
-                source = tweet_row['source']
-                if source == 'web':
-                    classification = 0
-
-            elif rule_number == 18:
-                in_reply_to_user_id = int(tweet_row['in_reply_to_user_id'])
-                if in_reply_to_user_id != 0:
-                    classification = 0
-            
-            elif rule_number == 20:
-                text = tweet_row['text']
-                if not isinstance(text, float):
-                #source: https://www.geeksforgeeks.org/python-check-url-string/
-                    url = re.findall('http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\(\), ]|(?:%[0-9a-fA-F][0-9a-fA-F]))+', text) 
-                    text_without_url = ''
-                    for u in url:
-                        text_without_url = text.replace(u,'')
-                        text = text_without_url
-                    if text_without_url != '':
-                        classification = 0
-
-            elif rule_number == 21:
-                retweet_count = int(tweet_row['retweet_count'])
-                if retweet_count > 0:
-                    classification = 0
-
-        if rule_number == 22:
-            sources = df_user['source'].unique()
-            if len(sources) > 1:
-                classification = 0
-
-    return classification
 
 
 def van_den_beld_rules(classification_file, users_dataset, tweets_dataset, rule_number):
+    rule_set = 'van_den_beld'
     human = 0
     bot = 0
     neutral = 0
@@ -220,53 +135,28 @@ def van_den_beld_rules(classification_file, users_dataset, tweets_dataset, rule_
                     user_already_classified = True
 
         if not user_already_classified:
-            if rule_number == 1:
-                description = row['description']
-                if not isinstance(description,float):
-                    if 'bot' in description:
-                        classification = 1
-                    else: 
-                        classification = 0
-
-            elif rule_number == 2:
-                followers_count = row['followers_count']
-                friends_count = row['friends_count']
-                if friends_count >= followers_count * 100:
-                    classification = 1
-                else: 
-                    classification = 0
-
-            elif rule_number == 4:
-                user_profile_image_url = row['profile_image_url']
-                number_same_images = df_csv.loc[df_csv.profile_image_url == user_profile_image_url, 'profile_image_url'].count()
-                if number_same_images > 1:
-                    classification = 1
-                else:
-                    classification = 0
-
+            if rule_number in [1,2,4]:
+                rule_output =  check_vdb_rule(rule_set, number, row, df_csv) 
             elif rule_number == 3 or rule_number == 5:
-                classification = check_vdb_tweet_rule(df_tweets, rule_number, user_id)
+                rule_output = check_vdb_tweet_rule(df_tweets, rule_number, user_id)
 
             dataset = row['dataset']
             if dataset == 'E13' or dataset == 'TFP':
                 class_user = 0
             elif dataset == 'FSF' or dataset == 'TWT' or dataset == 'INT':
                 class_user = 1
-            if classification == 0:
+            if rule_output == 0:
                 human += 1
-            elif classification == 1:
+            elif rule_output == 1:
                 bot += 1
-            elif classification == 'neutral':
-                neutral += 1
+            
             with open(classification_file, mode = 'a') as output:
                 output_writer = csv.writer(output)
-                output_writer.writerow([user_id,dataset,classification,class_user])
+                output_writer.writerow([user_id,dataset,rule_output,class_user])
             print('HUMAN')
             print(human)
             print('BOT')
             print(bot)
-            print('NEUTRAL')
-            print(neutral)  
             print('----------------------------------------') 
 
 def check_vdb_tweet_rule(df_csv, rule_number, user_id):
@@ -311,6 +201,25 @@ def check_vdb_tweet_rule(df_csv, rule_number, user_id):
 
     return classification
 
+def check_vdb_rule(rule_set, number, row, df_row): 
+    rule_satisfied = 0
+    attribute = rules.attributes(rule_set, number)
+    if number == 4:
+        attribute_value = []
+        attribute_value.append(row[attr])
+        attribute_value.append(df_row[attr])
+    else: 
+        if isinstance(attribute, list):
+           attribute_value = []
+           for attr in attribute:
+               attribute_value.append(row[attr])
+        else:
+           attribute_value = row[attribute] 
+    
+    rule_output = rules.rules(rule_set, number, attribute_value)
+    if rule_output == 1:
+        rule_satisfied = 1
+    return rule_satisfied
 
 def socialbakers_rules(classification_file, users_dataset, tweets_dataset, rule_number):
     human = 0
@@ -484,7 +393,7 @@ def check_sb_tweet_rule(df_csv, rule_number, user_id):
 def main():
     rule_nr = sys.argv[1]
     rule_set = sys.argv[2]
-    dataset = home_directory + '/git/ICYBM121-p1/code/'
+    dataset = home_directory + '/git/ICYBM121-p1/code'
     users_dataset = dataset + '/bas_users.csv'
     tweets_dataset = dataset + '/bas_tweets.csv'
 
