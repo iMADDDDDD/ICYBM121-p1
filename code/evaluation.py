@@ -147,7 +147,6 @@ def calculate_information_gain_star(dataset, classification_file, attribute, rul
 def calculate_pearson_correlation_coefficient(classification_file):
     df_csv = pandas.read_csv(classification_file)
     df_rule_class = df_csv.filter(['output','class'], axis=1)
-    print(df_rule_class)
     pearson_correlation_coefficient = df_rule_class.corr(method='pearson')
     return pearson_correlation_coefficient
 
