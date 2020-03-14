@@ -60,6 +60,23 @@ def rules(rule_set, number, attribute):
             output = van_den_beld_rule_4(attribute[0], attribute[1])
         elif number == 5:
             output = van_den_beld_rule_5(attribute)
+    elif rule_set == 'social_bakers':
+        if number == 1:
+            output = social_bakers_rule_1(attribute[0], attribute[1])
+        elif number == 2:
+            output = social_bakers_rule_2(attribute)
+        elif number == 3:
+            output = social_bakers_rule_3(attribute)
+        elif number == 4:
+            output = social_bakers_rule_4(attribute)
+        elif number == 5:
+            output = social_bakers_rule_5(attribute)
+        elif number == 6:
+            output = social_bakers_rule_6(attribute)
+        elif number == 7:
+            output = social_bakers_rule_7(attribute[0], attribute[1], attribute[2])
+        elif number == 8:
+            output = social_bakers_rule_8(attribute[0], attribute[1], attribute[2])
     
     return output
 
@@ -109,6 +126,19 @@ def attributes(rule_set, rule_number):
             attribute = 'profile_image_url'
         elif rule_number == 5:
             attribute = 'source'
+    elif rule_set == 'social_bakers':
+        if rule_number == 1:
+            attribute = ['followers_count', 'friends_count']
+        elif rule_number in [2, 3, 5]:
+            attribute = 'text'
+        elif rule_number == 4:
+            attribute = 'retweeted_status_id'
+        elif rule_number == 6:
+            attribute = 'statuses_count'
+        elif rule_number == 7:
+            attribute = ['created_at', 'updated', 'profile_image_url']
+        elif rule_number == 8: 
+            attribute = ['description', 'location', 'friends_count']
     return attribute
 
 
@@ -379,7 +409,7 @@ def van_den_beld_rule_4(profile_image_url, df_profile_image_url):
         output = 0
     return output
 
-#rule 5. 
+#rule 5. tweet from API 
 def van_den_beld_rule_5(source):
     if source != 'web':
         output = 1
@@ -387,12 +417,128 @@ def van_den_beld_rule_5(source):
         output = 0
     return output
 
-def social_bakers_rule_1(friends_count, followers_count):
+
+#rule 1. friends:followers >= 50:1
+def social_bakers_rule_1(followers_count, friends_count):
     if friends_count >= followers_count * 50:
         output = 1
     else: 
         output = 0
     return output
+
+
+#rule 2. tweets spam phrases
+def social_bakers_rule_2(df_text):
+    count_spam_tweets = 0
+    number_tweets = 0
+    for _, text in df_text.iterrows():
+        number_tweets += 1
+        if not isinstance(text, float):
+            if 'diet' in text or 'make money' in text or 'work from home' in text or 'dieta' in text or 'fare soldi' in text or 'lavoro da casa' in text:
+                count_spam_tweets += 1
+
+    percentage = count_spam_tweets / number_tweets
+    if percentage > 30.00:
+        output = 1 
+    else:
+        output = 0
+    return output
+
+
+#rule 3. same tweet >= 3
+def social_bakers_rule_3(df_text):
+    max_frequency = df_text.value_counts().max()
+    if max_frequency >= 3:
+        output = 1
+    else:
+        output = 0
+    return output
+
+
+#rule 4. retweets >= 90%
+def social_bakers_rule_4(df_retweeted_status_id):
+    count_spam_tweets = 0
+    number_tweets = 0
+    for _, retweeted_status_id in df_retweeted_status_id.iterrows():
+        number_tweets += 1
+        if not math.isnan(retweeted_status_id): 
+            count_retweets += 1
+
+    percentage = count_retweets / number_tweets
+    if percentage > 90.00:
+        output = 1  
+    else:
+        output = 0
+    return output
+
+
+#rule 5. tweet-links >= 90%
+def social_bakers_rule_5(df_text):
+    count_links = 0
+    number_tweets = 0
+    for _, text in df_text.iterrows():
+        number_tweets += 1
+        if not isinstance(text, float):
+        #source: https://www.geeksforgeeks.org/python-check-url-string/
+            url = re.findall('http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\(\), ]|(?:%[0-9a-fA-F][0-9a-fA-F]))+', text) 
+            text_without_url = ''
+            for u in url:
+                text_without_url = text.replace(u,'')
+                text = text_without_url
+                if text_without_url == '':
+                    count_links += 1
+
+    percentage = count_links / number_tweets
+    if percentage > 90.00:
+        output = 1  
+    else:
+        output = 0
+    return output
+
+
+#rule 6. 0 tweets
+def social_bakers_rule_6(statuses_count):
+    if statuses_count == 0:
+        output = 1
+    else:
+        output = 0
+    return output
+
+
+#rule 7. default image after 2 months
+def social_bakers_rule_7(created_at, updated_date, profile_image_url):
+    created_date = datetime.strptime(created_at,'%a %b %d %H:%M:%S %z %Y')
+    updated_date = datetime.strptime(updated,'%Y-%m-%d %H:%M:%S')
+    timezone = pytz.timezone("Europe/Rome")
+    crawled_date = timezone.localize(updated_date)
+
+    difference = int((crawled_date - created_date).days)
+    if difference > 62:
+        if 'default' in profile_image_url:
+            output = 1
+        else:
+            output = 0
+    else:
+        output = 0
+    return output
+
+
+#rule 8. no bio, no location, friends >= 100
+def social_bakers_rule_8(description, location, friends_count):
+    if isinstance(description,float) and math.isnan(description):
+        if isinstance(location,float) and math.isnan(location): 
+            if int(friends_count) > 100:
+                output = 1
+            else:
+                output = 0
+        else:
+            output = 0
+    else:
+        output = 0
+    return output
+    
+   
+
 
     
     
