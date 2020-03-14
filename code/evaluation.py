@@ -3,6 +3,7 @@ import csv
 import sys
 import pandas
 import rules
+from info_gain import info_gain
 
 
 home_directory = '/home/hanne'

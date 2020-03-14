@@ -3,10 +3,12 @@ import re
 import pandas
 import math
 import os
+import rules
 
 home_directory = '/home/hanne'
 
 def camisani_calzolari_algorithm(users_dataset, tweets_dataset, classification_file):
+    rule_set = 'camsani_calzolari'
     human = 0
     bot = 0
     neutral = 0
@@ -14,8 +16,9 @@ def camisani_calzolari_algorithm(users_dataset, tweets_dataset, classification_f
         with open(classification_file, mode = 'w') as output:
             output_writer = csv.writer(output)
             output_writer.writerow(['id','dataset', 'classification'])
-    df_csv = pandas.read_csv(users_dataset, sep=',')
-    for _, row in df_csv.iterrows():
+    df_users = pandas.read_csv(users_dataset, sep=',')
+    df_tweets = pandas.read_csv(tweets_dataset, index_col=4)
+    for _, row in df_users.iterrows():
         #meaning of user fields
         #https://developer.twitter.com/en/docs/tweets/data-dictionary/overview/user-object
         user_already_classified = False
@@ -31,51 +34,18 @@ def camisani_calzolari_algorithm(users_dataset, tweets_dataset, classification_f
 
         if not user_already_classified:
             rules_dict = initialize_rules_dictionary()
+        
+            # check rules related to users dataset
+            for number in [1,2,3,4,5,6,7,9,11,19]:
+                rules_dict = check_rule(rule_set, number, rules_dict, row)
             
-            #check rule 1: check if profile contains a name
-            name = row['name']
-            rules_dict = check_rule_1(rules_dict, name)
+            # check rules related to tweets dataset
+            for number in [8,10,11,12,13,14,15,16,17,18,19,20,21]:
+                rules_dict = check_rules_related_to_tweets(tweets_dataset, user_id, rules_dict)
 
-            #check rule 2: check if profile contains an image
-            default_profile_image = row['default_profile_image']
-            rules_dict = check_rule_2(rules_dict, default_profile_image)
 
-            #check rule 3: check if profile contains a physical address
-            location = row['location']
-            rules_dict = check_rule_3(rules_dict, location)
-
-            #check rule 4: check if profile contains a biography
-            description = row['description']
-            rules_dict = check_rule_4(rules_dict, description)
-
-            #check rule 5: check if the account has at least 30 followers
-            try:
-                followers_count = int(row['followers_count'])
-            except: 
-                followers_count = 0
-            rules_dict = check_rule_5(rules_dict, followers_count)
+            classification = rules.rules(rule_set, number, attribute_value)
             
-            #check rule 6: check if it has been inserted in a list by other Twitter users
-            listed_count = int(row['listed_count'])
-            rules_dict = check_rule_6(rules_dict, listed_count)
-
-            #check rule 7: check if it has written at least 50 tweets
-            statuses_count = int(row['statuses_count'])
-            rules_dict = check_rule_7(rules_dict, statuses_count)
-            
-            #check rule 9: check if the profile contains a URL
-            url = row['url']
-            rules_dict = check_rule_9(rules_dict, url)
-
-            #check rule 11: check if it writes tweets that have punctuation
-            rules_dict = check_rule_11(rules_dict, description)
-            
-            #check rule 19: check if the equation for number of followers and friends is satisfies
-            friends_count = int(row['friends_count'])
-            rules_dict = check_rule_19(rules_dict, followers_count, friends_count)
-          
-            #check other rules related to tweets
-            rules_dict = check_rules_related_to_tweets(tweets_dataset, user_id, rules_dict)
             dataset = row['dataset']
             #calculate the final classification of user
             classification = end_result(rules_dict)
@@ -99,11 +69,9 @@ def camisani_calzolari_algorithm(users_dataset, tweets_dataset, classification_f
             print('----------------------------------------')       
 
 
-def check_rules_related_to_tweets(tweets_dataset, user_id, rules_dict):
-    df_csv = pandas.read_csv(tweets_dataset, index_col=4)
-    #print(df_csv)
+def check_rules_related_to_tweets(df_tweets, user_id, rules_dict, number):
     try:
-        tweets_user = df_csv.loc[int(user_id)]
+        tweets_user = df_tweets.loc[int(user_id)]
     # https://developer.twitter.com/en/docs/tweets/data-dictionary/overview/tweet-object
     except:
         print("no tweets for user")
@@ -113,58 +81,28 @@ def check_rules_related_to_tweets(tweets_dataset, user_id, rules_dict):
             df_user = pandas.DataFrame(tweets_user).T
         else:
             df_user = tweets_user
-        for _, tweet_row in df_user.iterrows():
-            #check rule 8: check if account has been geo-localized
-            geo = tweet_row['geo']
-            rules_dict = check_rule_8(rules_dict, geo)
-
-            #check rule 10: check if it has been included in another user's favorites
-            try:
-               favorite_count = int(tweet_row['favorite_count'])
-            except: 
-                favorite_count = 0
-            rules_dict = check_rule_10(rules_dict, favorite_count)
-
-            #check rule 11: check if it writes tweets that have punctuation
-            text = tweet_row['text']
-            rules_dict = check_rule_11(rules_dict, text)
-             
-            #check rule 12: check if it has used a hashtag in at least one tweet
-            num_hashtags = int(tweet_row['num_hashtags'])
-            rules_dict = check_rule_12(rules_dict, num_hashtags)
-
-            #check rule 13: check if it has logged into Twitter using an iPhone
-            source = tweet_row['source']
-            rules_dict = check_rule_13(rules_dict, source)
-
-            #check rule 14: check if it has logged into Twitter using an Android device
-            rules_dict = check_rule_14(rules_dict, source)
-
-            #check rule 15: check if it is connected with foursquare
-            rules_dict = check_rule_15(rules_dict, source)
-
-            #check rule 16: check if it is connected with instagram
-            rules_dict = check_rule_16(rules_dict, source)
-
-            #check rule 17: check if it has logged into twitter.com website
-            rules_dict = check_rule_17(rules_dict, source)
-
-            #check rule 18: check if it has written the userID of another user in at least one tweet, that is it posted an @reply or a mention         
-            in_reply_to_user_id = tweet_row['in_reply_to_user_id']
-            rules_dict = check_rule_18(rules_dict, in_reply_to_user_id)
-                      
-            #check rule 20: check if it publishes content which does not just contain URLs
-            rules_dict = check_rule_20(rules_dict, text)
-
-            #check rule 21: check if at least one of its tweets has been retwitted by other accounts
-            retweet_count = int(tweet_row['retweet_count'])
-            rules_dict = check_rule_21(rules_dict, retweet_count)
-
-        #check rule 22: check if it has logged into Twitter using different clients
-        rules_dict = check_rule_22(rules_dict)
+        if number == 22:
+            rules_dict = check_rule(rule_set, number, rules_dict, df_user)
+        else:
+            for _, tweet_row in df_user.iterrows():
+                rules_dict = check_rule(rule_set, number, rules_dict, tweet_row)
     return rules_dict
-          
 
+          
+def check_rule(rule_set, number, rules_dict, row): 
+    attribute = rules.attributes(rule_set, number)
+    if isinstance(attribute, list):
+       attribute_value = []
+       for attr in attribute:
+           attribute_value.append(row[attr])
+    else:
+       attribute_value = attribute    
+    classification = rules.rules(rule_set, number, attribute_value)
+    if classification == 0:
+        rule_index = 'rule_' + str(number)
+        rules_dict[rule_index] = True
+    return rules_dict
+            
 def end_result(rules_dict):
     human_points = calculate_human_points(rules_dict)
     bot_points = calculate_bot_points(rules_dict)
@@ -202,176 +140,6 @@ def initialize_rules_dictionary():
     rules_dict['rule_20'] = False
     rules_dict['rule_21'] = False
     rules_dict['rule_22'] = False
-    return rules_dict
-
-    
-#1. the profile contains a name
-def check_rule_1(rules_dict, name):
-    if name != '':
-        rules_dict['rule_1'] = True
-    return rules_dict
-
-   
-#2. the profile contains an image
-# default_profile_image is a Boolean
-# * true if default image is used
-# * false if user has uploaded its own image
-def check_rule_2(rules_dict, default_profile_image):
-    if isinstance(default_profile_image,float) and math.isnan(default_profile_image):
-        rules_dict['rule_2'] = True
-    return rules_dict
-
-
-#3. the profile contains a physical address
-def check_rule_3(rules_dict, location):
-    if not (isinstance(location,float) and math.isnan(location)):
-        rules_dict['rule_3'] = True
-    return rules_dict
-
-
-#4. the profile contains a biography
-def check_rule_4(rules_dict, description):
-    if not (isinstance(description,float) and math.isnan(description)):
-        rules_dict['rule_4'] = True
-    return rules_dict
-
-
-#5. the account has at least 30 followers
-def check_rule_5(rules_dict, followers_count):
-    if followers_count >= 30:
-        rules_dict['rule_5'] = True
-    return rules_dict
-
-#6. it has been inserted in a list by other Twitter users
-# listed_count = number of public lists that this user is a member of
-def check_rule_6(rules_dict, listed_count):
-    if listed_count > 0:
-        rules_dict['rule_6'] = True
-    return rules_dict
-
-#7. it has written at least 50 tweets
-# https://developer.twitter.com/en/docs/tweets/data-dictionary/overview/user-object
-# subtract the number of retweets? 
-# there is no number of retweets per user account
-def check_rule_7(rules_dict, statuses_count):
-    if statuses_count > 50:
-        rules_dict['rule_7'] = True
-    return rules_dict
-
-#8. the account has been geo-localized
-def check_rule_8(rules_dict, geo):
-    if not math.isnan(geo):
-        rules_dict['rule_8'] = True
-    return rules_dict
-
-
-#9. the profile contains a URL
-def check_rule_9(rules_dict, url):
-    if not (isinstance(url,float) and math.isnan(url)):
-        rules_dict['rule_9'] = True
-    return rules_dict
-
-
-#10. it has been includes in another user's favorites
-def check_rule_10(rules_dict, favorite_count):
-    if favorite_count > 0:
-        rules_dict['rule_10'] = True
-    return rules_dict
-
-
-#11. it writes tweets that have punctuation
-# in one text
-# three punctuation marks that are appropriate for use as sentence endings
-def check_rule_11(rules_dict, text):
-    if not isinstance(text, float):
-        if '.' in text or '?' in text or '!' in text:
-            rules_dict['rule_11'] = True
-    return rules_dict
-
-#12. it has used a hashtag in at least one tweet
-def check_rule_12(rules_dict, num_hashtags):
-    if num_hashtags > 0:
-        rules_dict['rule_12'] = True
-    return rules_dict
-
-#13. it has logged into Twitter using an iPhone
-def check_rule_13(rules_dict, source):
-    if source == 'iphone':
-        rules_dict['rule_13'] = True
-    return rules_dict
-
-
-#14. it has logged into Twitter using an Android device
-def check_rule_14(rules_dict, source):
-    if source == 'android':
-        rules_dict['rule_14'] = True
-    return rules_dict
-
-#15. it is connected with Foursquare
-def check_rule_15(rules_dict, source):
-    if source == 'foursquare':
-        rules_dict['rule_15'] = True
-    return rules_dict
-
-#16. it is connected with Instagram
-def check_rule_16(rules_dict, source):
-    if source == 'instagram':
-        rules_dict['rule_16'] = True
-    return rules_dict
-
-#17. it has logged into twitter.com website
-def check_rule_17(rules_dict, source):
-    if source == 'web':
-        rules_dict['rule_17'] = True
-    return rules_dict
-
-#18. it has written the userID of another user in at least one tweet, that is it posted a @reply or a mention
-def check_rule_18(rules_dict, in_reply_to_user_id):
-    if in_reply_to_user_id != '':
-        rules_dict['rule_18'] = True
-    return rules_dict
-
-#19. (2*number followers) >= (number of friends)
-def check_rule_19(rules_dict, followers_count, friends_count):
-    if (2*followers_count) >= (friends_count):
-         rules_dict['rule_19'] = True
-    return rules_dict
-
-
-#20. it publishes content which does not just contain URLs
-def check_rule_20(rules_dict, text):
-    if not isinstance(text, float):
-        #source: https://www.geeksforgeeks.org/python-check-url-string/
-        url = re.findall('http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\(\), ]|(?:%[0-9a-fA-F][0-9a-fA-F]))+', text) 
-        text_without_url = ''
-        for u in url:
-            text_without_url = text.replace(u,'')
-            text = text_without_url
-        if text_without_url != '':
-            rules_dict['rule_20'] = True
-    return rules_dict
-
-#21. at least one of its tweets has been retwitted by other accounts
-def check_rule_21(rules_dict, retweet_count):
-    if retweet_count > 0:
-        rules_dict['rule_21'] = True
-    return rules_dict
-
-#22. it has logged into Twitter through different clients
-def check_rule_22(rules_dict):
-    client_count = 0
-    if rules_dict['rule_13']:
-       client_count += 1
-    if rules_dict['rule_14']:
-       client_count += 1
-    if rules_dict['rule_15']:
-       client_count += 1
-    if rules_dict['rule_16']:
-       client_count += 1
-    if rules_dict['rule_17']:
-       client_count += 1
-    if client_count > 1:
-       rules_dict['rule_22'] = True
     return rules_dict
 
 def calculate_human_points(rules_dict):
@@ -469,7 +237,7 @@ def calculate_bot_points(rules_dict):
     if not rules_dict['rule_22']:
         bot_points += 1
     # 2 bot points if it only uses APIs
-    if not rules_dict['rule_13'] and not rules_dict['rule_14'] and not rules_dict['rule_15'] and not rules_dict['rule_16'] and not rules_dict['rule_17']:
+    if not rules_dict['rule_17']:
         bot_points += 2
     return bot_points
 
