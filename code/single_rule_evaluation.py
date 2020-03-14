@@ -19,7 +19,7 @@ def single_rule(classification_file, users_dataset, tweets_dataset, rule_number,
     if not os.path.isfile(classification_file):
         with open(classification_file, mode = 'w') as output:
             output_writer = csv.writer(output)
-            output_writer.writerow(['id','dataset', 'output', 'class'])
+            output_writer.writerow(['id','dataset', 'output', 'classification', 'class'])
     df_csv = pandas.read_csv(users_dataset, sep=',')
     df_tweets = pandas.read_csv(tweets_dataset, index_col=4)
     for _, row in df_csv.iterrows():
@@ -37,36 +37,62 @@ def single_rule(classification_file, users_dataset, tweets_dataset, rule_number,
                     user_already_classified = True
 
         if not user_already_classified:
-            rule_satisfied = 0
             if rule_set == 'camisani_calzolari':
+                classification = 1
                 if rule_number in [1,2,3,4,5,6,7,9,19]:
-                    rule_satisfied = check_rule(rule_set, rule_number, row)
+                    rule_output = check_rule(rule_set, rule_number, row)
 
             # needs to be checked in tweets
                 elif rule_number in [8,10,11,12,13,14,15,16,17,18,20,21,22]:
-                    rule_satisfied = check_cc_tweet_rule(df_tweets, user_id, rule_number, rule_set)
+                    rule_output = check_cc_tweet_rule(df_tweets, user_id, rule_number, rule_set)
                 # RULE IS NOT SATISFIED
-                if rule_satisfied == 0:
+                if rule_output == 0:
                  # USER IS BOT
+                   classification = 1
                    bot += 1
 
                 # RULE IS SATISFIED
-                elif rule_satisfied == 1:
+                elif rule_output == 1:
                 # USER IS HUMAN
+                   classification = 0
                    human += 1
 
             elif rule_set == 'van_den_beld':
+                classification = 0
                 if rule_number in [1,2,4]:
-                    rule_output =  check_vdb_rule(rule_set, number, row, df_csv) 
+                    rule_output =  check_vdb_rule(rule_set, rule_number, row, df_csv) 
                 elif rule_number in [3,5]:
                     rule_output = check_vdb_tweet_rule(df_tweets, rule_number, user_id)
+                # RULE IS NOT SATISFIED
+                if rule_output == 0:
+                 # USER IS HUMAN
+                   classification = 0
+                   human += 1
+
+                # RULE IS SATISFIED
+                elif rule_output == 1:
+                # USER IS BOT
+                   classification = 1
+                   bot += 1
 
             elif rule_set == 'social_bakers':
+                classification = 0
                 if rule_number in [1, 6, 7, 8]:
                     rule_output = check_rule(rule_set, number, row)
                 
                 elif rule_number in [2, 3, 4, 5]:
                     rule_output = check_sb_tweet_rule(df_tweets, rule_number, user_id)
+                 # RULE IS NOT SATISFIED
+                if rule_output == 0:
+                 # USER IS HUMAN
+                   classification = 0
+                   human += 1
+
+                # RULE IS SATISFIED
+                elif rule_output == 1:
+                # USER IS BOT
+                   classification = 1
+                   bot += 1
                 
             dataset = row['dataset']
             if dataset == 'E13' or dataset == 'TFP':
@@ -77,7 +103,7 @@ def single_rule(classification_file, users_dataset, tweets_dataset, rule_number,
 
             with open(classification_file, mode = 'a') as output:
                 output_writer = csv.writer(output)
-                output_writer.writerow([user_id,dataset,rule_output,class_user])
+                output_writer.writerow([user_id,dataset,rule_output,classification,class_user])
             print('HUMAN')
             print(human)
             print('BOT')
@@ -193,10 +219,10 @@ def main():
         single_rule(classification_file, users_dataset, tweets_dataset, int(rule_nr), 'camisani_calzolari')
     elif rule_set == 'vdb':
         classification_file = dataset + '/bas_classification_' + rule_set + '_r' + rule_nr + '.csv'
-        van_den_beld_rules(classification_file, users_dataset, tweets_dataset, int(rule_nr), 'van_den_beld')
+        single_rule(classification_file, users_dataset, tweets_dataset, int(rule_nr), 'van_den_beld')
     elif rule_set == 'sb':
         classification_file = dataset + '/bas_classification_' + rule_set + '_r' + rule_nr + '.csv'
-        socialbakers_rules(classification_file, users_dataset, tweets_dataset, int(rule_nr), 'social_bakers')
+        single_rule(classification_file, users_dataset, tweets_dataset, int(rule_nr), 'social_bakers')
 
 
 if __name__ == "__main__":

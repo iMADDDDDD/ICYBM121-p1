@@ -113,7 +113,7 @@ def attributes(rule_set, rule_number):
             attribute = 'text'
         elif rule_number == 12:
             attribute = 'num_hashtags'
-        elif rule_number == 13 or rule_number == 14 or rule_number == 15 or rule_number == 16 or rule_number == 17 or rule_number == 22:
+        elif rule_number in [13, 14, 15, 16, 17, 22]:
             attribute = 'source'
         elif rule_number == 18:
             attribute = 'in_reply_to_user_id'

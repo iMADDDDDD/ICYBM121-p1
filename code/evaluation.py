@@ -17,14 +17,15 @@ def determine_positive_and_negative(classification_file):
         class_reader = csv.reader(class_file, delimiter=',')
         next(class_reader, None)
         for class_row in class_reader:
+            print(class_row)
             dataset = class_row[1]
-            classification = class_row[2]
-            if classification == 'human':
+            classification = int(class_row[3])
+            if classification == 0:
                 if dataset == 'E13' or dataset == 'TFP':
                     true_negative += 1
                 elif dataset == 'FSF' or dataset == 'TWT' or dataset == 'INT':
                     false_negative += 1
-            elif classification == 'bot':
+            elif classification == 1:
                 if dataset == 'E13' or dataset == 'TFP':
                     false_positive += 1
                 elif dataset == 'FSF' or dataset == 'TWT' or dataset == 'INT':
@@ -76,7 +77,9 @@ def calculate_information_gain(true_positive, true_negative, false_positive, fal
     information_gain = 1 - ((humans/total)*((-(true_negative/humans)*math.log2(true_negative/humans)) - ((false_negative/humans)*math.log2(false_negative/humans))) + (bots/total)*((-(true_positive/bots)*math.log2(true_positive/bots)) - ((false_positive/bots)*math.log2(false_positive/bots))))
     return information_gain
 
-def calculate_information_gain_star(dataset, classification_file, attribute, rule_set, rule_number):
+
+def calculate_information_gain_star(dataset, classification_file, rule_set, rule_number):
+    attribute = rules.attributes(rule_set, rule_number)
     whole_total = 3900
     df_csv = pandas.read_csv(dataset)
     dict_entropy_classes = {}
@@ -113,6 +116,7 @@ def calculate_information_gain_star(dataset, classification_file, attribute, rul
                             dict_entropy_classes[attribute_value][0] += 1
                         
     information_gain_star = 1
+    children_entropy = 0
     for value in dict_entropy_classes:
         tp = dict_entropy_classes[value][0]
         tn = dict_entropy_classes[value][1]
@@ -141,7 +145,8 @@ def calculate_information_gain_star(dataset, classification_file, attribute, rul
              
         else:
             attribute_value_entropy = (bots/whole_total)*((-(tp/bots)*math.log2(tp/bots)) - ((fp/bots)*math.log2(fp/bots)))
-        information_gain_star -= attribute_value_entropy
+        children_entropy += attibute_value_entropy
+    information_gain_star -= children_entropy
         
     return information_gain_star
 
@@ -151,10 +156,12 @@ def calculate_pearson_correlation_coefficient(classification_file):
     pearson_correlation_coefficient = df_rule_class.corr(method='pearson')
     return pearson_correlation_coefficient
 
+
 def calculate_pearson_correlation_coefficient_star(bas_dataset, classification_file, rule_set, rule_number):
     attribute = rules.attributes(rule_set, rule_number)
     df_dataset = pandas.read_csv(bas_dataset)
     df_attribute = df_dataset[attribute]
+    #print(df_attribute)
     df_numerical_attribute = df_attribute.fillna(0)
     #df_numerical_attribute = df_numerical_attribute.astype(int)
     df_classification = pandas.read_csv(classification_file)
@@ -163,14 +170,15 @@ def calculate_pearson_correlation_coefficient_star(bas_dataset, classification_f
     pearson_correlation_coefficient_star = df_pcc_star.corr(method='pearson')
     return pearson_correlation_coefficient_star
 
+
 def main():
     dataset = home_directory + '/git/ICYBM121-p1/code'
     file_name = sys.argv[1]
     kind_dataset = sys.argv[2]
     if 'cc' in file_name:
         rule_set = 'camisani_calzolari'
-    #rule_number = int(file_name[-5])
-    #print(rule_number)
+    rule_number = int(file_name[-5])
+    print(rule_number)
     if kind_dataset == 'u':
         bas_dataset = dataset + '/' + 'bas_users.csv'
     elif kind_dataset == 't':
@@ -192,18 +200,18 @@ def main():
     mcc = calculate_MCC(tp, tn, fp, fn)
     print("MCC")
     print(mcc)
-    #information_gain = calculate_information_gain(tp, tn, fp, fn)
-    #print("INFORMATION GAIN")
-    #print(information_gain)
-    #information_gain_star = calculate_information_gain_star(bas_dataset, classification_file, attribute, rule_set, rule_number)
+    information_gain = calculate_information_gain(tp, tn, fp, fn)
+    print("INFORMATION GAIN")
+    print(information_gain)
+    #information_gain_star = calculate_information_gain_star(bas_dataset, classification_file, rule_set, rule_number)
     #print("INFORMATION GAIN STAR")
     #print(information_gain_star)
-    #pearson_correlation_coefficient = calculate_pearson_correlation_coefficient(classification_file)
-    #print("PEARSON CORRELATION COEFFICIENT")
-    #print(pearson_correlation_coefficient)
-    #pearson_correlation_coefficient_star = calculate_pearson_correlation_coefficient_star(bas_dataset, classification_file, rule_set, rule_number)
-    #print("PEARSON CORRELATION COEFFICIENT STAR")
-    #print(pearson_correlation_coefficient_star)
+    pearson_correlation_coefficient = calculate_pearson_correlation_coefficient(classification_file)
+    print("PEARSON CORRELATION COEFFICIENT")
+    print(pearson_correlation_coefficient)
+    pearson_correlation_coefficient_star = calculate_pearson_correlation_coefficient_star(bas_dataset, classification_file, rule_set, rule_number)
+    print("PEARSON CORRELATION COEFFICIENT STAR")
+    print(pearson_correlation_coefficient_star)
     
     
 
