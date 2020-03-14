@@ -1,4 +1,5 @@
 import math
+import re
 
 #Classification equals 0 (human) or 1 (bot)
 
@@ -59,6 +60,33 @@ def attributes(rule_set, rule_number):
             attribute = 'default_profile_image'
         elif rule_number == 3:
             attribute = 'location'
+        elif rule_number == 4:
+            attribute = 'description'
+        elif rule_number == 5:
+            attribute = 'followers_count'
+        elif rule_number == 6:
+            attribute = 'listed_count'
+        elif rule_number == 7:
+            attribute = 'statuses_count'
+        elif rule_number == 8:
+            attribute = 'geo'
+        elif rule_number == 9:
+            attribute = 'url'
+        elif rule_number == 10:
+            attribute = 'favorite_count'
+        elif rule_number == 11 or rule_number == 20:
+            attribute = 'text'
+        elif rule_number == 12:
+            attribute = 'num_hashtags'
+        elif rule_number == 13 or rule_number == 14 or rule_number == 15 or rule_number == 16 or rule_number == 17 or rule_number == 22:
+            attribute = 'source'
+        elif rule_number == 18:
+            attribute = 'in_reply_to_user_id'
+        elif rule_number == 19:
+            attribute = ['followers_count', 'friends_count']
+        elif rule_number == 21:
+            attribute = 'retweet_count'
+
     return attribute
 
 
@@ -250,6 +278,7 @@ def camisani_calzolari_rule_19(followers_count, friends_count):
 
 #rule 20. it publishes content which does not just contain URLs
 def camisani_calzolari_rule_20(text):
+    classification = 1
     if not isinstance(text, float):
     #source: https://www.geeksforgeeks.org/python-check-url-string/
         url = re.findall('http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\(\), ]|(?:%[0-9a-fA-F][0-9a-fA-F]))+', text) 

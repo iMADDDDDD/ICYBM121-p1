@@ -4,11 +4,12 @@ import pandas
 import math
 import os
 import rules
+import time
 
 home_directory = '/home/hanne'
 
 def camisani_calzolari_algorithm(users_dataset, tweets_dataset, classification_file):
-    rule_set = 'camsani_calzolari'
+    rule_set = 'camisani_calzolari'
     human = 0
     bot = 0
     neutral = 0
@@ -18,6 +19,7 @@ def camisani_calzolari_algorithm(users_dataset, tweets_dataset, classification_f
             output_writer.writerow(['id','dataset', 'classification'])
     df_users = pandas.read_csv(users_dataset, sep=',')
     df_tweets = pandas.read_csv(tweets_dataset, index_col=4)
+  
     for _, row in df_users.iterrows():
         #meaning of user fields
         #https://developer.twitter.com/en/docs/tweets/data-dictionary/overview/user-object
@@ -36,21 +38,17 @@ def camisani_calzolari_algorithm(users_dataset, tweets_dataset, classification_f
             rules_dict = initialize_rules_dictionary()
         
             # check rules related to users dataset
-            for number in [1,2,3,4,5,6,7,9,11,19]:
+            for number in [1,2,3,4,5,6,7,9,19]:
                 rules_dict = check_rule(rule_set, number, rules_dict, row)
             
             # check rules related to tweets dataset
-            for number in [8,10,11,12,13,14,15,16,17,18,19,20,21]:
-                rules_dict = check_rules_related_to_tweets(tweets_dataset, user_id, rules_dict)
+            for number in [8,10,11,12,13,14,15,16,17,18,20,21,22]:
+                rules_dict = check_rules_related_to_tweets(df_tweets, user_id, rules_dict, number, rule_set)
 
-
-            classification = rules.rules(rule_set, number, attribute_value)
             
             dataset = row['dataset']
             #calculate the final classification of user
             classification = end_result(rules_dict)
-            print(classification)
-            print(row['dataset'])
             if classification == 'human':
                 human += 1
             elif classification == 'bot':
@@ -69,7 +67,7 @@ def camisani_calzolari_algorithm(users_dataset, tweets_dataset, classification_f
             print('----------------------------------------')       
 
 
-def check_rules_related_to_tweets(df_tweets, user_id, rules_dict, number):
+def check_rules_related_to_tweets(df_tweets, user_id, rules_dict, number, rule_set):
     try:
         tweets_user = df_tweets.loc[int(user_id)]
     # https://developer.twitter.com/en/docs/tweets/data-dictionary/overview/tweet-object
@@ -96,7 +94,7 @@ def check_rule(rule_set, number, rules_dict, row):
        for attr in attribute:
            attribute_value.append(row[attr])
     else:
-       attribute_value = attribute    
+       attribute_value = row[attribute]    
     classification = rules.rules(rule_set, number, attribute_value)
     if classification == 0:
         rule_index = 'rule_' + str(number)
@@ -243,11 +241,10 @@ def calculate_bot_points(rules_dict):
 
 
 def main():
-    #table 6: results of running the algorithm over the complete dataset
-    dataset = home_directory + '/git/ICYBM121-p1/code/'
-    users_dataset = dataset + 'bas_users.csv'
-    tweets_dataset = dataset + 'bas_tweets.csv'
-    classification_file = dataset + 'bas_classification.csv'
+    dataset = home_directory + '/git/ICYBM121-p1/database/INT/'
+    users_dataset = dataset + 'users.csv'
+    tweets_dataset = dataset + 'tweets.csv'
+    classification_file = dataset + 'E13_classification.csv'
     camisani_calzolari_algorithm(users_dataset, tweets_dataset, classification_file)
 
 
