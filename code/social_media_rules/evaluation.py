@@ -17,7 +17,6 @@ def determine_positive_and_negative(classification_file):
         class_reader = csv.reader(class_file, delimiter=',')
         next(class_reader, None)
         for class_row in class_reader:
-            print(class_row)
             dataset = class_row[1]
             classification = int(class_row[3])
             if classification == 0:
@@ -32,10 +31,12 @@ def determine_positive_and_negative(classification_file):
                     true_positive += 1
     return true_positive, true_negative, false_positive, false_negative
 
+#Function that calculates the accuracy of a feature
 def calculate_accuracy(true_positive, true_negative, false_positive, false_negative):
     accuracy = (true_positive + true_negative) / (true_positive + true_negative + false_positive + false_negative)
     return accuracy
 
+#Function that calculates the precision of a feature
 def calculate_precision(true_positive, false_positive):
     if (true_positive == 0 and false_positive == 0):
         return 0
@@ -43,6 +44,7 @@ def calculate_precision(true_positive, false_positive):
         precision = true_positive / (true_positive + false_positive)
         return precision
 
+#Function that calculates the recall of a feature
 def calculate_recall(true_positive, false_negative):
     if (true_positive == 0 and false_negative == 0):
         return 0
@@ -50,6 +52,7 @@ def calculate_recall(true_positive, false_negative):
         recall = true_positive / (true_positive + false_negative)
         return recall
 
+#Function that calculates the F-measure of a feature
 def calculate_f_measure(precision, recall):
     if (precision == 0 and recall == 0):
         return 0
@@ -57,6 +60,7 @@ def calculate_f_measure(precision, recall):
         f_measure = (2 * precision * recall) / (precision + recall)
         return f_measure
 
+#Function that calculates the MCC of a feature
 def calculate_MCC(true_positive, true_negative, false_positive, false_negative):
     if (true_positive == 0 and false_negative == 0):
         return 0
@@ -70,6 +74,7 @@ def calculate_MCC(true_positive, true_negative, false_positive, false_negative):
         MCC = ((true_positive * true_negative) - (false_positive * false_negative)) / math.sqrt((true_positive + false_negative) * (true_positive + false_positive) * (true_negative + false_positive) * (true_negative + false_negative))
         return MCC
 
+#Function that calculates the information gain of a feature.
 def calculate_information_gain_manual(true_positive, true_negative, false_positive, false_negative):
     total = true_negative + false_negative + true_positive + false_positive
     humans = true_negative + false_negative
@@ -131,36 +136,36 @@ def main():
         bas_dataset = dataset + '/' + 'bas_tweets.csv'
     classification_file = dataset + '/' + file_name
     tp, tn, fp, fn = determine_positive_and_negative(classification_file)
-    #accuracy = calculate_accuracy(tp, tn, fp, fn)
-    #print("ACCURACY")
-    #print(accuracy)
-    #precision = calculate_precision(tp, fp)
-    #print("PRECISION")
-    #print(precision)
-    #recall = calculate_recall(tp, fn)
-    #print("RECALL")
-    #print(recall)
-    #f_measure = calculate_f_measure(precision, recall)
-    #print("F MEASURE")
-    #print(f_measure)
-    #mcc = calculate_MCC(tp, tn, fp, fn)
-    #print("MCC")
-    #print(mcc)
+    accuracy = calculate_accuracy(tp, tn, fp, fn)
+    print("ACCURACY")
+    print(accuracy)
+    precision = calculate_precision(tp, fp)
+    print("PRECISION")
+    print(precision)
+    recall = calculate_recall(tp, fn)
+    print("RECALL")
+    print(recall)
+    f_measure = calculate_f_measure(precision, recall)
+    print("F MEASURE")
+    print(f_measure)
+    mcc = calculate_MCC(tp, tn, fp, fn)
+    print("MCC")
+    print(mcc)
     information_gain_manual = calculate_information_gain_manual(tp, tn, fp, fn)
     print("INFORMATION GAIN MANUAL")
     print(information_gain_manual)
     information_gain = calculate_information_gain(classification_file, rule_set, rule_number)
     print("INFORMATION GAIN")
     print(information_gain)
-    information_gain_star = calculate_information_gain_star(bas_dataset, classification_file, rule_set, rule_number)
-    print("INFORMATION GAIN STAR")
-    print(information_gain_star)
-    #pearson_correlation_coefficient = calculate_pearson_correlation_coefficient(classification_file)
-    #print("PEARSON CORRELATION COEFFICIENT")
-    #print(pearson_correlation_coefficient)
-    pearson_correlation_coefficient_star = calculate_pearson_correlation_coefficient_star(bas_dataset, classification_file, rule_set, rule_number)
-    print("PEARSON CORRELATION COEFFICIENT STAR")
-    print(pearson_correlation_coefficient_star)
+    #information_gain_star = calculate_information_gain_star(bas_dataset, classification_file, rule_set, rule_number)
+    #print("INFORMATION GAIN STAR")
+    #print(information_gain_star)
+    pearson_correlation_coefficient = calculate_pearson_correlation_coefficient(classification_file)
+    print("PEARSON CORRELATION COEFFICIENT")
+    print(pearson_correlation_coefficient)
+    #pearson_correlation_coefficient_star = calculate_pearson_correlation_coefficient_star(bas_dataset, classification_file, rule_set, rule_number)
+    #print("PEARSON CORRELATION COEFFICIENT STAR")
+    #print(pearson_correlation_coefficient_star)
     
     
 

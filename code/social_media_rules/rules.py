@@ -120,7 +120,7 @@ def attributes(rule_set, rule_number):
         elif rule_number in [13, 14, 15, 16, 17, 22]:
             attribute = 'source'
         elif rule_number == 18:
-            attribute = 'in_reply_to_user_id'
+            attribute = 'text'
         elif rule_number == 19:
             attribute = ['followers_count', 'friends_count']
         elif rule_number == 21:
@@ -327,9 +327,12 @@ def camisani_calzolari_rule_17(source):
 
 
 #rule 18. it has written the userID of another user in at least one tweet, that is it posted a @reply or a mention
-def camisani_calzolari_rule_18(in_reply_to_user_id):
-    if in_reply_to_user_id != 0:
-        output = 1
+def camisani_calzolari_rule_18(text):
+    if not isinstance(text,float):
+        if '@' in text:
+            output = 1
+        else:
+            output = 0
     else:
         output = 0
     return output
