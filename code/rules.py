@@ -143,10 +143,12 @@ def attributes(rule_set, rule_number):
     elif rule_set == 'social_bakers':
         if rule_number == 1:
             attribute = ['followers_count', 'friends_count']
-        elif rule_number in [2, 3, 5]:
+        elif rule_number in [2, 3]:
             attribute = 'text'
         elif rule_number == 4:
             attribute = 'retweeted_status_id'
+        elif rule_number == 5:
+            attribute = 'num_urls'
         elif rule_number == 6:
             attribute = 'statuses_count'
         elif rule_number == 7:
@@ -480,16 +482,12 @@ def social_bakers_rule_3(df_text):
 
 #rule 4. retweets >= 90%
 def social_bakers_rule_4(df_retweeted_status_id):
-    count_spam_tweets = 0
-    number_tweets = 0
-    if isinstance(df_retweeted_status_id, pandas.Series):
-        df_retweeted_status_id = pandas.DataFrame(df_retweeted_status_id).T
-    for _, retweeted_status_id in df_retweeted_status_id.iterrows():
-        number_tweets += 1
-        if not math.isnan(retweeted_status_id): 
-            count_retweets += 1
-
-    percentage = count_retweets / number_tweets
+    print('RULE 4')
+    number_tweets = len(df_retweeted_status_id.index)
+    no_retweets = df_retweeted_status_id.isna().sum()
+    retweets = number_tweets - no_retweets
+    print(retweets)
+    percentage = retweets / number_tweets
     if percentage > 90.00:
         output = 1  
     else:
@@ -498,22 +496,9 @@ def social_bakers_rule_4(df_retweeted_status_id):
 
 
 #rule 5. tweet-links >= 90%
-def social_bakers_rule_5(df_text):
-    count_links = 0
-    number_tweets = 0
-    if isinstance(df_text, pandas.Series):
-        df_text = pandas.DataFrame(df_text).T
-    for _, text in df_text.iterrows():
-        number_tweets += 1
-        if not isinstance(text, float):
-        #source: https://www.geeksforgeeks.org/python-check-url-string/
-            url = re.findall('http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\(\), ]|(?:%[0-9a-fA-F][0-9a-fA-F]))+', text) 
-            text_without_url = ''
-            for u in url:
-                text_without_url = text.replace(u,'')
-                text = text_without_url
-                if text_without_url == '':
-                    count_links += 1
+def social_bakers_rule_5(df_num_urls):
+    number_tweets = len(df_num_urls.index)
+    count_links = df_num_urls[(df_num_urls) > 0].count()
 
     percentage = count_links / number_tweets
     if percentage > 90.00:
