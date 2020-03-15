@@ -6,8 +6,6 @@ import rules
 from info_gain import info_gain
 
 
-home_directory = '/home/hanne'
-
 def determine_positive_and_negative(classification_file):
     true_positive = 0
     true_negative = 0
@@ -123,7 +121,7 @@ def calculate_pearson_correlation_coefficient_star(bas_dataset, classification_f
 
 
 def main():
-    dataset = home_directory + '/git/ICYBM121-p1/code'
+    dataset = '../git/ICYBM121-p1/code'
     file_name = sys.argv[1]
     kind_dataset = sys.argv[2]
     if 'cc' in file_name:
@@ -134,7 +132,7 @@ def main():
         bas_dataset = dataset + '/' + 'bas_users.csv'
     elif kind_dataset == 't':
         bas_dataset = dataset + '/' + 'bas_tweets.csv'
-    classification_file = dataset + '/' + file_name
+    classification_file = '../git/ICYBM121-p1/social_media_results/' + file_name
     tp, tn, fp, fn = determine_positive_and_negative(classification_file)
     accuracy = calculate_accuracy(tp, tn, fp, fn)
     print("ACCURACY")
