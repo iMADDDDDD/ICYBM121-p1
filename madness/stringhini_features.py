@@ -1,8 +1,10 @@
 import pandas as pd
+
 from info_gain import info_gain
 from numpy import *
+from madness import utils
+
 import re
-from scipy.stats import pearsonr
 
 BAS = '../datasets/BAS/bas_users.csv'
 BAS_TWEETS = '../datasets/BAS/baseline_tweets.csv'
@@ -22,8 +24,9 @@ def feature1():
 
     ig = info_gain.info_gain(temp_list, friends_list)
     print("INFORMATION GAIN: " + str(ig))
-    class_list = read_dataset()
-    print(corrcoef(friends_list, class_list))
+
+    class_list = utils.read_dataset()
+    print(corrcoef(friends_list, class_list)[0][1])
     return temp_list
 
 
@@ -52,8 +55,8 @@ def feature2():
     ig = info_gain.info_gain(tmp, tweets_count)
     print("Information Gain: " + str(ig))
 
-    class_list = read_dataset()
-    print(corrcoef(tweets_count, class_list))
+    class_list = utils.read_dataset()
+    print(corrcoef(tweets_count, class_list)[0][1])
     return tmp
 
 
@@ -73,7 +76,7 @@ def feature3():
     for i in range(len(users_id)):
         print(i)
         all_user_tweets = dataset_tweets['text'].loc[dataset_tweets['user_id'] == users_id[i]]
-        similarities.append(message_similarity(all_user_tweets))
+        similarities.append(utils.message_similarity(all_user_tweets))
 
     for similarity in similarities:
         if similarity > 100:
@@ -84,8 +87,8 @@ def feature3():
     ig = info_gain.info_gain(temp, similarities)
     print("Information Gain: " + str(ig))
 
-    class_list = read_dataset()
-    print(corrcoef(similarities, class_list))
+    class_list = utils.read_dataset()
+    print(corrcoef(similarities, class_list)[0][1])
     return temp
 
 
@@ -122,8 +125,8 @@ def feature4():
     ig = info_gain.info_gain(temp, url_ratios)
     print("Information Gain: " + str(ig))
 
-    class_list = read_dataset()
-    print(corrcoef(url_ratios, class_list))
+    class_list = utils.read_dataset()
+    print(corrcoef(url_ratios, class_list)[0][1])
     return temp
 
 
@@ -163,54 +166,9 @@ def feature5():
     ig = info_gain.info_gain(temp, ratios)
     print("Information Gain: " + str(ig))
 
-    class_list = read_dataset()
-    print(corrcoef(ratios, class_list))
+    class_list = utils.read_dataset()
+    print(corrcoef(ratios, class_list)[0][1])
     return temp
-
-
-def read_dataset():
-    tmp = []
-    dataset = pd.read_csv(BAS)
-
-    dataset_values = dataset['dataset'].values
-
-    for value in dataset_values:
-        if value == 'E13' or value == 'TFP':
-            tmp.append(1)
-        else:
-            tmp.append(0)
-    return tmp
-
-
-def message_similarity(tweets):
-    tweets = tweets.tolist()
-    similarities = 0
-    i = 1
-    while i < len(tweets):
-        j = -1
-        while j > -16:
-
-            if j + i < 0:
-                j = -17
-            else:
-                firstTweet = str(tweets[i]).split()
-                secondTweet = str(tweets[i + j]).split()
-
-                for m in range(len(firstTweet)):
-                    for n in range(len(secondTweet)):
-
-                        if firstTweet[m] == secondTweet[n]:
-
-                            try:
-                                if (firstTweet[m + 1] == secondTweet[n + 1] and firstTweet[m + 2] == secondTweet[
-                                    n + 2] and firstTweet[m + 3] == secondTweet[n + 3]):
-                                    similarities += 1
-                            except:
-                                pass
-
-                j -= 1
-        i += 1
-    return similarities / 2
 
 
 if __name__ == '__main__':
