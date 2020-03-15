@@ -70,14 +70,19 @@ def calculate_MCC(true_positive, true_negative, false_positive, false_negative):
         MCC = ((true_positive * true_negative) - (false_positive * false_negative)) / math.sqrt((true_positive + false_negative) * (true_positive + false_positive) * (true_negative + false_positive) * (true_negative + false_negative))
         return MCC
 
+def calculate_information_gain_manual(true_positive, true_negative, false_positive, false_negative):
+    total = true_negative + false_negative + true_positive + false_positive
+    humans = true_negative + false_negative
+    bots = true_positive + false_positive
+    information_gain = 1 - ((humans/total)*((-(true_negative/humans)*math.log2(true_negative/humans)) - ((false_negative/humans)*math.log2(false_negative/humans))) + (bots/total)*((-(true_positive/bots)*math.log2(true_positive/bots)) - ((false_positive/bots)*math.log2(false_positive/bots))))
+    return information_gain
+
 def calculate_information_gain(classification_file, rule_set,rule_number):
     df_classification = pandas.read_csv(classification_file)
     output_list = df_classification['output'].values
     classification_list = df_classification['class'].values
     information_gain = info_gain.info_gain(classification_list, output_list)
     return information_gain
-
-
 
 
 def calculate_information_gain_star(dataset, classification_file, rule_set, rule_number):
@@ -125,7 +130,7 @@ def main():
     elif kind_dataset == 't':
         bas_dataset = dataset + '/' + 'bas_tweets.csv'
     classification_file = dataset + '/' + file_name
-    #tp, tn, fp, fn = determine_positive_and_negative(classification_file)
+    tp, tn, fp, fn = determine_positive_and_negative(classification_file)
     #accuracy = calculate_accuracy(tp, tn, fp, fn)
     #print("ACCURACY")
     #print(accuracy)
@@ -141,6 +146,9 @@ def main():
     #mcc = calculate_MCC(tp, tn, fp, fn)
     #print("MCC")
     #print(mcc)
+    information_gain_manual = calculate_information_gain_manual(tp, tn, fp, fn)
+    print("INFORMATION GAIN MANUAL")
+    print(information_gain_manual)
     information_gain = calculate_information_gain(classification_file, rule_set, rule_number)
     print("INFORMATION GAIN")
     print(information_gain)
