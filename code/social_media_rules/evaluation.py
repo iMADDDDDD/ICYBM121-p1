@@ -97,12 +97,23 @@ def calculate_information_gain_star(dataset, classification_file, rule_set, rule
     if 'users' in dataset:
         df_dataset = pandas.read_csv(dataset)
         attribute = rules.attributes(rule_set,rule_number)
-        attribute_list = df_dataset[attribute].values
-
+        #if isinstance(attribute,list):
+        attribute_list = []
+        attrs = df_dataset[attribute].values
+        for attr in attrs:
+            rule_output = rules.rules(rule_set, rule_number, attr)
+            if rule_output == 1:
+                number_satisfied = 1
+            else:
+                number_satisfied = 0
+            attribute_list.append(number_satisfied)
+            
+        #else:
+         #   attribute_list = df_dataset[attribute].values
         df_classification = pandas.read_csv(classification_file)
         classification_list = df_classification['class'].values
-        #print(classification_list)
-        #print(attribute_list)
+        print(classification_list)
+        print(attribute_list)
         information_gain_star = info_gain.info_gain(classification_list, attribute_list)
     else:
         attribute = rules.attributes(rule_set, rule_number)
