@@ -101,6 +101,8 @@ def calculate_information_gain_star(dataset, classification_file, rule_set, rule
 
         df_classification = pandas.read_csv(classification_file)
         classification_list = df_classification['class'].values
+        #print(classification_list)
+        #print(attribute_list)
         information_gain_star = info_gain.info_gain(classification_list, attribute_list)
     else:
         attribute = rules.attributes(rule_set, rule_number)
@@ -123,13 +125,10 @@ def calculate_information_gain_star(dataset, classification_file, rule_set, rule
                     rule_output = rules.rules(rule_set, rule_number, attr)
                     if rule_output == 1:
                         number_satisfied += 1
-            attr_values.append(str(number_satisfied)) 
+            attr_values.append(number_satisfied)
             df_class = df_classification.loc[df_classification['id'] == user_id]
-            real_class = df_class['class'].values
+            real_class = df_class['class'].values[0]
             real_classes.append(real_class)
-        
-        print(type(real_classes))
-        print(type(attr_values))
         information_gain_star = info_gain.info_gain(real_classes, attr_values)
         
     return information_gain_star
