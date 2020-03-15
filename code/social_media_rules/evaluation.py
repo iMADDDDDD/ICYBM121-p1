@@ -7,6 +7,7 @@ from info_gain import info_gain
 
 home_directory = '/home/hanne'
 
+# Function to calculate the number of true positives (TP), false negatives (FN), false positives (FP) and false negatives (FN)
 def determine_positive_and_negative(classification_file):
     true_positive = 0
     true_negative = 0
@@ -97,19 +98,19 @@ def calculate_information_gain_star(dataset, classification_file, rule_set, rule
     if 'users' in dataset:
         df_dataset = pandas.read_csv(dataset)
         attribute = rules.attributes(rule_set,rule_number)
-        #if isinstance(attribute,list):
-        attribute_list = []
-        attrs = df_dataset[attribute].values
-        for attr in attrs:
-            rule_output = rules.rules(rule_set, rule_number, attr)
-            if rule_output == 1:
-                number_satisfied = 1
-            else:
-                number_satisfied = 0
-            attribute_list.append(number_satisfied)
+        if isinstance(attribute,list):
+            attribute_list = []
+            attrs = df_dataset[attribute].values
+            for attr in attrs:
+                rule_output = rules.rules(rule_set, rule_number, attr)
+                if rule_output == 1:
+                     number_satisfied = 1
+                else:
+                     number_satisfied = 0
+                attribute_list.append(number_satisfied)
             
-        #else:
-         #   attribute_list = df_dataset[attribute].values
+        else:
+            attribute_list = df_dataset[attribute].values
         df_classification = pandas.read_csv(classification_file)
         classification_list = df_classification['class'].values
         print(classification_list)
@@ -153,8 +154,9 @@ def calculate_pearson_correlation_coefficient(classification_file):
 
 #Function that uses corr of pandas DataFrame to calculate the pearson correlation coefficient *
 def calculate_pearson_correlation_coefficient_star(bas_dataset, classification_file, rule_set, rule_number):
+
+    #calculate pearson correlation coefficient * for a non-numerical attribute of the users dataset
     if 'users' in bas_dataset and ((rule_number in [2,3,4,9] and rule_set == 'camsani_calzolari') or (rule_number in [1,4] and rule_set == 'van_den_beld')):
-        #print('IF')
         attribute = rules.attributes(rule_set, rule_number)
         df_dataset = pandas.read_csv(bas_dataset)
         attribute_list = df_dataset[attribute].values
@@ -174,22 +176,21 @@ def calculate_pearson_correlation_coefficient_star(bas_dataset, classification_f
         df_class = df_classification['class']
         df_pcc_star = pandas.concat([df_attr, df_class], axis=1)
         pearson_correlation_coefficient_star = df_pcc_star.corr(method='pearson')
+
+     #calculate pearson correlation coefficient * for a numerical attribute of the users dataset
     elif 'users' in bas_dataset:
         attribute = rules.attributes(rule_set, rule_number)
         df_dataset = pandas.read_csv(bas_dataset)
         df_attribute = df_dataset[attribute]
-        #print(df_attribute)
-        df_numerical_attribute = df_attribute.fillna(0)
-        #df_numerical_attribute = df_numerical_attribute.astype(int)
+        df_numerical_attribute = df_attribute.fillna(0)   
         df_classification = pandas.read_csv(classification_file)
         df_class = df_classification['class']
         df_pcc_star = pandas.concat([df_numerical_attribute, df_class], axis=1)
         pearson_correlation_coefficient_star = df_pcc_star.corr(method='pearson')
     
         
+    #calculate pearson correlation coefficient * for an attribute of the tweets dataset
     else:
-        print(rule_set)
-        print(rule_number)
         attribute = rules.attributes(rule_set, rule_number)
         df_dataset = pandas.read_csv(bas_dataset)
         user_id_list = list(set(df_dataset['user_id'].values))
@@ -273,8 +274,6 @@ def main():
     print("PEARSON CORRELATION COEFFICIENT STAR")
     print(pearson_correlation_coefficient_star)
     
-    
-
 
 if __name__ == "__main__":
     main()
