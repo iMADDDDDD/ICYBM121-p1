@@ -1,7 +1,6 @@
 # Essential imports
 import pandas as pd
 import random
-from multiprocessing.pool import ThreadPool as Pool
 
 # Declaring global dataset paths
 E13 = '../datasets/E13/users.csv'  # Human
@@ -99,7 +98,7 @@ def baseline_tweets():
                 BAS_TWEETS = BAS_TWEETS.append(int_tweets.loc[user_ids[i]])
             elif datasets[i] == 'TWT':
                 BAS_TWEETS = BAS_TWEETS.append(twt_tweets.loc[user_ids[i]])
-        except:
+        except KeyError:
             pass
 
     BAS_TWEETS.to_csv('../datasets/BAS/baseline_tweets.csv', index=True, encoding='utf-8-sig')

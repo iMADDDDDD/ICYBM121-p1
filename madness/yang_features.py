@@ -1,12 +1,31 @@
 import re
-import ngram
 import pandas as pd
 import datetime
+
 from info_gain import info_gain
 from numpy import *
+from madness import utils
 
 BAS = '../datasets/BAS/bas_users.csv'
 BAS_TWEETS = '../datasets/BAS/baseline_tweets.csv'
+
+E13_followers = '../datasets/E13/followers.csv'
+FSF_followers = '../datasets/FSF/followers.csv'
+INT_followers = '../datasets/INT/followers.csv'
+TFP_followers = '../datasets/TFP/followers.csv'
+TWT_followers = '../datasets/TWT/followers.csv'
+
+E13_friends = '../datasets/E13/friends.csv'
+FSF_friends = '../datasets/FSF/friends.csv'
+INT_friends = '../datasets/INT/friends.csv'
+TFP_friends = '../datasets/TFP/friends.csv'
+TWT_friends = '../datasets/TWT/friends.csv'
+
+E13_tweets = '../datasets/E13/tweets.csv'
+FSF_tweets = '../datasets/FSF/tweets.csv'
+INT_tweets = '../datasets/INT/tweets.csv'
+TFP_tweets = '../datasets/TFP/tweets.csv'
+TWT_tweets = '../datasets/TWT/tweets.csv'
 
 
 # Age of the account
@@ -30,19 +49,13 @@ def feature1():
     ig = info_gain.info_gain(temp, age)
     print("INFORMATION GAIN: " + str(ig))
 
-    class_list = read_dataset()
-    print(corrcoef(age, class_list))
+    class_list = utils.read_dataset()
+    print("PEARSON CORRELATION COEFFICIENT: " + str(corrcoef(age, class_list)[0][1]))
     return temp
 
 
 # Bidirectional links
 def feature2():
-    E13_followers = '../datasets/E13/followers.csv'
-    FSF_followers = '../datasets/FSF/followers.csv'
-    INT_followers = '../datasets/INT/followers.csv'
-    TFP_followers = '../datasets/TFP/followers.csv'
-    TWT_followers = '../datasets/TWT/followers.csv'
-
     dataset = pd.read_csv('../datasets/BAS/bas_users.csv')
     e13_followers = pd.read_csv(E13_followers)
     fsf_followers = pd.read_csv(FSF_followers)
@@ -149,19 +162,13 @@ def feature2():
     ig = info_gain.info_gain(temp, ratios)
     print("INFORMATION GAIN: " + str(ig))
 
-    class_list = read_dataset()
-    print(corrcoef(ratios, class_list))
+    class_list = utils.read_dataset()
+    print("PEARSON CORRELATION COEFFICIENT: " + str(corrcoef(ratios, class_list)[0][1]))
     return temp
 
 
 # Average number of followers of friends
 def feature3():
-    E13_friends = '../datasets/E13/friends.csv'
-    FSF_friends = '../datasets/FSF/friends.csv'
-    INT_friends = '../datasets/INT/friends.csv'
-    TFP_friends = '../datasets/TFP/friends.csv'
-    TWT_friends = '../datasets/TWT/friends.csv'
-
     dataset = pd.read_csv(BAS)
     e13_friends = pd.read_csv(E13_friends)
     fsf_friends = pd.read_csv(FSF_friends)
@@ -238,18 +245,12 @@ def feature3():
     ig = info_gain.info_gain(temp, averages)
     print("INFORMATION GAIN: " + str(ig))
 
-    class_list = read_dataset()
-    print(corrcoef(averages, class_list))
+    class_list = utils.read_dataset()
+    print("PEARSON CORRELATION COEFFICIENT: " + str(corrcoef(averages, class_list)[0][1]))
     return temp
 
 
 def feature4():
-    E13_followers = '../datasets/E13/followers.csv'
-    FSF_followers = '../datasets/FSF/followers.csv'
-    INT_followers = '../datasets/INT/followers.csv'
-    TFP_followers = '../datasets/TFP/followers.csv'
-    TWT_followers = '../datasets/TWT/followers.csv'
-
     dataset = pd.read_csv(BAS)
     e13_followers = pd.read_csv(E13_followers)
     fsf_followers = pd.read_csv(FSF_followers)
@@ -325,18 +326,12 @@ def feature4():
     ig = info_gain.info_gain(temp, global_tweets_count)
     print("INFORMATION GAIN: " + str(ig))
 
-    class_list = read_dataset()
-    print(corrcoef(global_tweets_count, class_list))
+    class_list = utils.read_dataset()
+    print("PEARSON CORRELATION COEFFICIENT: " + str(corrcoef(global_tweets_count, class_list)[0][1]))
     return temp
 
 
 def feature5():
-    E13_followers = '../datasets/E13/followers.csv'
-    FSF_followers = '../datasets/FSF/followers.csv'
-    INT_followers = '../datasets/INT/followers.csv'
-    TFP_followers = '../datasets/TFP/followers.csv'
-    TWT_followers = '../datasets/TWT/followers.csv'
-
     e13_followers = pd.read_csv(E13_followers)
     fsf_followers = pd.read_csv(FSF_followers)
     int_followers = pd.read_csv(INT_followers)
@@ -447,18 +442,12 @@ def feature5():
     ig = info_gain.info_gain(temp, ratios)
     print("INFORMATION GAIN: " + str(ig))
 
-    class_list = read_dataset()
-    print(corrcoef(ratios, class_list))
+    class_list = utils.read_dataset()
+    print("PEARSON CORRELATION COEFFICIENT: " + str(corrcoef(ratios, class_list)[0][1]))
     return temp
 
 
 def feature6():
-    E13_tweets = '../datasets/E13/tweets.csv'
-    FSF_tweets = '../datasets/FSF/tweets.csv'
-    INT_tweets = '../datasets/INT/tweets.csv'
-    TFP_tweets = '../datasets/TFP/tweets.csv'
-    TWT_tweets = '../datasets/TWT/tweets.csv'
-
     e13_tweets = pd.read_csv(E13_tweets)
     fsf_tweets = pd.read_csv(FSF_tweets)
     int_tweets = pd.read_csv(INT_tweets)
@@ -560,18 +549,12 @@ def feature6():
     ig = info_gain.info_gain(temp, ratios)
     print("INFORMATION GAIN: " + str(ig))
 
-    class_list = read_dataset()
-    print(corrcoef(ratios, class_list))
+    class_list = utils.read_dataset()
+    print("PEARSON CORRELATION COEFFICIENT: " + str(corrcoef(ratios, class_list)[0][1]))
     pass
 
 
 def feature7():
-    E13_tweets = '../datasets/E13/tweets.csv'
-    FSF_tweets = '../datasets/FSF/tweets.csv'
-    INT_tweets = '../datasets/INT/tweets.csv'
-    TFP_tweets = '../datasets/TFP/tweets.csv'
-    TWT_tweets = '../datasets/TWT/tweets.csv'
-
     e13_tweets = pd.read_csv(E13_tweets)
     fsf_tweets = pd.read_csv(FSF_tweets)
     int_tweets = pd.read_csv(INT_tweets)
@@ -674,18 +657,13 @@ def feature7():
     ig = info_gain.info_gain(temp, ratios)
     print("INFORMATION GAIN: " + str(ig))
 
-    class_list = read_dataset()
-    print(corrcoef(ratios, class_list))
+    class_list = utils.read_dataset()
+    print("PEARSON CORRELATION COEFFICIENT: " + str(corrcoef(ratios, class_list)[0][1]))
     pass
 
 
 def feature8():
     timenow = datetime.datetime.now()
-    E13_tweets = '../datasets/E13/tweets.csv'
-    FSF_tweets = '../datasets/FSF/tweets.csv'
-    INT_tweets = '../datasets/INT/tweets.csv'
-    TFP_tweets = '../datasets/TFP/tweets.csv'
-    TWT_tweets = '../datasets/TWT/tweets.csv'
 
     e13_tweets = pd.read_csv(E13_tweets)
     fsf_tweets = pd.read_csv(FSF_tweets)
@@ -709,7 +687,7 @@ def feature8():
                     api_tweets.append(tweet)
                 else:
                     pass
-            similarity_count = message_similarity(api_tweets)
+            similarity_count = utils.message_similarity(api_tweets)
             total.append(similarity_count)
         elif bas_dataset[i] == 'FSF':
             tweets = fsf_tweets['text'].loc[fsf_tweets['user_id'] == user_ids[i]]
@@ -718,7 +696,7 @@ def feature8():
                     api_tweets.append(tweet)
                 else:
                     pass
-            similarity_count = message_similarity(api_tweets)
+            similarity_count = utils.message_similarity(api_tweets)
             total.append(similarity_count)
         elif bas_dataset[i] == 'INT':
             tweets = int_tweets['text'].loc[int_tweets['user_id'] == user_ids[i]]
@@ -727,7 +705,7 @@ def feature8():
                     api_tweets.append(tweet)
                 else:
                     pass
-            similarity_count = message_similarity(api_tweets)
+            similarity_count = utils.message_similarity(api_tweets)
             total.append(similarity_count)
         elif bas_dataset[i] == 'TFP':
             tweets = tfp_tweets['text'].loc[tfp_tweets['user_id'] == user_ids[i]]
@@ -736,7 +714,7 @@ def feature8():
                     api_tweets.append(tweet)
                 else:
                     pass
-            similarity_count = message_similarity(api_tweets)
+            similarity_count = utils.message_similarity(api_tweets)
             total.append(similarity_count)
         elif bas_dataset[i] == 'TWT':
             tweets = twt_tweets['text'].loc[twt_tweets['user_id'] == user_ids[i]]
@@ -745,7 +723,7 @@ def feature8():
                     api_tweets.append(tweet)
                 else:
                     pass
-            similarity_count = message_similarity(api_tweets)
+            similarity_count = utils.message_similarity(api_tweets)
             total.append(similarity_count)
 
     for i in range(len(total)):
@@ -757,11 +735,11 @@ def feature8():
             temp.append(0)
         else:
             temp.append(1)
-    
+
     ig = info_gain.info_gain(temp, total)
     print("INFORMATION GAIN: " + str(ig))
 
-    class_list = read_dataset()
+    class_list = utils.read_dataset()
     print("PEARSON CORRELATION COEFFICIENT: " + str(corrcoef(total, class_list)[0][1]))
 
     timeend = datetime.datetime.now()
@@ -795,53 +773,9 @@ def feature9():
     ig = info_gain.info_gain(temp, ratios)
     print("INFORMATION GAIN: " + str(ig))
 
-    class_list = read_dataset()
+    class_list = utils.read_dataset()
     print("PEARSON CORRELATION COEFFICIENT: " + str(corrcoef(ratios, class_list)[0][1]))
     return temp
-
-
-def read_dataset():
-    tmp = []
-    dataset = pd.read_csv(BAS)
-
-    dataset_values = dataset['dataset'].values
-
-    for value in dataset_values:
-        if value == 'E13' or value == 'TFP':
-            tmp.append(1)
-        else:
-            tmp.append(0)
-    return tmp
-
-
-def message_similarity(tweets):
-    similarities = 0
-    i = 1
-    while i < len(tweets):
-        j = -1
-        while j > -16:
-
-            if j + i < 0:
-                j = -17
-            else:
-                firstTweet = str(tweets[i]).split()
-                secondTweet = str(tweets[i + j]).split()
-
-                for m in range(len(firstTweet)):
-                    for n in range(len(secondTweet)):
-
-                        if firstTweet[m] == secondTweet[n]:
-
-                            try:
-                                if (firstTweet[m + 1] == secondTweet[n + 1] and firstTweet[m + 2] == secondTweet[
-                                        n + 2] and firstTweet[m + 3] == secondTweet[n + 3]):
-                                    similarities += 1
-                            except:
-                                pass
-
-                j -= 1
-        i += 1
-    return similarities / 2
 
 
 if __name__ == '__main__':
