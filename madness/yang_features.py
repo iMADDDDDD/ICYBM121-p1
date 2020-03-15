@@ -5,7 +5,7 @@ import datetime
 from info_gain import info_gain
 from numpy import *
 
-BAS = '../datasets/BAS/users.csv'
+BAS = '../datasets/BAS/bas_users.csv'
 BAS_TWEETS = '../datasets/BAS/baseline_tweets.csv'
 
 
@@ -43,7 +43,7 @@ def feature2():
     TFP_followers = '../datasets/TFP/followers.csv'
     TWT_followers = '../datasets/TWT/followers.csv'
 
-    dataset = pd.read_csv(BAS)
+    dataset = pd.read_csv('../datasets/BAS/bas_users.csv')
     e13_followers = pd.read_csv(E13_followers)
     fsf_followers = pd.read_csv(FSF_followers)
     int_followers = pd.read_csv(INT_followers)
@@ -59,80 +59,75 @@ def feature2():
 
     for i in range(0, len(bas_ids)):
         count = 0
-        print("Processing index: " + str(i))
+        print(i)
         try:
             if bas_dataset[i] == 'E13':
-                followers_of_id = e13_followers['source_id'].loc[e13_followers['target_id'] == bas_ids[0]].values
+                followers_of_id = e13_followers['source_id'].loc[e13_followers['target_id'] == bas_ids[i]].values
                 for id in followers_of_id:
-                    isExistForward = e13_followers.query(
-                        'source_id == ' + str(bas_ids[0]) + ' and target_id == ' + str(id))
-                    isExistBackward = e13_followers.query(
-                        'source_id == ' + str(id) + ' and target_id == ' + str(bas_ids[0]))
-
-                    if isExistForward.empty or isExistBackward.empty:
+                    try:
+                        forward = e13_followers['target_id'].loc[e13_followers['source_id'] == id].values
+                        if forward[0] == bas_ids[i]:
+                            count += 1
+                        else:
+                            pass
+                    except KeyError:
                         pass
-                    else:
-                        count += 1
 
                 ratio = count / bas_friends[i]
                 ratios.append(ratio)
             elif bas_dataset[i] == 'TFP':
                 followers_of_id = tfp_followers['source_id'].loc[tfp_followers['target_id'] == bas_ids[i]].values
                 for id in followers_of_id:
-                    isExistForward = tfp_followers.query(
-                        'source_id == ' + str(bas_ids[i]) + ' and target_id == ' + str(id))
-                    isExistBackward = tfp_followers.query(
-                        'source_id == ' + str(id) + ' and target_id == ' + str(bas_ids[i]))
-
-                    if isExistForward.empty or isExistBackward.empty:
+                    try:
+                        forward = tfp_followers['target_id'].loc[tfp_followers['source_id'] == id].values
+                        if forward[0] == bas_ids[i]:
+                            count += 1
+                        else:
+                            pass
+                    except KeyError:
                         pass
-                    else:
-                        count += 1
 
                 ratio = count / bas_friends[i]
                 ratios.append(ratio)
             elif bas_dataset[i] == 'FSF':
                 followers_of_id = fsf_followers['source_id'].loc[fsf_followers['target_id'] == bas_ids[i]].values
                 for id in followers_of_id:
-                    isExistForward = fsf_followers.query(
-                        'source_id == ' + str(bas_ids[i]) + ' and target_id == ' + str(id))
-                    isExistBackward = fsf_followers.query(
-                        'source_id == ' + str(id) + ' and target_id == ' + str(bas_ids[i]))
-
-                    if isExistForward.empty or isExistBackward.empty:
+                    try:
+                        forward = fsf_followers['target_id'].loc[fsf_followers['source_id'] == id].values
+                        if forward[0] == bas_ids[i]:
+                            count += 1
+                        else:
+                            pass
+                    except KeyError:
                         pass
-                    else:
-                        count += 1
 
                 ratio = count / bas_friends[i]
                 ratios.append(ratio)
             elif bas_dataset[i] == 'INT':
                 followers_of_id = int_followers['source_id'].loc[int_followers['target_id'] == bas_ids[i]].values
                 for id in followers_of_id:
-                    isExistForward = int_followers.query(
-                        'source_id == ' + str(bas_ids[i]) + ' and target_id == ' + str(id))
-                    isExistBackward = int_followers.query(
-                        'source_id == ' + str(id) + ' and target_id == ' + str(bas_ids[i]))
-
-                    if isExistForward.empty or isExistBackward.empty:
+                    try:
+                        forward = int_followers['target_id'].loc[int_followers['source_id'] == id].values
+                        if forward[0] == bas_ids[i]:
+                            count += 1
+                        else:
+                            pass
+                    except KeyError:
                         pass
-                    else:
-                        count += 1
 
                 ratio = count / bas_friends[i]
                 ratios.append(ratio)
             elif bas_dataset[i] == 'TWT':
                 followers_of_id = twt_followers['source_id'].loc[twt_followers['target_id'] == bas_ids[i]].values
                 for id in followers_of_id:
-                    isExistForward = twt_followers.query(
-                        'source_id == ' + str(bas_ids[i]) + ' and target_id == ' + str(id))
-                    isExistBackward = twt_followers.query(
-                        'source_id == ' + str(id) + ' and target_id == ' + str(bas_ids[i]))
-
-                    if isExistForward.empty or isExistBackward.empty:
+                    try:
+                        forward = twt_followers['target_id'].loc[twt_followers['source_id'] == id].values
+                        if forward[0] == bas_ids[i]:
+                            count += 1
+                        else:
+                            pass
+                    except KeyError:
                         pass
-                    else:
-                        count += 1
 
                 ratio = count / bas_friends[i]
                 ratios.append(ratio)
@@ -140,7 +135,13 @@ def feature2():
             pass
 
     for ratio in ratios:
-        if ratio < 0.2:
+        if isnan(ratio):
+            ratio = 0
+        else:
+            pass
+
+    for ratio in ratios:
+        if ratio < 0.5:
             temp.append(0)
         else:
             temp.append(1)
@@ -150,7 +151,7 @@ def feature2():
 
     class_list = read_dataset()
     print(corrcoef(ratios, class_list))
-    pass
+    return temp
 
 
 # Average number of followers of friends
@@ -239,7 +240,7 @@ def feature3():
 
     class_list = read_dataset()
     print(corrcoef(averages, class_list))
-    pass
+    return temp
 
 
 def feature4():
@@ -326,7 +327,7 @@ def feature4():
 
     class_list = read_dataset()
     print(corrcoef(global_tweets_count, class_list))
-    pass
+    return temp
 
 
 def feature5():
@@ -448,7 +449,7 @@ def feature5():
 
     class_list = read_dataset()
     print(corrcoef(ratios, class_list))
-    pass
+    return temp
 
 
 def feature6():

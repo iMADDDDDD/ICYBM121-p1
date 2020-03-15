@@ -2,8 +2,9 @@ import pandas as pd
 from info_gain import info_gain
 from numpy import *
 import re
+from scipy.stats import pearsonr
 
-BAS = '../datasets/BAS/users.csv'
+BAS = '../datasets/BAS/bas_users.csv'
 BAS_TWEETS = '../datasets/BAS/baseline_tweets.csv'
 
 
@@ -143,21 +144,27 @@ def feature5():
             ratio = 0
         except ZeroDivisionError:
             ratio = 0
-        print("------ " + str(friends_list[i]) + " / " + str(followers_list[i]) + "^2" + " = " + str(ratio))
         ratios.append(ratio)
 
-        if ratio < 20:
+    for i in range(len(ratios)):
+        if isnan(ratios[i]):
+            ratios[i] = 0
+
+    for i in range(len(ratios)):
+        if isinf(ratios[i]):
+            ratios[i] = 0
+
+    for ratio in ratios:
+        if ratio < 0.1:
             temp.append(1)
         else:
             temp.append(0)
-
-    print(ratios)
 
     ig = info_gain.info_gain(temp, ratios)
     print("Information Gain: " + str(ig))
 
     class_list = read_dataset()
-    print(corrcoef(class_list, ratios))
+    print(corrcoef(ratios, class_list))
     return temp
 
 
@@ -207,4 +214,5 @@ def message_similarity(tweets):
 
 
 if __name__ == '__main__':
-    feature3()
+    print("Feature 5")
+    feature5()
