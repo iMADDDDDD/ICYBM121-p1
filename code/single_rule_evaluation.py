@@ -3,9 +3,6 @@ import csv
 import pandas
 import math
 import sys
-from datetime import datetime
-import pytz
-import time
 import re
 import rules
 
@@ -78,10 +75,10 @@ def single_rule(classification_file, users_dataset, tweets_dataset, rule_number,
             elif rule_set == 'social_bakers':
                 classification = 0
                 if rule_number in [1, 6, 7, 8]:
-                    rule_output = check_rule(rule_set, number, row)
+                    rule_output = check_rule(rule_set, rule_number, row)
                 
                 elif rule_number in [2, 3, 4, 5]:
-                    rule_output = check_sb_tweet_rule(df_tweets, rule_number, user_id)
+                    rule_output = check_sb_tweet_rule(df_tweets, user_id, rule_number, rule_set)
                  # RULE IS NOT SATISFIED
                 if rule_output == 0:
                  # USER IS HUMAN
@@ -145,6 +142,7 @@ def check_rule(rule_set, number, row):
 
 
 def check_vdb_tweet_rule(df_csv, rule_number, user_id):
+    rule_set = 'van_den_beld'
     rule_output = 0
     try:
         tweets_user = df_csv.loc[int(user_id)]
@@ -160,10 +158,10 @@ def check_vdb_tweet_rule(df_csv, rule_number, user_id):
         for _, tweet_row in df_user.iterrows():
 
             if rule_number == 5:
-               rule_output = check_vdb_rule(rule_set, number, tweet_row, df_user)
+               rule_output = check_vdb_rule(rule_set, rule_number, tweet_row, df_user)
 
         if rule_number == 3:
-            rule_output = check_vdb_rule(rule_set, number, [], df_user)
+            rule_output = check_vdb_rule(rule_set, rule_number, [], df_user)
 
     return rule_output
 
@@ -189,7 +187,7 @@ def check_vdb_rule(rule_set, number, row, df_row):
 
 
 def check_sb_tweet_rule(df_tweets, user_id, number, rule_set):
-    classification = 0
+    rule_output = 0
     try:
         tweets_user = df_tweets.loc[int(user_id)]
     # https://developer.twitter.com/en/docs/tweets/data-dictionary/overview/tweet-object

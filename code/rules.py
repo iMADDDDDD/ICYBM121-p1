@@ -1,5 +1,9 @@
 import math
 import re
+import pandas
+import pytz
+import time
+from datetime import datetime
 
 #Output of rule equals 0 (false) or 1 (true)
 
@@ -400,7 +404,7 @@ def van_den_beld_rule_2(followers_count, friends_count):
 def van_den_beld_rule_3(df_tweets):
    output = 0
    df_tweets['created_at'] = pandas.to_datetime(df_tweets['created_at'])
-   created_date = df_user.sort_values(by=['created_at'], ascending=False)
+   created_date = df_tweets.sort_values(by=['created_at'], ascending=False)
    df_last_tweets = created_date.head(20)
    dict_same_tweets = {}
    for _, row in df_last_tweets.iterrows():
@@ -448,6 +452,8 @@ def social_bakers_rule_1(followers_count, friends_count):
 def social_bakers_rule_2(df_text):
     count_spam_tweets = 0
     number_tweets = 0
+    if isinstance(df_text, pandas.Series):
+        df_text = pandas.DataFrame(df_text).T
     for _, text in df_text.iterrows():
         number_tweets += 1
         if not isinstance(text, float):
@@ -476,6 +482,8 @@ def social_bakers_rule_3(df_text):
 def social_bakers_rule_4(df_retweeted_status_id):
     count_spam_tweets = 0
     number_tweets = 0
+    if isinstance(df_retweeted_status_id, pandas.Series):
+        df_retweeted_status_id = pandas.DataFrame(df_retweeted_status_id).T
     for _, retweeted_status_id in df_retweeted_status_id.iterrows():
         number_tweets += 1
         if not math.isnan(retweeted_status_id): 
@@ -493,6 +501,8 @@ def social_bakers_rule_4(df_retweeted_status_id):
 def social_bakers_rule_5(df_text):
     count_links = 0
     number_tweets = 0
+    if isinstance(df_text, pandas.Series):
+        df_text = pandas.DataFrame(df_text).T
     for _, text in df_text.iterrows():
         number_tweets += 1
         if not isinstance(text, float):
@@ -525,7 +535,7 @@ def social_bakers_rule_6(statuses_count):
 #rule 7. default image after 2 months
 def social_bakers_rule_7(created_at, updated_date, profile_image_url):
     created_date = datetime.strptime(created_at,'%a %b %d %H:%M:%S %z %Y')
-    updated_date = datetime.strptime(updated,'%Y-%m-%d %H:%M:%S')
+    updated_date = datetime.strptime(updated_date,'%Y-%m-%d %H:%M:%S')
     timezone = pytz.timezone("Europe/Rome")
     crawled_date = timezone.localize(updated_date)
 
