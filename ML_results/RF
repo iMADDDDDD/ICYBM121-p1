@@ -1,0 +1,67 @@
+=== Run information ===
+
+Scheme:       weka.classifiers.trees.RandomForest -P 100 -I 100 -num-slots 1 -K 0 -M 1.0 -V 0.001 -S 1
+Relation:     camisani_calzolari_classificationFinal-weka.filters.unsupervised.attribute.Remove-R1
+Instances:    3900
+Attributes:   24
+              name
+              image
+              address
+              biography
+              followers_30
+              list
+              tweets_50
+              URL
+              followers_friends_ratio
+              number_of_friends
+              number_of_tweets
+              friends_to_follower_ratio
+              bot_in_biography
+              followers_friends_ratio_100
+              duplicate_images
+              followers_friends_ratio_50
+              default_image
+              no biography
+              no location
+              friends_100
+              no tweets
+              account_age
+              following_rate
+              H_or_Bot
+Test mode:    10-fold cross-validation
+
+=== Classifier model (full training set) ===
+
+RandomForest
+
+Bagging with 100 iterations and base learner
+
+weka.classifiers.trees.RandomTree -K 0 -M 1.0 -V 0.001 -S 1 -do-not-check-capabilities
+
+Time taken to build model: 0.37 seconds
+
+=== Stratified cross-validation ===
+=== Summary ===
+
+Correctly Classified Instances        3810               97.6923 %
+Incorrectly Classified Instances        90                2.3077 %
+Kappa statistic                          0.9538
+Mean absolute error                      0.0393
+Root mean squared error                  0.1415
+Relative absolute error                  7.8518 %
+Root relative squared error             28.296  %
+Total Number of Instances             3900     
+
+=== Detailed Accuracy By Class ===
+
+                 TP Rate  FP Rate  Precision  Recall   F-Measure  MCC      ROC Area  PRC Area  Class
+                 0.970    0.016    0.984      0.970    0.977      0.954    0.991     0.991     0
+                 0.984    0.030    0.970      0.984    0.977      0.954    0.991     0.986     1
+Weighted Avg.    0.977    0.023    0.977      0.977    0.977      0.954    0.991     0.988     
+
+=== Confusion Matrix ===
+
+    a    b   <-- classified as
+ 1891   59 |    a = 0
+   31 1919 |    b = 1
+

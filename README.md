@@ -3,14 +3,11 @@ Big data &amp; computer security - Project 1
 
 ## To implement
 ### TODO
-#### 3. Baseline datasets
-* FAK dataset: baseline_dataset.py
-* BAS dataset: create_BAS_csv.py
 
 #### 4. Fake detection with algorithms based on classification rules
 * table 6: camisani_calzolari_algorithm.py
 * table 7: camisani_calzolari_algorithm_evaluation.py
-* table 8
+* table 8: single_rule_evaluation.py and camisani_calzolari_algorithm_evaluation.py
 
 #### 5. Fake detection with algorithms based on feature sets
 * table 11
@@ -23,6 +20,12 @@ Big data &amp; computer security - Project 1
 * table 18
 
 ### DONE
+#### 3. Baseline datasets
+* FAK dataset: baseline_dataset.py
+  - FAK_user_ids.csv
+* BAS dataset: create_BAS_csv.py
+  - bas_users.csv
+  - bas_tweets.csv
 
 ## Link to report
 https://www.overleaf.com/7545349834pjdhszdgwsdn

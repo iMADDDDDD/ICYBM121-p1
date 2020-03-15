@@ -1,0 +1,296 @@
+=== Run information ===
+
+Scheme:       weka.classifiers.meta.AdaBoostM1 -P 100 -S 1 -I 10 -W weka.classifiers.trees.DecisionStump
+Relation:     camisani_calzolari_classificationFinal-weka.filters.unsupervised.attribute.Remove-R1
+Instances:    3900
+Attributes:   24
+              name
+              image
+              address
+              biography
+              followers_30
+              list
+              tweets_50
+              URL
+              followers_friends_ratio
+              number_of_friends
+              number_of_tweets
+              friends_to_follower_ratio
+              bot_in_biography
+              followers_friends_ratio_100
+              duplicate_images
+              followers_friends_ratio_50
+              default_image
+              no biography
+              no location
+              friends_100
+              no tweets
+              account_age
+              following_rate
+              H_or_Bot
+Test mode:    10-fold cross-validation
+
+=== Classifier model (full training set) ===
+
+AdaBoostM1: Base classifiers and their weights: 
+
+Decision Stump
+
+Classifications
+
+followers_30 = 0 : 0
+followers_30 != 0 : 1
+followers_30 is missing : 0
+
+Class distributions
+
+followers_30 = 0
+0	1	
+0.8346067415730337	0.16539325842696628	
+followers_30 != 0
+0	1	
+0.05552238805970149	0.9444776119402986	
+followers_30 is missing
+0	1	
+0.5	0.5	
+
+
+Weight: 2.01
+
+Decision Stump
+
+Classifications
+
+following_rate = 0 : 0
+following_rate != 0 : 1
+following_rate is missing : 1
+
+Class distributions
+
+following_rate = 0
+0	1	
+0.7766948645596482	0.22330513544035172	
+following_rate != 0
+0	1	
+0.17613142872877763	0.8238685712712224	
+following_rate is missing
+0	1	
+0.370858955492658	0.629141044507342	
+
+
+Weight: 1.44
+
+Decision Stump
+
+Classifications
+
+number_of_tweets = 1 : 1
+number_of_tweets != 1 : 0
+number_of_tweets is missing : 1
+
+Class distributions
+
+number_of_tweets = 1
+0	1	
+0.2672568333331432	0.7327431666668568	
+number_of_tweets != 1
+0	1	
+0.8676306114751872	0.1323693885248128	
+number_of_tweets is missing
+0	1	
+0.4666106892077804	0.5333893107922196	
+
+
+Weight: 1.25
+
+Decision Stump
+
+Classifications
+
+friends_100 = 0 : 1
+friends_100 != 0 : 0
+friends_100 is missing : 0
+
+Class distributions
+
+friends_100 = 0
+0	1	
+0.044594433977848125	0.9554055660221518	
+friends_100 != 0
+0	1	
+0.7284584093017276	0.2715415906982725	
+friends_100 is missing
+0	1	
+0.5864775829770229	0.413522417022977	
+
+
+Weight: 1.24
+
+Decision Stump
+
+Classifications
+
+list = 1 : 1
+list != 1 : 0
+list is missing : 1
+
+Class distributions
+
+list = 1
+0	1	
+0.09519415031987956	0.9048058496801203	
+list != 1
+0	1	
+0.5396770721772414	0.4603229278227587	
+list is missing
+0	1	
+0.3927500180359536	0.6072499819640463	
+
+
+Weight: 0.66
+
+Decision Stump
+
+Classifications
+
+account_age = 0 : 0
+account_age != 0 : 1
+account_age is missing : 1
+
+Class distributions
+
+account_age = 0
+0	1	
+0.7466500725660381	0.25334992743396195	
+account_age != 0
+0	1	
+0.2313528813287728	0.7686471186712273	
+account_age is missing
+0	1	
+0.3198705570456505	0.6801294429543496	
+
+
+Weight: 1.18
+
+Decision Stump
+
+Classifications
+
+friends_100 = 0 : 1
+friends_100 != 0 : 0
+friends_100 is missing : 1
+
+Class distributions
+
+friends_100 = 0
+0	1	
+0.14084263180585752	0.8591573681941425	
+friends_100 != 0
+0	1	
+0.5634894570092713	0.4365105429907287	
+friends_100 is missing
+0	1	
+0.49129928871680817	0.5087007112831918	
+
+
+Weight: 0.46
+
+Decision Stump
+
+Classifications
+
+tweets_50 = 0 : 0
+tweets_50 != 0 : 1
+tweets_50 is missing : 1
+
+Class distributions
+
+tweets_50 = 0
+0	1	
+0.6455037313006347	0.35449626869936535	
+tweets_50 != 0
+0	1	
+0.28031053298923253	0.7196894670107675	
+tweets_50 is missing
+0	1	
+0.4116570480181695	0.5883429519818305	
+
+
+Weight: 0.81
+
+Decision Stump
+
+Classifications
+
+friends_100 = 1 : 0
+friends_100 != 1 : 1
+friends_100 is missing : 1
+
+Class distributions
+
+friends_100 = 1
+0	1	
+0.5313277852244387	0.4686722147755614	
+friends_100 != 1
+0	1	
+0.12712764728362977	0.8728723527163702	
+friends_100 is missing
+0	1	
+0.4598459647440595	0.5401540352559406	
+
+
+Weight: 0.37
+
+Decision Stump
+
+Classifications
+
+address = 0 : 1
+address != 0 : 1
+address is missing : 1
+
+Class distributions
+
+address = 0
+0	1	
+0.20067350681917656	0.7993264931808234	
+address != 0
+0	1	
+0.4929886643009136	0.5070113356990864	
+address is missing
+0	1	
+0.397097615210009	0.6029023847899909	
+
+
+Weight: 0.42
+
+Number of performed Iterations: 10
+
+
+Time taken to build model: 0.15 seconds
+
+=== Stratified cross-validation ===
+=== Summary ===
+
+Correctly Classified Instances        3752               96.2051 %
+Incorrectly Classified Instances       148                3.7949 %
+Kappa statistic                          0.9241
+Mean absolute error                      0.0677
+Root mean squared error                  0.1728
+Relative absolute error                 13.5337 %
+Root relative squared error             34.5644 %
+Total Number of Instances             3900     
+
+=== Detailed Accuracy By Class ===
+
+                 TP Rate  FP Rate  Precision  Recall   F-Measure  MCC      ROC Area  PRC Area  Class
+                 0.955    0.031    0.968      0.955    0.962      0.924    0.991     0.992     0
+                 0.969    0.045    0.956      0.969    0.962      0.924    0.991     0.989     1
+Weighted Avg.    0.962    0.038    0.962      0.962    0.962      0.924    0.991     0.991     
+
+=== Confusion Matrix ===
+
+    a    b   <-- classified as
+ 1863   87 |    a = 0
+   61 1889 |    b = 1
+
