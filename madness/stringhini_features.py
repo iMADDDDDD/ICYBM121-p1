@@ -26,7 +26,7 @@ def feature1():
     print("INFORMATION GAIN: " + str(ig))
 
     class_list = utils.read_dataset()
-    print(corrcoef(friends_list, class_list)[0][1])
+    print("Correlation coefficient: " + str(corrcoef(friends_list, class_list)[0][1]))
     return temp_list
 
 
@@ -56,7 +56,7 @@ def feature2():
     print("Information Gain: " + str(ig))
 
     class_list = utils.read_dataset()
-    print(corrcoef(tweets_count, class_list)[0][1])
+    print("Correlation coefficient: " + str(corrcoef(tweets_count, class_list)[0][1]))
     return tmp
 
 
@@ -88,7 +88,7 @@ def feature3():
     print("Information Gain: " + str(ig))
 
     class_list = utils.read_dataset()
-    print(corrcoef(similarities, class_list)[0][1])
+    print("Correlation coefficient: " + str(corrcoef(similarities, class_list)[0][1]))
     return temp
 
 
@@ -126,7 +126,7 @@ def feature4():
     print("Information Gain: " + str(ig))
 
     class_list = utils.read_dataset()
-    print(corrcoef(url_ratios, class_list)[0][1])
+    print("Correlation coefficient: " + str(corrcoef(url_ratios, class_list)[0][1]))
     return temp
 
 
@@ -167,7 +167,7 @@ def feature5():
     print("Information Gain: " + str(ig))
 
     class_list = utils.read_dataset()
-    print(corrcoef(ratios, class_list)[0][1])
+    print("Correlation coefficient: " + str(corrcoef(ratios, class_list)[0][1]))
     return temp
 
 

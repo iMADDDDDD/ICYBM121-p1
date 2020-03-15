@@ -50,7 +50,7 @@ def feature1():
     print("INFORMATION GAIN: " + str(ig))
 
     class_list = utils.read_dataset()
-    print(corrcoef(age, class_list))
+    print("PEARSON CORRELATION COEFFICIENT: " + str(corrcoef(age, class_list)[0][1]))
     return temp
 
 
@@ -163,7 +163,7 @@ def feature2():
     print("INFORMATION GAIN: " + str(ig))
 
     class_list = utils.read_dataset()
-    print(corrcoef(ratios, class_list))
+    print("PEARSON CORRELATION COEFFICIENT: " + str(corrcoef(ratios, class_list)[0][1]))
     return temp
 
 
@@ -246,7 +246,7 @@ def feature3():
     print("INFORMATION GAIN: " + str(ig))
 
     class_list = utils.read_dataset()
-    print(corrcoef(averages, class_list))
+    print("PEARSON CORRELATION COEFFICIENT: " + str(corrcoef(averages, class_list)[0][1]))
     return temp
 
 
@@ -327,7 +327,7 @@ def feature4():
     print("INFORMATION GAIN: " + str(ig))
 
     class_list = utils.read_dataset()
-    print(corrcoef(global_tweets_count, class_list))
+    print("PEARSON CORRELATION COEFFICIENT: " + str(corrcoef(global_tweets_count, class_list)[0][1]))
     return temp
 
 
@@ -443,7 +443,7 @@ def feature5():
     print("INFORMATION GAIN: " + str(ig))
 
     class_list = utils.read_dataset()
-    print(corrcoef(ratios, class_list))
+    print("PEARSON CORRELATION COEFFICIENT: " + str(corrcoef(ratios, class_list)[0][1]))
     return temp
 
 
@@ -550,7 +550,7 @@ def feature6():
     print("INFORMATION GAIN: " + str(ig))
 
     class_list = utils.read_dataset()
-    print(corrcoef(ratios, class_list))
+    print("PEARSON CORRELATION COEFFICIENT: " + str(corrcoef(ratios, class_list)[0][1]))
     pass
 
 
@@ -658,7 +658,7 @@ def feature7():
     print("INFORMATION GAIN: " + str(ig))
 
     class_list = utils.read_dataset()
-    print(corrcoef(ratios, class_list))
+    print("PEARSON CORRELATION COEFFICIENT: " + str(corrcoef(ratios, class_list)[0][1]))
     pass
 
 
