@@ -208,7 +208,7 @@ def check_sb_tweet_rule(df_tweets, user_id, number, rule_set):
 def main():
     rule_nr = sys.argv[1]
     rule_set = sys.argv[2]
-    dataset = home_directory + '/git/ICYBM121-p1/code'
+    dataset = home_directory + '/git/ICYBM121-p1/social_media_results'
     users_dataset = dataset + '/bas_users.csv'
     tweets_dataset = dataset + '/bas_tweets.csv'
 
